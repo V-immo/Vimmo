@@ -457,9 +457,9 @@
             <div class="search-section">
                 <div class="search-input-wrapper">
                     <i class="ri-search-line"></i>
-                    <input type="text" placeholder="Zoek op stad, wijk of postcode...">
+                    <input type="text" id="searchInput" placeholder="Zoek op stad, wijk of postcode...">
                 </div>
-                <select class="filter-select">
+                <select class="filter-select" id="typeSelect">
                     <option>Alle types</option>
                     <option>Appartement</option>
                     <option>Huis</option>
@@ -467,15 +467,15 @@
                     <option>Penthouse</option>
                     <option>Grond</option>
                 </select>
-                <select class="filter-select">
-                    <option>Prijs</option>
+                <select class="filter-select" id="priceSelect">
+                    <option>Geen max</option>
                     <option>Tot €200.000</option>
                     <option>Tot €350.000</option>
                     <option>Tot €500.000</option>
                     <option>Tot €750.000</option>
                     <option>€750.000+</option>
                 </select>
-                <button class="btn btn-primary search-btn">Zoeken</button>
+                <button class="btn btn-primary search-btn" onclick="filterProperties()">Zoeken</button>
             </div>
         </div>
     </section>

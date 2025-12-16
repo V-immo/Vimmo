@@ -389,156 +389,156 @@
     </div>
 
     <section class="listing-hero">
-            <div class="container">
-                <h1>Woningen <span style="color: #d63031;">te huur</span></h1>
-                <p class="subtitle">Vind uw ideale huurwoning in België</p>
+        <div class="container">
+            <h1>Woningen <span style="color: #d63031;">te huur</span></h1>
+            <p class="subtitle">Vind uw ideale huurwoning in België</p>
 
-                <div class="search-section">
-                    <div class="search-input-wrapper">
-                        <i class="ri-search-line"></i>
-                        <input type="text" placeholder="Zoek op stad, wijk of postcode...">
+            <div class="search-section">
+                <div class="search-input-wrapper">
+                    <i class="ri-search-line"></i>
+                    <input type="text" id="searchInput" placeholder="Zoek op stad, wijk of postcode...">
+                </div>
+                <select class="filter-select" id="typeSelect">
+                    <option>Alle types</option>
+                    <option>Appartement</option>
+                    <option>Huis</option>
+                    <option>Studio</option>
+                    <option>Kamer</option>
+                </select>
+                <select class="filter-select" id="priceSelect">
+                    <option>Geen max</option>
+                    <option>Tot €750/mnd</option>
+                    <option>Tot €1.000/mnd</option>
+                    <option>Tot €1.500/mnd</option>
+                    <option>Tot €2.000/mnd</option>
+                    <option>€2.000+/mnd</option>
+                </select>
+                <button class="btn btn-primary" onclick="filterProperties()">Zoeken</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="results-header">
+            <p class="results-count"><strong>156</strong> huurwoningen gevonden</p>
+            <div class="sort-options">
+                <label style="font-size: 0.85rem; color: var(--text-muted);">Sorteren:</label>
+                <select class="filter-select">
+                    <option>Meest recent</option>
+                    <option>Prijs laag-hoog</option>
+                    <option>Prijs hoog-laag</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="listing-layout">
+            <aside class="filters-sidebar">
+                <div class="filter-group">
+                    <h4>Huurprijs per maand</h4>
+                    <div class="price-range">
+                        <input type="number" placeholder="Min €">
+                        <span>—</span>
+                        <input type="number" placeholder="Max €">
                     </div>
-                    <select class="filter-select">
-                        <option>Alle types</option>
-                        <option>Appartement</option>
-                        <option>Huis</option>
-                        <option>Studio</option>
-                        <option>Kamer</option>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Slaapkamers</h4>
+                    <select>
+                        <option>Alle</option>
+                        <option>1+</option>
+                        <option>2+</option>
+                        <option>3+</option>
                     </select>
-                    <select class="filter-select">
-                        <option>Huurprijs</option>
-                        <option>Tot €750/mnd</option>
-                        <option>Tot €1.000/mnd</option>
-                        <option>Tot €1.500/mnd</option>
-                        <option>Tot €2.000/mnd</option>
-                        <option>€2.000+/mnd</option>
-                    </select>
-                    <button class="btn btn-primary">Zoeken</button>
                 </div>
-            </div>
-        </section>
 
-        <section class="container">
-            <div class="results-header">
-                <p class="results-count"><strong>156</strong> huurwoningen gevonden</p>
-                <div class="sort-options">
-                    <label style="font-size: 0.85rem; color: var(--text-muted);">Sorteren:</label>
-                    <select class="filter-select">
-                        <option>Meest recent</option>
-                        <option>Prijs laag-hoog</option>
-                        <option>Prijs hoog-laag</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="listing-layout">
-                <aside class="filters-sidebar">
-                    <div class="filter-group">
-                        <h4>Huurprijs per maand</h4>
-                        <div class="price-range">
-                            <input type="number" placeholder="Min €">
-                            <span>—</span>
-                            <input type="number" placeholder="Max €">
-                        </div>
-                    </div>
-
-                    <div class="filter-group">
-                        <h4>Slaapkamers</h4>
-                        <select>
-                            <option>Alle</option>
-                            <option>1+</option>
-                            <option>2+</option>
-                            <option>3+</option>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <h4>Type</h4>
-                        <div class="checkbox-group">
-                            <label class="checkbox-item"><input type="checkbox" checked> Appartement</label>
-                            <label class="checkbox-item"><input type="checkbox" checked> Huis</label>
-                            <label class="checkbox-item"><input type="checkbox"> Studio</label>
-                            <label class="checkbox-item"><input type="checkbox"> Kamer</label>
-                        </div>
-                    </div>
-
-                    <div class="filter-group">
-                        <h4>Extra</h4>
-                        <div class="checkbox-group">
-                            <label class="checkbox-item"><input type="checkbox"> Gemeubeld</label>
-                            <label class="checkbox-item"><input type="checkbox"> Huisdieren toegestaan</label>
-                            <label class="checkbox-item"><input type="checkbox"> Met parking</label>
-                        </div>
-                    </div>
-
-                    <button class="reset-filters"><i class="ri-refresh-line"></i> Filters wissen</button>
-                </aside>
-
-                <div class="property-listing-grid" id="propertyGrid"></div>
-            </div>
-
-            <div class="pagination">
-                <button class="page-btn"><i class="ri-arrow-left-s-line"></i></button>
-                <button class="page-btn active">1</button>
-                <button class="page-btn">2</button>
-                <button class="page-btn">3</button>
-                <button class="page-btn"><i class="ri-arrow-right-s-line"></i></button>
-            </div>
-        </section>
-
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-content"
-                    style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
-                    <div class="footer-brand">
-                        <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
-                                style="color: #d63031; font-weight: 400;">V</span> <span
-                                style="color: #3d3530; font-weight: 400;">I</span><span
-                                style="color: #3d3530; font-weight: 800;">MMO</span></h3>
-                    </div>
-                    <div class="footer-links" style="display: flex; gap: 60px; text-align: right;">
-                        <ul>
-                            <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">PLATFORM</li>
-                            <li style="list-style: none; margin-bottom: 8px;"><a href="kopen.html"
-                                    style="color: var(--text-muted); text-decoration: none;">Te koop</a></li>
-                            <li style="list-style: none; margin-bottom: 8px;"><a href="huren.html"
-                                    style="color: var(--text-muted); text-decoration: none;">Te huur</a></li>
-                            <li style="list-style: none; margin-bottom: 8px;"><a href="prijzen.html"
-                                    style="color: var(--text-muted); text-decoration: none;">Prijzen</a></li>
-                        </ul>
-                        <ul>
-                            <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">DIENSTEN</li>
-                            <li style="list-style: none; margin-bottom: 8px;"><a href="register.html"
-                                    style="color: var(--text-muted); text-decoration: none;">Voor makelaars</a></li>
-                            <li style="list-style: none; margin-bottom: 8px;"><a href="particulier.html"
-                                    style="color: var(--text-muted); text-decoration: none;">Plaats een pand</a></li>
-                            <li style="list-style: none; margin-bottom: 8px;"><a href="contact.html"
-                                    style="color: var(--text-muted); text-decoration: none;">Contact</a></li>
-                        </ul>
+                <div class="filter-group">
+                    <h4>Type</h4>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item"><input type="checkbox" checked> Appartement</label>
+                        <label class="checkbox-item"><input type="checkbox" checked> Huis</label>
+                        <label class="checkbox-item"><input type="checkbox"> Studio</label>
+                        <label class="checkbox-item"><input type="checkbox"> Kamer</label>
                     </div>
                 </div>
-                <div class="footer-bottom" style="padding-top: 30px;">
-                    <p>&copy; 2024 Vimmo International.</p>
+
+                <div class="filter-group">
+                    <h4>Extra</h4>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item"><input type="checkbox"> Gemeubeld</label>
+                        <label class="checkbox-item"><input type="checkbox"> Huisdieren toegestaan</label>
+                        <label class="checkbox-item"><input type="checkbox"> Met parking</label>
+                    </div>
+                </div>
+
+                <button class="reset-filters"><i class="ri-refresh-line"></i> Filters wissen</button>
+            </aside>
+
+            <div class="property-listing-grid" id="propertyGrid"></div>
+        </div>
+
+        <div class="pagination">
+            <button class="page-btn"><i class="ri-arrow-left-s-line"></i></button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn"><i class="ri-arrow-right-s-line"></i></button>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content"
+                style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
+                <div class="footer-brand">
+                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
+                            style="color: #d63031; font-weight: 400;">V</span> <span
+                            style="color: #3d3530; font-weight: 400;">I</span><span
+                            style="color: #3d3530; font-weight: 800;">MMO</span></h3>
+                </div>
+                <div class="footer-links" style="display: flex; gap: 60px; text-align: right;">
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">PLATFORM</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="kopen.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te koop</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="huren.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te huur</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="prijzen.html"
+                                style="color: var(--text-muted); text-decoration: none;">Prijzen</a></li>
+                    </ul>
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">DIENSTEN</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="register.html"
+                                style="color: var(--text-muted); text-decoration: none;">Voor makelaars</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="particulier.html"
+                                style="color: var(--text-muted); text-decoration: none;">Plaats een pand</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="contact.html"
+                                style="color: var(--text-muted); text-decoration: none;">Contact</a></li>
+                    </ul>
                 </div>
             </div>
-        </footer>
+            <div class="footer-bottom" style="padding-top: 30px;">
+                <p>&copy; 2024 Vimmo International.</p>
+            </div>
+        </div>
+    </footer>
 
-        <script>
-            function toggleMobileMenu() {
-                document.getElementById('mobileMenu').classList.toggle('open');
-                document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
-            }
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+        }
 
-            const properties = [
-                { image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80', price: '€1.250', title: 'Modern appartement met terras', location: 'Antwerpen, Zuid', beds: 2, baths: 1, sqm: 85, isNew: true, isVerified: true },
-                { image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80', price: '€950', title: 'Licht appartement centrum', location: 'Gent, Centrum', beds: 1, baths: 1, sqm: 55, isNew: false, isVerified: true },
-                { image: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80', price: '€1.850', title: 'Ruime gezinswoning met tuin', location: 'Leuven, Heverlee', beds: 4, baths: 2, sqm: 180, isNew: true, isVerified: true },
-                { image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', price: '€750', title: 'Gezellige studio', location: 'Brussel, Schaarbeek', beds: 1, baths: 1, sqm: 35, isNew: false, isVerified: false },
-                { image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80', price: '€1.450', title: 'Duplex met dakterras', location: 'Mechelen, Centrum', beds: 3, baths: 2, sqm: 120, isNew: true, isVerified: true },
-                { image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', price: '€2.200', title: 'Luxe penthouse', location: 'Knokke-Heist', beds: 3, baths: 2, sqm: 150, isNew: false, isVerified: true }
-            ];
+        const properties = [
+            { image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80', price: '€1.250', title: 'Modern appartement met terras', location: 'Antwerpen, Zuid', beds: 2, baths: 1, sqm: 85, isNew: true, isVerified: true },
+            { image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80', price: '€950', title: 'Licht appartement centrum', location: 'Gent, Centrum', beds: 1, baths: 1, sqm: 55, isNew: false, isVerified: true },
+            { image: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80', price: '€1.850', title: 'Ruime gezinswoning met tuin', location: 'Leuven, Heverlee', beds: 4, baths: 2, sqm: 180, isNew: true, isVerified: true },
+            { image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', price: '€750', title: 'Gezellige studio', location: 'Brussel, Schaarbeek', beds: 1, baths: 1, sqm: 35, isNew: false, isVerified: false },
+            { image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80', price: '€1.450', title: 'Duplex met dakterras', location: 'Mechelen, Centrum', beds: 3, baths: 2, sqm: 120, isNew: true, isVerified: true },
+            { image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', price: '€2.200', title: 'Luxe penthouse', location: 'Knokke-Heist', beds: 3, baths: 2, sqm: 150, isNew: false, isVerified: true }
+        ];
 
-            document.getElementById('propertyGrid').innerHTML = properties.map(prop => `
+        document.getElementById('propertyGrid').innerHTML = properties.map(prop => `
             <div class="property-listing-card">
                 <div class="card-image" style="background-image: url('${prop.image}')">
                     <div class="card-badges">
@@ -559,7 +559,7 @@
                 </div>
             </div>
         `).join('');
-        </script>
+    </script>
 </body>
 
 </html>
