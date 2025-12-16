@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Aanmaken | Vimmo</title>
+    <meta name="description"
+        content="Maak een gratis Vimmo account aan. Of je nu een woning zoekt, makelaar bent, of je woning wilt verkopen.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .account-page {
+            min-height: 100vh;
+            padding: 120px 0 80px;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-section) 50%, var(--bg-light) 100%);
+        }
+
+        .account-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .account-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .account-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .account-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .account-card {
+            background: var(--bg-card);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 40px 30px;
+            text-align: center;
+            transition: var(--transition-fast);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .account-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .account-card.popular {
+            border-color: var(--primary);
+        }
+
+        .account-card.popular::before {
+            content: 'Meest gekozen';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .account-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-section);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .account-icon i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .account-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .account-card .subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .account-card .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .account-card .price-note {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 30px;
+        }
+
+        .features-list {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .features-list li {
+            list-style: none;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .features-list li i {
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .account-card .btn {
+            width: 100%;
+            padding: 16px;
+        }
+
+        /* Registration Form Modal */
+        .register-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+            padding: 20px;
+        }
+
+        .register-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-section);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close i {
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .modal-header {
+            margin-bottom: 30px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .modal-header p {
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-section);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .btn-itsme {
+            background: #FF562C;
+            color: white;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .btn-itsme:hover {
+            background: #e04b25;
+        }
+
+        .divider {
+            text-align: center;
+            color: var(--text-muted);
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: var(--glass-border);
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .terms {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .terms a {
+            color: var(--primary);
+        }
+
+        /* Trusted By Section */
+        .trusted-section {
+            text-align: center;
+            padding: 60px 0;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 80px;
+        }
+
+        .trusted-section p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+        }
+
+        .trust-badge i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            .account-types {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .account-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar scrolled">
+        <div class="container nav-content">
+            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="kopen.html">Te koop</a>
+                <a href="huren.html">Te huur</a>
+                <a href="nieuwbouw.html">Nieuwbouw</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <a href="dashboard.html" class="btn btn-glass">Inloggen</a>
+            </div>
+            <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span></a>
+            <button class="close-menu" onclick="toggleMobileMenu()">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html" onclick="toggleMobileMenu()">Home</a>
+            <a href="kopen.html" onclick="toggleMobileMenu()">Te koop</a>
+            <a href="huren.html" onclick="toggleMobileMenu()">Te huur</a>
+            <a href="nieuwbouw.html" onclick="toggleMobileMenu()">Nieuwbouw</a>
+            <a href="contact.html" onclick="toggleMobileMenu()">Contact</a>
+        </div>
+        <div class="mobile-menu-actions">
+            <a href="dashboard.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
+        </div>
+    </div>
+
+    <main class="account-page">
+        <div class="container">
+            <div class="account-header">
+                <span class="label-pill"><i class="ri-user-add-line"></i> Account aanmaken</span>
+                <h1>Welkom bij Vimmo</h1>
+                <p>Kies het type account dat bij jou past. Als woningzoeker is het helemaal gratis.</p>
+            </div>
+
+            <div class="account-types">
+                <!-- Woningzoeker -->
+                <div class="account-card" onclick="openRegister('zoeker')">
+                    <div class="account-icon">
+                        <i class="ri-search-line"></i>
+                    </div>
+                    <h3>Woningzoeker</h3>
+                    <p class="subtitle">Ik zoek een woning om te kopen of huren</p>
+                    <div class="price">Gratis</div>
+                    <p class="price-note">Altijd gratis, geen verplichtingen</p>
+                    <ul class="features-list">
+                        <li><i class="ri-heart-line"></i> Woningen opslaan & liken</li>
+                        <li><i class="ri-notification-line"></i> Alerts bij nieuwe woningen</li>
+                        <li><i class="ri-calendar-line"></i> Bezichtigingen aanvragen</li>
+                        <li><i class="ri-message-3-line"></i> Direct contact met makelaars</li>
+                        <li><i class="ri-shield-check-line"></i> Vimmo Verified badge</li>
+                    </ul>
+                    <button class="btn btn-glass">Gratis registreren</button>
+                </div>
+
+                <!-- Particulier -->
+                <div class="account-card popular" onclick="openRegister('particulier')">
+                    <div class="account-icon">
+                        <i class="ri-home-heart-line"></i>
+                    </div>
+                    <h3>Particulier</h3>
+                    <p class="subtitle">Ik wil mijn woning zelf verkopen of verhuren</p>
+                    <div class="price">Vanaf €89</div>
+                    <p class="price-note">Eenmalig, geen commissie</p>
+                    <ul class="features-list">
+                        <li><i class="ri-upload-cloud-line"></i> Woning advertentie plaatsen</li>
+                        <li><i class="ri-image-line"></i> Tot 25 foto's uploaden</li>
+                        <li><i class="ri-vidicon-line"></i> Video tour toevoegen</li>
+                        <li><i class="ri-mail-line"></i> Berichten ontvangen</li>
+                        <li><i class="ri-bar-chart-line"></i> Statistieken bekijken</li>
+                    </ul>
+                    <button class="btn btn-primary">Start verkopen</button>
+                </div>
+
+                <!-- Makelaar -->
+                <div class="account-card" onclick="openRegister('makelaar')">
+                    <div class="account-icon">
+                        <i class="ri-building-4-line"></i>
+                    </div>
+                    <h3>Makelaar</h3>
+                    <p class="subtitle">Ik ben een professionele makelaar of kantoor</p>
+                    <div class="price">Vanaf €149<span style="font-size: 1rem; font-weight: 400;">/mnd</span></div>
+                    <p class="price-note">Maandelijks opzegbaar</p>
+                    <ul class="features-list">
+                        <li><i class="ri-stack-line"></i> Onbeperkt panden beheren</li>
+                        <li><i class="ri-user-star-line"></i> Leads dashboard</li>
+                        <li><i class="ri-line-chart-line"></i> Uitgebreide analytics</li>
+                        <li><i class="ri-rocket-line"></i> Boost & promotie opties</li>
+                        <li><i class="ri-store-3-line"></i> Eigen makelaarspagina</li>
+                    </ul>
+                    <button class="btn btn-glass">Word partner</button>
+                </div>
+            </div>
+
+            <!-- Trust Section -->
+            <div class="trusted-section">
+                <p>Vertrouwd door duizenden gebruikers in België</p>
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <i class="ri-shield-check-line"></i>
+                        <span>SSL Beveiligd</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="ri-lock-line"></i>
+                        <span>GDPR Compliant</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="ri-verified-badge-line"></i>
+                        <span>Itsme Verificatie</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Registration Modal - Zoeker -->
+    <div id="registerModal" class="register-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeRegister()">
+                <i class="ri-close-line"></i>
+            </button>
+
+            <div class="modal-header">
+                <h2 id="modalTitle">Account aanmaken</h2>
+                <p id="modalSubtitle">Vul je gegevens in om te starten</p>
+            </div>
+
+            <!-- Itsme Button -->
+            <button class="btn btn-itsme" onclick="simulateItsme()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Itsme_logo.svg/1200px-Itsme_logo.svg.png"
+                    style="height: 24px; filter: brightness(0) invert(1);">
+                Registreren met itsme
+            </button>
+
+            <div class="divider">of met email</div>
+
+            <form id="registerForm" onsubmit="submitRegister(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Voornaam</label>
+                        <input type="text" class="form-input" placeholder="Jan" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Achternaam</label>
+                        <input type="text" class="form-input" placeholder="Janssens" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>E-mailadres</label>
+                    <input type="email" class="form-input" placeholder="jan@voorbeeld.be" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Telefoonnummer</label>
+                    <input type="tel" class="form-input" placeholder="+32 475 12 34 56">
+                </div>
+
+                <div class="form-group" id="extraFields" style="display: none;">
+                    <!-- Extra fields for particulier/makelaar -->
+                </div>
+
+                <div class="form-group">
+                    <label>Wachtwoord</label>
+                    <input type="password" class="form-input" placeholder="Minimaal 8 karakters" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px;">
+                    Account aanmaken
+                </button>
+            </form>
+
+            <p class="terms">
+                Door te registreren ga je akkoord met onze
+                <a href="#">Algemene Voorwaarden</a> en <a href="#">Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content"
+                style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
+                <div class="footer-brand">
+                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
+                            style="color: #d63031; font-weight: 400;">V</span> <span
+                            style="color: #3d3530; font-weight: 400;">I</span><span
+                            style="color: #3d3530; font-weight: 800;">MMO</span></h3>
+                    <p style="color: var(--text-muted); max-width: 280px; font-size: 0.9rem; line-height: 1.6;">Vind een
+                        plek die bij je past. Woningen in heel België.</p>
+                </div>
+                <div class="footer-links" style="display: flex; gap: 60px; text-align: right;">
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">ZOEKEN</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="kopen.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te koop</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="huren.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te huur</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="nieuwbouw.html"
+                                style="color: var(--text-muted); text-decoration: none;">Nieuwbouw</a></li>
+                    </ul>
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">ACCOUNT</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="account.html"
+                                style="color: var(--text-muted); text-decoration: none;">Registreren</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="dashboard.html"
+                                style="color: var(--text-muted); text-decoration: none;">Inloggen</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="contact.html"
+                                style="color: var(--text-muted); text-decoration: none;">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom"
+                style="text-align: left; padding-top: 30px; display: flex; justify-content: space-between;">
+                <p>&copy; 2024 Vimmo.</p>
+                <div style="display: flex; gap: 20px; color: var(--text-muted);">
+                    <a href="#" style="color: var(--text-muted);"><i class="ri-instagram-line"></i></a>
+                    <a href="#" style="color: var(--text-muted);"><i class="ri-linkedin-fill"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        let currentType = '';
+
+        function openRegister(type) {
+            currentType = type;
+            const modal = document.getElementById('registerModal');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const extraFields = document.getElementById('extraFields');
+
+            if (type === 'zoeker') {
+                title.textContent = 'Woningzoeker Account';
+                subtitle.textContent = 'Gratis account om woningen te zoeken en op te slaan';
+                extraFields.style.display = 'none';
+                extraFields.innerHTML = '';
+            } else if (type === 'particulier') {
+                title.textContent = 'Particulier Account';
+                subtitle.textContent = 'Verkoop of verhuur je woning zelf';
+                extraFields.style.display = 'block';
+                extraFields.innerHTML = `
+                    <label>Adres van je woning</label>
+                    <input type="text" class="form-input" placeholder="Straat, nummer, postcode, gemeente">
+                `;
+            } else if (type === 'makelaar') {
+                title.textContent = 'Makelaar Account';
+                subtitle.textContent = 'Professioneel account voor makelaars';
+                extraFields.style.display = 'block';
+                extraFields.innerHTML = `
+                    <label>Naam kantoor</label>
+                    <input type="text" class="form-input" placeholder="Uw makelaars kantoor" style="margin-bottom: 16px;">
+                    <label>BIV-nummer</label>
+                    <input type="text" class="form-input" placeholder="BIV 123 456">
+                `;
+            }
+
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRegister() {
+            document.getElementById('registerModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function simulateItsme() {
+            alert('Itsme verificatie wordt gestart... (Demo)');
+            // In real app: redirect to itsme flow
+        }
+
+        function submitRegister(e) {
+            e.preventDefault();
+            // Show success and redirect
+            alert('Account aangemaakt! Je wordt doorgestuurd naar je dashboard.');
+            window.location.href = 'dashboard.html';
+        }
+
+        // Close modal on overlay click
+        document.getElementById('registerModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('registerModal')) {
+                closeRegister();
+            }
+        });
+    </script>
+</body>
+
+</html>
