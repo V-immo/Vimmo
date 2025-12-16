@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijn Dashboard | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .dashboard-zoeker {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-light);
+        }
+
+        .sidebar-zoeker {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-zoeker .brand {
+            padding: 0 30px 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-nav-zoeker {
+            padding: 0 15px;
+        }
+
+        .nav-item-zoeker {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-item-zoeker:hover {
+            background: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        .nav-item-zoeker.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-item-zoeker i {
+            font-size: 1.2rem;
+        }
+
+        .main-content-zoeker {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 40px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-header p {
+            color: var(--text-muted);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .saved-properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .property-card-mini {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--bg-light);
+            transition: transform 0.2s;
+        }
+
+        .property-card-mini:hover {
+            transform: translateY(-4px);
+        }
+
+        .property-card-mini img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .property-card-mini .info {
+            padding: 16px;
+        }
+
+        .property-card-mini .price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .property-card-mini .title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .property-card-mini .location {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .appointment-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .appointment-date {
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .appointment-date .day {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .appointment-date .month {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .appointment-info {
+            flex: 1;
+        }
+
+        .appointment-info .property-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .appointment-info .time {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .appointment-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .message-preview {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .message-preview:hover {
+            background: #e8e8e8;
+        }
+
+        .message-preview.unread {
+            background: #f0f7ff;
+            border-left: 3px solid var(--primary);
+        }
+
+        .message-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-content .sender {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .message-content .preview {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-zoeker {
+                display: none;
+            }
+
+            .main-content-zoeker {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .saved-properties-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-zoeker">
+        <!-- Sidebar -->
+        <aside class="sidebar-zoeker">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+
+            <nav class="sidebar-nav-zoeker">
+                <a href="dashboard-zoeker.html" class="nav-item-zoeker active">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="dashboard-zoeker.html#opgeslagen" class="nav-item-zoeker">
+                    <i class="ri-heart-line"></i> Opgeslagen
+                </a>
+                <a href="dashboard-zoeker.html#bezichtigingen" class="nav-item-zoeker">
+                    <i class="ri-calendar-check-line"></i> Bezichtigingen
+                </a>
+                <a href="berichten.html" class="nav-item-zoeker">
+                    <i class="ri-message-3-line"></i> Berichten
+                    <span class="badge"
+                        style="margin-left: auto; background: var(--accent-red); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                </a>
+                <a href="dashboard-zoeker.html#zoekopdrachten" class="nav-item-zoeker">
+                    <i class="ri-search-line"></i> Zoekopdrachten
+                </a>
+
+                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+
+                <a href="account.html" class="nav-item-zoeker">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="index.html" class="nav-item-zoeker">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content-zoeker">
+            <div class="dashboard-header">
+                <h1>Welkom terug, Emma!</h1>
+                <p>Hier is een overzicht van uw opgeslagen woningen en aankomende bezichtigingen</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Opgeslagen Woningen -->
+                <div class="section-card" id="opgeslagen">
+                    <div class="section-header">
+                        <h2><i class="ri-heart-fill" style="color: var(--accent-red);"></i> Opgeslagen Woningen</h2>
+                        <a href="#">Bekijk alle (7)</a>
+                    </div>
+
+                    <div class="saved-properties-grid">
+                        <a href="property.html" class="property-card-mini"
+                            style="text-decoration: none; color: inherit;">
+                            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&q=80"
+                                alt="Penthouse">
+                            <div class="info">
+                                <div class="price">€ 1.250.000</div>
+                                <div class="title">Penthouse aan de Schelde</div>
+                                <div class="location"><i class="ri-map-pin-line"></i> Antwerpen, Zuid</div>
+                            </div>
+                        </a>
+
+                        <a href="property.html" class="property-card-mini"
+                            style="text-decoration: none; color: inherit;">
+                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&q=80"
+                                alt="Loft">
+                            <div class="info">
+                                <div class="price">€ 685.000</div>
+                                <div class="title">Stadsloft in historisch pand</div>
+                                <div class="location"><i class="ri-map-pin-line"></i> Gent, Centrum</div>
+                            </div>
+                        </a>
+
+                        <a href="property.html" class="property-card-mini"
+                            style="text-decoration: none; color: inherit;">
+                            <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=400&q=80"
+                                alt="Huis">
+                            <div class="info">
+                                <div class="price">€ 550.000</div>
+                                <div class="title">Duurzaam Wonen in 't Groen</div>
+                                <div class="location"><i class="ri-map-pin-line"></i> Leuven, Kessel-Lo</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Aankomende Bezichtigingen -->
+                <div class="section-card" id="bezichtigingen">
+                    <div class="section-header">
+                        <h2><i class="ri-calendar-check-line"></i> Aankomende Bezichtigingen</h2>
+                        <a href="agenda.html">Agenda bekijken</a>
+                    </div>
+
+                    <div class="appointment-item">
+                        <div class="appointment-date">
+                            <div class="day">18</div>
+                            <div class="month">DEC</div>
+                        </div>
+                        <div class="appointment-info">
+                            <div class="property-name">Penthouse aan de Schelde</div>
+                            <div class="time"><i class="ri-time-line"></i> 14:00 - 15:00</div>
+                            <div class="time"><i class="ri-map-pin-line"></i> Antwerpen, Zuid</div>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <span class="appointment-status status-confirmed">Bevestigd</span>
+                        </div>
+                    </div>
+
+                    <div class="appointment-item">
+                        <div class="appointment-date">
+                            <div class="day">20</div>
+                            <div class="month">DEC</div>
+                        </div>
+                        <div class="appointment-info">
+                            <div class="property-name">Stadsloft in historisch pand</div>
+                            <div class="time"><i class="ri-time-line"></i> 10:30 - 11:30</div>
+                            <div class="time"><i class="ri-map-pin-line"></i> Gent, Centrum</div>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <span class="appointment-status status-pending">In afwachting</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Berichten -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2><i class="ri-message-3-line"></i> Recente Berichten</h2>
+                        <a href="berichten.html">Alle berichten</a>
+                    </div>
+
+                    <div class="message-preview unread" onclick="window.location.href='chat.html?id=1'">
+                        <div class="message-avatar">MV</div>
+                        <div class="message-content">
+                            <div class="sender">Makelaar Vastgoed</div>
+                            <div class="preview">De bezichtiging voor morgen is bevestigd. Tot dan!</div>
+                        </div>
+                        <div class="message-time">2u geleden</div>
+                    </div>
+
+                    <div class="message-preview unread" onclick="window.location.href='chat.html?id=2'">
+                        <div class="message-avatar">JD</div>
+                        <div class="message-content">
+                            <div class="sender">Jan De Vries</div>
+                            <div class="preview">Bedankt voor uw interesse. Wanneer schikt het u?</div>
+                        </div>
+                        <div class="message-time">1d geleden</div>
+                    </div>
+
+                    <div class="message-preview" onclick="window.location.href='chat.html?id=3'">
+                        <div class="message-avatar">PH</div>
+                        <div class="message-content">
+                            <div class="sender">Premium Homes</div>
+                            <div class="preview">De documenten zijn beschikbaar in het portaal</div>
+                        </div>
+                        <div class="message-time">3d geleden</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
