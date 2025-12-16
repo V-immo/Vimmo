@@ -548,11 +548,24 @@
         <div class="page-header">
             <div>
                 <h1 class="page-title">Goedenavond, Thomas</h1>
-                <p class="page-subtitle">Hier is uw overzicht van vandaag.</p>
+                <p style="color: var(--text-muted);">Hier is uw overzicht van vandaag</p>
             </div>
-            <button class="btn btn-primary" style="padding: 14px 24px;">
-                <i class="ri-add-line"></i> Nieuw Pand
-            </button>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <!-- Property Switcher -->
+                <select id="propertySwitcher" onchange="switchProperty()"
+                    style="padding: 12px 16px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); background: white; cursor: pointer; min-width: 250px;">
+                    <option value="all">📊 Alle Panden (3)</option>
+                    <option value="1" selected>🏠 Moderne Woning - Antwerpen</option>
+                    <option value="2">🏢 Penthouse - Schelde</option>
+                    <option value="3">🏡 Villa - Brasschaat</option>
+                </select>
+
+                <!-- Add Property Button -->
+                <button onclick="window.location.href='verkopen.html'"
+                    style="padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap;">
+                    <i class="ri-add-line"></i> Nieuw Pand
+                </button>
+            </div>
         </div>
 
         <!-- Stats -->
@@ -776,6 +789,31 @@
                 item.style.opacity = '0.5';
             }, 1000);
         }
+
+        function switchProperty() {
+            const select = document.getElementById('propertySwitcher');
+            const propertyId = select.value;
+
+            if (propertyId === 'all') {
+                // Show all properties stats
+                alert('📊 Weergave: Alle Panden\n\nStats worden gecombineerd voor al uw panden.');
+            } else {
+                // Show specific property
+                const propertyName = select.options[select.selectedIndex].text;
+                alert(`🏠 Gefilterd op: ${propertyName}\n\nStats en aanvragen worden nu gefilterd voor dit pand.`);
+            }
+
+            // Save selection to localStorage
+            localStorage.setItem('selectedProperty', propertyId);
+        }
+
+        // Load saved property selection
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('selectedProperty');
+            if (saved) {
+                document.getElementById('propertySwitcher').value = saved;
+            }
+        });
     </script>
 </body>
 
