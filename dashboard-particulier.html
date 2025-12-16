@@ -391,8 +391,10 @@
                         </div>
                         <div class="request-time">Wil graag bezichtigen op: Woensdag 18 dec, 14:00</div>
                         <div class="request-actions">
-                            <button class="btn-accept">Accepteren</button>
-                            <button class="btn-decline">Afwijzen</button>
+                            <button class="btn-accept"
+                                onclick="acceptRequest('req-1', 'Emma Peeters', 'Woensdag 18 dec', '14:00')">Accepteren</button>
+                            <button class="btn-decline"
+                                onclick="declineRequest('req-1', 'Emma Peeters')">Afwijzen</button>
                             <button class="btn-decline" onclick="window.location.href='chat.html?id=1'"><i
                                     class="ri-message-3-line"></i> Bericht</button>
                         </div>
@@ -408,8 +410,10 @@
                         </div>
                         <div class="request-time">Wil graag bezichtigen op: Vrijdag 20 dec, 10:30</div>
                         <div class="request-actions">
-                            <button class="btn-accept">Accepteren</button>
-                            <button class="btn-decline">Afwijzen</button>
+                            <button class="btn-accept"
+                                onclick="acceptRequest('req-2', 'Lucas Vermeulen', 'Vrijdag 20 dec', '10:30')">Accepteren</button>
+                            <button class="btn-decline"
+                                onclick="declineRequest('req-2', 'Lucas Vermeulen')">Afwijzen</button>
                             <button class="btn-decline" onclick="window.location.href='chat.html?id=2'"><i
                                     class="ri-message-3-line"></i> Bericht</button>
                         </div>
@@ -422,8 +426,10 @@
                         <div class="request-name">Sophie Dubois</div>
                         <div class="request-time">Wil graag bezichtigen op: Zaterdag 21 dec, 15:00</div>
                         <div class="request-actions">
-                            <button class="btn-accept">Accepteren</button>
-                            <button class="btn-decline">Afwijzen</button>
+                            <button class="btn-accept"
+                                onclick="acceptRequest('req-3', 'Sophie Dubois', 'Zaterdag 21 dec', '15:00')">Accepteren</button>
+                            <button class="btn-decline"
+                                onclick="declineRequest('req-3', 'Sophie Dubois')">Afwijzen</button>
                             <button class="btn-decline" onclick="window.location.href='chat.html?id=3'"><i
                                     class="ri-message-3-line"></i> Bericht</button>
                         </div>
@@ -434,6 +440,44 @@
     </div>
 
     <script src="app.js"></script>
+    <script>
+        // Handle Accept/Decline for booking requests
+        function acceptRequest(requestId, name, date, time) {
+            if (confirm(`Bezichtiging accepteren voor ${name} op ${date} om ${time}?`)) {
+                // Update bookings in localStorage
+                const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+                const booking = bookings.find(b => b.id === requestId);
+                if (booking) {
+                    booking.status = 'confirmed';
+                    localStorage.setItem('bookings', JSON.stringify(bookings));
+                }
+
+                // Show success message
+                alert(`✅ Bezichtiging geaccepteerd! ${name} ontvangt een bevestiging.`);
+
+                // Remove from UI
+                event.target.closest('.request-item').remove();
+            }
+        }
+
+        function declineRequest(requestId, name) {
+            if (confirm(`Bezichtiging afwijzen voor ${name}?`)) {
+                // Update bookings in localStorage
+                const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+                const booking = bookings.find(b => b.id === requestId);
+                if (booking) {
+                    booking.status = 'declined';
+                    localStorage.setItem('bookings', JSON.stringify(bookings));
+                }
+
+                // Show message
+                alert(`Bezichtiging afgewezen. ${name} ontvangt een notificatie.`);
+
+                // Remove from UI
+                event.target.closest('.request-item').remove();
+            }
+        }
+    </script>
 </body>
 
 </html>
