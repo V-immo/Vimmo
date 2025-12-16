@@ -271,7 +271,15 @@
                     <h1 style="font-size: 2rem; margin-bottom: 8px;">Mijn Advertentie Beheren</h1>
                     <p style="color: var(--text-muted);">Bewerk uw woning advertentie en foto's</p>
                 </div>
-                <div style="display: flex; gap: 12px;">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <!-- Property Selector -->
+                    <select id="propertySelector" onchange="switchEditProperty()"
+                        style="padding: 12px 16px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); background: white; cursor: pointer; min-width: 250px;">
+                        <option value="prop-1" selected>🏠 Moderne Woning - Antwerpen</option>
+                        <option value="prop-2">🏢 Penthouse - Schelde</option>
+                        <option value="prop-3">🏡 Villa - Brasschaat</option>
+                    </select>
+
                     <button class="btn-secondary" onclick="window.location.href='property.html'">
                         <i class="ri-eye-line"></i> Preview
                     </button>
@@ -396,8 +404,57 @@
     </div>
 
     <script src="app.js"></script>
+    <script src="propertyContext.js"></script>
     <script>
         let photos = [];
+
+        // Load advertentie for current property
+        function loadAdvertentieForProperty() {
+            const propertyId = propertyContext.getCurrentId();
+            const data = propertyContext.getData('advertentie');
+
+            // Update property selector
+            document.getElementById('propertySelector').value = propertyId;
+
+            if (data) {
+                // Load all fields
+                document.getElementById('editTitle').value = data.title || '';
+                document.getElementById('editPrice').value = data.price || '';
+                document.getElementById('editLocation').value = data.location || '';
+                document.getElementById('editDescription').value = data.description || '';
+                document.getElementById('editBedrooms').value = data.bedrooms || 3;
+                document.getElementById('editBathrooms').value = data.bathrooms || 2;
+                document.getElementById('editSurface').value = data.surface || 150;
+                document.getElementById('editType').value = data.type || 'Huis';
+
+                // Load photos
+                if (data.photos && data.photos.length > 0) {
+                    photos = data.photos;
+                    renderPhotoGallery();
+                }
+
+                updatePreview();
+            } else {
+                // Initialize with property defaults
+                const property = propertyContext.getCurrent();
+                document.getElementById('editTitle').value = property.name;
+                document.getElementById('editLocation').value = property.address.split(',')[1]?.trim() || '';
+                updatePreview();
+            }
+        }
+
+        // Switch to different property
+        function switchEditProperty() {
+            const propertyId = document.getElementById('propertySelector').value;
+            propertyContext.switch(propertyId);
+        }
+
+        // Listen for property changes
+        window.addEventListener('propertyChanged', (e) => {
+            console.log('Property changed to:', e.detail.property.name);
+            loadAdvertentieForProperty();
+        });
+
 
         function updatePreview() {
             document.getElementById('propertyTitle').textContent = document.getElementById('editTitle').value;
@@ -428,8 +485,11 @@
                 photos: photos
             };
 
-            localStorage.setItem('myAdvertentie', JSON.stringify(advertentie));
-            alert('✅ Advertentie opgeslagen!');
+            // Save using PropertyContext - automatically saves for current property
+            propertyContext.saveData('advertentie', advertentie);
+
+            const property = propertyContext.getCurrent();
+            alert(`✅ Advertentie opgeslagen voor:\n${property.emoji} ${property.name}`);
         }
 
         // Photo Management
@@ -514,26 +574,10 @@
             }
         }
 
-        // Load saved data
+        // Load saved data on page load
         window.addEventListener('load', () => {
-            const saved = JSON.parse(localStorage.getItem('myAdvertentie') || '{}');
-            if (saved.title) {
-                document.getElementById('editTitle').value = saved.title;
-                document.getElementById('editPrice').value = saved.price;
-                document.getElementById('editLocation').value = saved.location;
-                document.getElementById('editDescription').value = saved.description;
-                document.getElementById('editBedrooms').value = saved.bedrooms;
-                document.getElementById('editBathrooms').value = saved.bathrooms;
-                document.getElementById('editSurface').value = saved.surface;
-                document.getElementById('editType').value = saved.type;
-
-                if (saved.photos && saved.photos.length > 0) {
-                    photos = saved.photos;
-                    renderPhotoGallery();
-                }
-
-                updatePreview();
-            }
+            // Load advertentie for current property
+            loadAdvertentieForProperty();
         });
     </script>
 </body>
