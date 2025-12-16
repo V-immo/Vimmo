@@ -412,7 +412,7 @@
             </div>
             <div class="nav-actions">
                 <a href="dashboard.html" class="btn btn-glass">Inloggen</a>
-                <a href="verkopen.html" class="btn btn-primary">Verkopen</a>
+                <a href="account.html" class="btn btn-primary">Registreren</a>
             </div>
             <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
                 <span></span>
@@ -441,270 +441,272 @@
         </div>
         <div class="mobile-menu-actions">
             <a href="dashboard.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
-            <a href="verkopen.html" class="btn btn-primary" style="width: 100%; text-align: center;">Verkopen</a>
-        </div>
-    </div>
-
-    <!-- Hero -->
-    <section class="listing-hero">
-        <div class="container">
-            <h1>Woningen <span style="color: #d63031;">te koop</span></h1>
-            <p class="subtitle">Vind uw droomwoning in België</p>
-
-            <div class="search-section">
-                <div class="search-input-wrapper">
-                    <i class="ri-search-line"></i>
-                    <input type="text" placeholder="Zoek op stad, wijk of postcode...">
-                </div>
-                <select class="filter-select">
-                    <option>Alle types</option>
-                    <option>Appartement</option>
-                    <option>Huis</option>
-                    <option>Villa</option>
-                    <option>Penthouse</option>
-                    <option>Grond</option>
-                </select>
-                <select class="filter-select">
-                    <option>Prijs</option>
-                    <option>Tot €200.000</option>
-                    <option>Tot €350.000</option>
-                    <option>Tot €500.000</option>
-                    <option>Tot €750.000</option>
-                    <option>€750.000+</option>
-                </select>
-                <button class="btn btn-primary search-btn">Zoeken</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Listings -->
-    <section class="container">
-        <div class="results-header">
-            <p class="results-count"><strong>247</strong> woningen gevonden</p>
-            <div class="sort-options">
-                <label>Sorteren:</label>
-                <select class="filter-select" style="min-width: 160px;">
-                    <option>Meest recent</option>
-                    <option>Prijs laag-hoog</option>
-                    <option>Prijs hoog-laag</option>
-                    <option>Oppervlakte</option>
-                </select>
-            </div>
+            <a href="account.html" class="btn btn-primary" style="width: 100%; text-align: center;">Registreren</a>
+            <a href="verkopen.html"
+                style="display: block; text-align: center; color: var(--primary); margin-top: 16px;">Woning verkopen
+                →</a>
         </div>
 
-        <div class="listing-layout">
-            <!-- Filters -->
-            <aside class="filters-sidebar">
-                <div class="filter-group">
-                    <h4>Prijs</h4>
-                    <div class="price-range">
-                        <input type="number" placeholder="Min €">
-                        <span>—</span>
-                        <input type="number" placeholder="Max €">
+        <!-- Hero -->
+        <section class="listing-hero">
+            <div class="container">
+                <h1>Woningen <span style="color: #d63031;">te koop</span></h1>
+                <p class="subtitle">Vind uw droomwoning in België</p>
+
+                <div class="search-section">
+                    <div class="search-input-wrapper">
+                        <i class="ri-search-line"></i>
+                        <input type="text" placeholder="Zoek op stad, wijk of postcode...">
                     </div>
+                    <select class="filter-select">
+                        <option>Alle types</option>
+                        <option>Appartement</option>
+                        <option>Huis</option>
+                        <option>Villa</option>
+                        <option>Penthouse</option>
+                        <option>Grond</option>
+                    </select>
+                    <select class="filter-select">
+                        <option>Prijs</option>
+                        <option>Tot €200.000</option>
+                        <option>Tot €350.000</option>
+                        <option>Tot €500.000</option>
+                        <option>Tot €750.000</option>
+                        <option>€750.000+</option>
+                    </select>
+                    <button class="btn btn-primary search-btn">Zoeken</button>
                 </div>
+            </div>
+        </section>
 
-                <div class="filter-group">
-                    <h4>Slaapkamers</h4>
-                    <select>
-                        <option>Alle</option>
-                        <option>1+</option>
-                        <option>2+</option>
-                        <option>3+</option>
-                        <option>4+</option>
-                        <option>5+</option>
+        <!-- Listings -->
+        <section class="container">
+            <div class="results-header">
+                <p class="results-count"><strong>247</strong> woningen gevonden</p>
+                <div class="sort-options">
+                    <label>Sorteren:</label>
+                    <select class="filter-select" style="min-width: 160px;">
+                        <option>Meest recent</option>
+                        <option>Prijs laag-hoog</option>
+                        <option>Prijs hoog-laag</option>
+                        <option>Oppervlakte</option>
                     </select>
                 </div>
-
-                <div class="filter-group">
-                    <h4>Oppervlakte</h4>
-                    <div class="price-range">
-                        <input type="number" placeholder="Min m²">
-                        <span>—</span>
-                        <input type="number" placeholder="Max m²">
-                    </div>
-                </div>
-
-                <div class="filter-group">
-                    <h4>Type woning</h4>
-                    <div class="checkbox-group">
-                        <label class="checkbox-item">
-                            <input type="checkbox" checked> Appartement
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" checked> Huis
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" checked> Villa
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox"> Penthouse
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox"> Grond
-                        </label>
-                    </div>
-                </div>
-
-                <div class="filter-group">
-                    <h4>Extra</h4>
-                    <div class="checkbox-group">
-                        <label class="checkbox-item">
-                            <input type="checkbox"> Met tuin
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox"> Met garage
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox"> Met terras
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox"> Nieuwbouw
-                        </label>
-                    </div>
-                </div>
-
-                <button class="reset-filters">
-                    <i class="ri-refresh-line"></i> Filters wissen
-                </button>
-            </aside>
-
-            <!-- Property Grid -->
-            <div class="property-listing-grid" id="propertyGrid">
-                <!-- Properties will be injected by JavaScript -->
             </div>
-        </div>
 
-        <!-- Pagination -->
-        <div class="pagination">
-            <button class="page-btn"><i class="ri-arrow-left-s-line"></i></button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn">2</button>
-            <button class="page-btn">3</button>
-            <button class="page-btn">4</button>
-            <button class="page-btn">5</button>
-            <button class="page-btn"><i class="ri-arrow-right-s-line"></i></button>
-        </div>
-    </section>
+            <div class="listing-layout">
+                <!-- Filters -->
+                <aside class="filters-sidebar">
+                    <div class="filter-group">
+                        <h4>Prijs</h4>
+                        <div class="price-range">
+                            <input type="number" placeholder="Min €">
+                            <span>—</span>
+                            <input type="number" placeholder="Max €">
+                        </div>
+                    </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content"
-                style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
-                <div class="footer-brand">
-                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
-                            style="color: #d63031; font-weight: 400;">V</span> <span
-                            style="color: #3d3530; font-weight: 400;">I</span><span
-                            style="color: #3d3530; font-weight: 800;">MMO</span></h3>
-                </div>
-                <div class="footer-links" style="display: flex; gap: 60px; text-align: right;">
-                    <ul>
-                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">PLATFORM</li>
-                        <li style="list-style: none; margin-bottom: 8px;"><a href="kopen.html"
-                                style="color: var(--text-muted); text-decoration: none;">Te koop</a></li>
-                        <li style="list-style: none; margin-bottom: 8px;"><a href="huren.html"
-                                style="color: var(--text-muted); text-decoration: none;">Te huur</a></li>
-                        <li style="list-style: none; margin-bottom: 8px;"><a href="prijzen.html"
-                                style="color: var(--text-muted); text-decoration: none;">Prijzen</a></li>
-                    </ul>
-                    <ul>
-                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">DIENSTEN</li>
-                        <li style="list-style: none; margin-bottom: 8px;"><a href="register.html"
-                                style="color: var(--text-muted); text-decoration: none;">Voor makelaars</a></li>
-                        <li style="list-style: none; margin-bottom: 8px;"><a href="particulier.html"
-                                style="color: var(--text-muted); text-decoration: none;">Plaats een pand</a></li>
-                        <li style="list-style: none; margin-bottom: 8px;"><a href="contact.html"
-                                style="color: var(--text-muted); text-decoration: none;">Contact</a></li>
-                    </ul>
+                    <div class="filter-group">
+                        <h4>Slaapkamers</h4>
+                        <select>
+                            <option>Alle</option>
+                            <option>1+</option>
+                            <option>2+</option>
+                            <option>3+</option>
+                            <option>4+</option>
+                            <option>5+</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Oppervlakte</h4>
+                        <div class="price-range">
+                            <input type="number" placeholder="Min m²">
+                            <span>—</span>
+                            <input type="number" placeholder="Max m²">
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Type woning</h4>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Appartement
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Huis
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Villa
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Penthouse
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Grond
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Extra</h4>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Met tuin
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Met garage
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Met terras
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Nieuwbouw
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="reset-filters">
+                        <i class="ri-refresh-line"></i> Filters wissen
+                    </button>
+                </aside>
+
+                <!-- Property Grid -->
+                <div class="property-listing-grid" id="propertyGrid">
+                    <!-- Properties will be injected by JavaScript -->
                 </div>
             </div>
-            <div class="footer-bottom"
-                style="text-align: left; padding-top: 30px; display: flex; justify-content: space-between;">
-                <p>&copy; 2024 Vimmo International.</p>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn"><i class="ri-arrow-left-s-line"></i></button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">4</button>
+                <button class="page-btn">5</button>
+                <button class="page-btn"><i class="ri-arrow-right-s-line"></i></button>
             </div>
-        </div>
-    </footer>
+        </section>
 
-    <script>
-        function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('open');
-            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
-        }
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content"
+                    style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
+                    <div class="footer-brand">
+                        <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
+                                style="color: #d63031; font-weight: 400;">V</span> <span
+                                style="color: #3d3530; font-weight: 400;">I</span><span
+                                style="color: #3d3530; font-weight: 800;">MMO</span></h3>
+                    </div>
+                    <div class="footer-links" style="display: flex; gap: 60px; text-align: right;">
+                        <ul>
+                            <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">PLATFORM</li>
+                            <li style="list-style: none; margin-bottom: 8px;"><a href="kopen.html"
+                                    style="color: var(--text-muted); text-decoration: none;">Te koop</a></li>
+                            <li style="list-style: none; margin-bottom: 8px;"><a href="huren.html"
+                                    style="color: var(--text-muted); text-decoration: none;">Te huur</a></li>
+                            <li style="list-style: none; margin-bottom: 8px;"><a href="prijzen.html"
+                                    style="color: var(--text-muted); text-decoration: none;">Prijzen</a></li>
+                        </ul>
+                        <ul>
+                            <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">DIENSTEN</li>
+                            <li style="list-style: none; margin-bottom: 8px;"><a href="register.html"
+                                    style="color: var(--text-muted); text-decoration: none;">Voor makelaars</a></li>
+                            <li style="list-style: none; margin-bottom: 8px;"><a href="particulier.html"
+                                    style="color: var(--text-muted); text-decoration: none;">Plaats een pand</a></li>
+                            <li style="list-style: none; margin-bottom: 8px;"><a href="contact.html"
+                                    style="color: var(--text-muted); text-decoration: none;">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom"
+                    style="text-align: left; padding-top: 30px; display: flex; justify-content: space-between;">
+                    <p>&copy; 2024 Vimmo International.</p>
+                </div>
+            </div>
+        </footer>
 
-        // Sample properties data
-        const properties = [
-            {
-                image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
-                price: '€395.000',
-                title: 'Moderne woning met tuin',
-                location: 'Antwerpen, Berchem',
-                beds: 3,
-                baths: 2,
-                sqm: 145,
-                isNew: true,
-                isVerified: true
-            },
-            {
-                image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-                price: '€275.000',
-                title: 'Licht appartement centrum',
-                location: 'Gent, Centrum',
-                beds: 2,
-                baths: 1,
-                sqm: 95,
-                isNew: false,
-                isVerified: true
-            },
-            {
-                image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
-                price: '€895.000',
-                title: 'Luxe villa met zwembad',
-                location: 'Knokke-Heist',
-                beds: 5,
-                baths: 3,
-                sqm: 320,
-                isNew: true,
-                isVerified: true
-            },
-            {
-                image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=80',
-                price: '€185.000',
-                title: 'Gezellig rijhuis',
-                location: 'Leuven, Kessel-Lo',
-                beds: 2,
-                baths: 1,
-                sqm: 85,
-                isNew: false,
-                isVerified: false
-            },
-            {
-                image: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=800&q=80',
-                price: '€425.000',
-                title: 'Penthouse met dakterras',
-                location: 'Brussel, Elsene',
-                beds: 3,
-                baths: 2,
-                sqm: 165,
-                isNew: true,
-                isVerified: true
-            },
-            {
-                image: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=800&q=80',
-                price: '€545.000',
-                title: 'Karaktervolle hoeve',
-                location: 'Brugge, Sint-Andries',
-                beds: 4,
-                baths: 2,
-                sqm: 240,
-                isNew: false,
-                isVerified: true
+        <script>
+            function toggleMobileMenu() {
+                document.getElementById('mobileMenu').classList.toggle('open');
+                document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
             }
-        ];
 
-        function renderProperties() {
-            const grid = document.getElementById('propertyGrid');
-            grid.innerHTML = properties.map(prop => `
+            // Sample properties data
+            const properties = [
+                {
+                    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
+                    price: '€395.000',
+                    title: 'Moderne woning met tuin',
+                    location: 'Antwerpen, Berchem',
+                    beds: 3,
+                    baths: 2,
+                    sqm: 145,
+                    isNew: true,
+                    isVerified: true
+                },
+                {
+                    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+                    price: '€275.000',
+                    title: 'Licht appartement centrum',
+                    location: 'Gent, Centrum',
+                    beds: 2,
+                    baths: 1,
+                    sqm: 95,
+                    isNew: false,
+                    isVerified: true
+                },
+                {
+                    image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
+                    price: '€895.000',
+                    title: 'Luxe villa met zwembad',
+                    location: 'Knokke-Heist',
+                    beds: 5,
+                    baths: 3,
+                    sqm: 320,
+                    isNew: true,
+                    isVerified: true
+                },
+                {
+                    image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=80',
+                    price: '€185.000',
+                    title: 'Gezellig rijhuis',
+                    location: 'Leuven, Kessel-Lo',
+                    beds: 2,
+                    baths: 1,
+                    sqm: 85,
+                    isNew: false,
+                    isVerified: false
+                },
+                {
+                    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=800&q=80',
+                    price: '€425.000',
+                    title: 'Penthouse met dakterras',
+                    location: 'Brussel, Elsene',
+                    beds: 3,
+                    baths: 2,
+                    sqm: 165,
+                    isNew: true,
+                    isVerified: true
+                },
+                {
+                    image: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=800&q=80',
+                    price: '€545.000',
+                    title: 'Karaktervolle hoeve',
+                    location: 'Brugge, Sint-Andries',
+                    beds: 4,
+                    baths: 2,
+                    sqm: 240,
+                    isNew: false,
+                    isVerified: true
+                }
+            ];
+
+            function renderProperties() {
+                const grid = document.getElementById('propertyGrid');
+                grid.innerHTML = properties.map(prop => `
                 <div class="property-listing-card">
                     <div class="card-image" style="background-image: url('${prop.image}')">
                         <div class="card-badges">
@@ -739,10 +741,10 @@
                     </div>
                 </div>
             `).join('');
-        }
+            }
 
-        renderProperties();
-    </script>
+            renderProperties();
+        </script>
 </body>
 
 </html>
