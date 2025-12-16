@@ -322,6 +322,97 @@
     </div>
 
     <script src="app.js"></script>
+    <script>
+        const chatInput = document.querySelector('.chat-input');
+        const sendBtn = document.querySelector('.send-btn');
+        const messagesContainer = document.querySelector('.chat-messages');
+
+        function sendMessage() {
+            const messageText = chatInput.value.trim();
+            if (!messageText) return;
+
+            // Create message element
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message sent';
+
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+
+            messageDiv.innerHTML = `
+                <div class="message-avatar">E</div>
+                <div class="message-content">
+                    <div class="message-text">${messageText}</div>
+                    <div class="message-time">${timeString}</div>
+                </div>
+            `;
+
+            // Add to chat
+            messagesContainer.appendChild(messageDiv);
+
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Clear input
+            chatInput.value = '';
+
+            // Save to localStorage
+            const chatId = new URLSearchParams(window.location.search).get('id') || '1';
+            const messages = JSON.parse(localStorage.getItem(`chat_${chatId}`) || '[]');
+            messages.push({
+                text: messageText,
+                time: timeString,
+                sent: true,
+                timestamp: now.getTime()
+            });
+            localStorage.setItem(`chat_${chatId}`, JSON.stringify(messages));
+
+            // Simulate response after 2 seconds
+            setTimeout(() => {
+                const responseDiv = document.createElement('div');
+                responseDiv.className = 'message';
+                responseDiv.innerHTML = `
+                    <div class="message-avatar">MV</div>
+                    <div class="message-content">
+                        <div class="message-text">Bedankt voor uw bericht! Ik kom zo snel mogelijk bij u terug.</div>
+                        <div class="message-time">${new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}</div>
+                    </div>
+                `;
+                messagesContainer.appendChild(responseDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 2000);
+        }
+
+        // Send on button click
+        sendBtn.addEventListener('click', sendMessage);
+
+        // Send on Enter key
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Load saved messages
+        window.addEventListener('load', () => {
+            const chatId = new URLSearchParams(window.location.search).get('id') || '1';
+            const messages = JSON.parse(localStorage.getItem(`chat_${chatId}`) || '[]');
+
+            messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = msg.sent ? 'message sent' : 'message';
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">${msg.sent ? 'E' : 'MV'}</div>
+                    <div class="message-content">
+                        <div class="message-text">${msg.text}</div>
+                        <div class="message-time">${msg.time}</div>
+                    </div>
+                `;
+                messagesContainer.appendChild(messageDiv);
+            });
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        });
+    </script>
 </body>
 
 </html>
