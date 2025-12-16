@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijn Advertentie | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .advertentie-page {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-light);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar .brand {
+            padding: 0 30px 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-nav {
+            padding: 0 15px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            max-width: 1400px;
+        }
+
+        .advertentie-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            margin-bottom: 30px;
+        }
+
+        .advertentie-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .property-preview {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .property-image {
+            width: 100%;
+            height: 300px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+        }
+
+        .property-details h2 {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+        }
+
+        .property-specs {
+            display: flex;
+            gap: 24px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+        }
+
+        .spec-item i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .edit-section {
+            background: var(--bg-light);
+            padding: 24px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+        }
+
+        .edit-section h3 {
+            margin-bottom: 16px;
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn-primary {
+            padding: 14px 32px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #c52a2b;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            padding: 14px 32px;
+            background: white;
+            color: var(--text-main);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+        }
+
+        .photo-upload {
+            border: 2px dashed rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .photo-upload:hover {
+            border-color: var(--primary);
+            background: rgba(214, 48, 49, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .property-preview {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="advertentie-page">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard-particulier.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="advertentie.html" class="nav-item active">
+                    <i class="ri-home-4-line"></i> Mijn Advertentie
+                </a>
+                <a href="beschikbaarheid.html" class="nav-item">
+                    <i class="ri-calendar-line"></i> Beschikbaarheid
+                </a>
+                <a href="agenda.html" class="nav-item">
+                    <i class="ri-calendar-check-line"></i> Aanvragen
+                </a>
+                <a href="berichten.html" class="nav-item">
+                    <i class="ri-message-3-line"></i> Berichten
+                </a>
+
+                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+
+                <a href="instellingen.html" class="nav-item">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="index.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="advertentie-header">
+                <div>
+                    <h1 style="font-size: 2rem; margin-bottom: 8px;">Mijn Advertentie Beheren</h1>
+                    <p style="color: var(--text-muted);">Bewerk uw woning advertentie en foto's</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn-secondary" onclick="window.location.href='property.html'">
+                        <i class="ri-eye-line"></i> Preview
+                    </button>
+                    <button class="btn-primary" onclick="saveAdvertentie()">
+                        <i class="ri-save-line"></i> Opslaan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Property Preview -->
+            <div class="advertentie-card">
+                <h2 style="margin-bottom: 24px;">Huidige Advertentie</h2>
+                <div class="property-preview">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80" alt="Woning"
+                        class="property-image">
+                    <div class="property-details">
+                        <h2 id="propertyTitle">Moderne Woning in Antwerpen</h2>
+                        <div style="font-size: 1.8rem; color: var(--primary); font-weight: 700; margin-bottom: 16px;"
+                            id="propertyPrice">€ 450.000</div>
+                        <div class="property-specs">
+                            <div class="spec-item">
+                                <i class="ri-hotel-bed-line"></i>
+                                <span id="bedrooms">3 Slaapkamers</span>
+                            </div>
+                            <div class="spec-item">
+                                <i class="ri-drop-line"></i>
+                                <span id="bathrooms">2 Badkamers</span>
+                            </div>
+                            <div class="spec-item">
+                                <i class="ri-ruler-line"></i>
+                                <span id="surface">150 m²</span>
+                            </div>
+                            <div class="spec-item">
+                                <i class="ri-map-pin-line"></i>
+                                <span id="location">Antwerpen, Zuid</span>
+                            </div>
+                        </div>
+                        <p id="description" style="color: var(--text-muted); line-height: 1.6;">
+                            Prachtige moderne woning in het hart van Antwerpen Zuid. Volledig gerenoveerd met
+                            hoogwaardige afwerking.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Form -->
+            <div class="advertentie-card">
+                <h2 style="margin-bottom: 24px;">Advertentie Bewerken</h2>
+
+                <div class="edit-section">
+                    <h3><i class="ri-information-line"></i> Basis Informatie</h3>
+                    <div class="form-group">
+                        <label>Titel</label>
+                        <input type="text" id="editTitle" value="Moderne Woning in Antwerpen"
+                            onchange="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Prijs (€)</label>
+                        <input type="number" id="editPrice" value="450000" onchange="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Locatie</label>
+                        <input type="text" id="editLocation" value="Antwerpen, Zuid" onchange="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Beschrijving</label>
+                        <textarea id="editDescription"
+                            onchange="updatePreview()">Prachtige moderne woning in het hart van Antwerpen Zuid. Volledig gerenoveerd met hoogwaardige afwerking.</textarea>
+                    </div>
+                </div>
+
+                <div class="edit-section">
+                    <h3><i class="ri-home-4-line"></i> Specificaties</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                        <div class="form-group">
+                            <label>Slaapkamers</label>
+                            <input type="number" id="editBedrooms" value="3" onchange="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>Badkamers</label>
+                            <input type="number" id="editBathrooms" value="2" onchange="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>Oppervlakte (m²)</label>
+                            <input type="number" id="editSurface" value="150" onchange="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>Type</label>
+                            <select id="editType">
+                                <option>Huis</option>
+                                <option>Appartement</option>
+                                <option>Villa</option>
+                                <option>Penthouse</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="edit-section">
+                    <h3><i class="ri-image-line"></i> Foto's</h3>
+                    <div class="photo-upload" onclick="alert('Foto upload functionaliteit komt binnenkort!')">
+                        <i class="ri-upload-cloud-line"
+                            style="font-size: 3rem; color: var(--primary); margin-bottom: 12px;"></i>
+                        <p style="font-weight: 600; margin-bottom: 4px;">Klik om foto's te uploaden</p>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Of sleep foto's hierheen</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        function updatePreview() {
+            document.getElementById('propertyTitle').textContent = document.getElementById('editTitle').value;
+            document.getElementById('propertyPrice').textContent = '€ ' + parseInt(document.getElementById('editPrice').value).toLocaleString('nl-BE');
+            document.getElementById('location').textContent = document.getElementById('editLocation').value;
+            document.getElementById('description').textContent = document.getElementById('editDescription').value;
+            document.getElementById('bedrooms').textContent = document.getElementById('editBedrooms').value + ' Slaapkamers';
+            document.getElementById('bathrooms').textContent = document.getElementById('editBathrooms').value + ' Badkamers';
+            document.getElementById('surface').textContent = document.getElementById('editSurface').value + ' m²';
+        }
+
+        function saveAdvertentie() {
+            const advertentie = {
+                title: document.getElementById('editTitle').value,
+                price: document.getElementById('editPrice').value,
+                location: document.getElementById('editLocation').value,
+                description: document.getElementById('editDescription').value,
+                bedrooms: document.getElementById('editBedrooms').value,
+                bathrooms: document.getElementById('editBathrooms').value,
+                surface: document.getElementById('editSurface').value,
+                type: document.getElementById('editType').value
+            };
+
+            localStorage.setItem('myAdvertentie', JSON.stringify(advertentie));
+            alert('✅ Advertentie opgeslagen!');
+        }
+
+        // Load saved data
+        window.addEventListener('load', () => {
+            const saved = JSON.parse(localStorage.getItem('myAdvertentie') || '{}');
+            if (saved.title) {
+                document.getElementById('editTitle').value = saved.title;
+                document.getElementById('editPrice').value = saved.price;
+                document.getElementById('editLocation').value = saved.location;
+                document.getElementById('editDescription').value = saved.description;
+                document.getElementById('editBedrooms').value = saved.bedrooms;
+                document.getElementById('editBathrooms').value = saved.bathrooms;
+                document.getElementById('editSurface').value = saved.surface;
+                document.getElementById('editType').value = saved.type;
+                updatePreview();
+            }
+        });
+    </script>
+</body>
+
+</html>
