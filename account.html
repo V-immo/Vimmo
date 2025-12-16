@@ -283,7 +283,8 @@
 
                 <div class="divider">of met email</div>
 
-                <form id="registerForm" onsubmit="submitRegister(event)">
+                <form class="register-form"
+                    onsubmit="event.preventDefault(); window.location.href='dashboard-zoeker.html';">
                     <div class="form-row">
                         <div class="form-group">
                             <label>Voornaam</label>
