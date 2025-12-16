@@ -390,6 +390,101 @@
             color: #555;
             font-size: 0.8rem;
         }
+
+        /* Dashboard Mobile Responsive */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 20px;
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .sidebar-nav {
+                display: none;
+            }
+
+            .sidebar-user {
+                display: none;
+            }
+
+            .sidebar-brand {
+                font-size: 1.4rem;
+                margin-bottom: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .page-title {
+                font-size: 1.4rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .request-item {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .request-times {
+                order: 3;
+                width: 100%;
+                text-align: left;
+            }
+
+            .btn-confirm {
+                width: 100%;
+                order: 4;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 1.2rem;
+            }
+
+            .sidebar-brand {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 

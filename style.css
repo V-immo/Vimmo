@@ -977,3 +977,121 @@ h4,
         font-size: 1.5rem;
     }
 }
+
+/* Better Mobile Navbar */
+@media (max-width: 900px) {
+    .navbar {
+        padding: 15px 0;
+    }
+
+    .navbar.scrolled {
+        padding: 10px 0;
+    }
+
+    .brand {
+        font-size: 1.4rem;
+        letter-spacing: 1px;
+    }
+
+    /* Make sure hamburger is always visible */
+    .hamburger {
+        display: flex !important;
+        position: relative;
+        z-index: 1001;
+    }
+
+    /* Hide desktop nav on mobile */
+    .nav-links,
+    .nav-actions {
+        display: none !important;
+    }
+
+    /* Navbar container fix */
+    .nav-content {
+        justify-content: space-between;
+    }
+}
+
+/* Extra mobile improvements */
+@media (max-width: 600px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    /* Footer mobile */
+    .footer-content {
+        flex-direction: column !important;
+        gap: 40px !important;
+        text-align: center !important;
+    }
+
+    .footer-links {
+        flex-direction: column !important;
+        gap: 30px !important;
+        text-align: center !important;
+    }
+
+    .footer-bottom {
+        flex-direction: column !important;
+        gap: 20px !important;
+        text-align: center !important;
+    }
+
+    /* CTA section mobile */
+    section[style*="display: flex"][style*="justify-content: space-between"] {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 20px !important;
+    }
+
+    /* Trust section grid */
+    div[style*="grid-template-columns: repeat(4, 1fr)"] {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* Stats grid - visible on mobile */
+    .hero-stats {
+        position: relative !important;
+        bottom: auto !important;
+        left: auto !important;
+        margin: 20px;
+        justify-content: center;
+    }
+
+    /* Better button sizing on mobile */
+    .btn {
+        padding: 12px 20px;
+        font-size: 0.75rem;
+    }
+
+    .btn-primary,
+    .btn-glass {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Small phones */
+@media (max-width: 400px) {
+    .brand {
+        font-size: 1.2rem;
+        letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+
+    div[style*="grid-template-columns: repeat(4, 1fr)"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    .mobile-menu-links a {
+        font-size: 1.3rem;
+        padding: 15px 0;
+    }
+}
