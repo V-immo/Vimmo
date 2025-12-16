@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particulier Verkopen | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .particulier-hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            padding: 140px 0 80px;
+            background: var(--bg-section);
+        }
+
+        .particulier-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        .particulier-hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .benefit-card {
+            background: var(--bg-card);
+            padding: 40px 30px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            transition: var(--transition-fast);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .benefit-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .benefit-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 100px 0;
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .pricing-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(168, 134, 42, 0.15);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Populair';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .pricing-card .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+
+        .pricing-card .price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .pricing-card ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .pricing-card ul li i {
+            color: var(--primary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--bg-section);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 900px) {
+
+            .benefits-grid,
+            .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#kopen">Te koop</a>
+                <a href="index.html#huren">Te huur</a>
+                <a href="index.html#nieuwbouw">Nieuwbouw</a>
+                <a href="register.html">Voor makelaars</a>
+                <a href="prijzen.html">Prijzen</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <a href="dashboard.html" class="btn btn-glass">Inloggen</a>
+                <a href="#start" class="btn btn-primary">Plaats een pand</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="particulier-hero">
+        <div class="container">
+            <span class="label-pill"><i class="ri-home-heart-line"></i> Voor Particulieren</span>
+            <h1>Verkoop uw woning<br><span class="text-gold">zonder makelaar</span></h1>
+            <p>Bereik duizenden potentiële kopers via het premium Vimmo platform. Professionele uitstraling, zonder
+                commissie.</p>
+            <a href="#start" class="btn btn-primary">Gratis Starten</a>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="container" style="padding: 80px 0;">
+        <div class="section-header" style="padding-top: 0;">
+            <div class="section-title">
+                <span>Voordelen</span>
+                <h2>Waarom Vimmo?</h2>
+            </div>
+        </div>
+
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <i class="ri-money-euro-circle-line"></i>
+                <h3>Geen Commissie</h3>
+                <p>Betaal een vast bedrag, geen percentage van uw verkoopprijs. Bespaar duizenden euro's.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="ri-verified-badge-line"></i>
+                <h3>Premium Uitstraling</h3>
+                <p>Uw advertentie krijgt dezelfde luxe presentatie als bij de beste makelaars.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="ri-user-star-line"></i>
+                <h3>Zelf in Controle</h3>
+                <p>Beheer bezichtigingen, berichten en prijswijzigingen via uw persoonlijke dashboard.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="ri-camera-3-line"></i>
+                <h3>Foto Service</h3>
+                <p>Optioneel: boek een professionele fotograaf voor premium resultaten.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="ri-eye-line"></i>
+                <h3>Maximaal Bereik</h3>
+                <p>Uw pand wordt automatisch gepubliceerd op alle grote vastgoedportalen.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="ri-customer-service-2-line"></i>
+                <h3>Ondersteuning</h3>
+                <p>Vragen? Ons team staat klaar om u te helpen via chat of telefoon.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing-section" id="start">
+        <div class="container">
+            <div class="pricing-header">
+                <span class="label-pill">Transparante Prijzen</span>
+                <h2>Kies uw pakket</h2>
+                <p style="color: var(--text-muted);">Geen verborgen kosten, geen commissies</p>
+            </div>
+
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>30 Dagen</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Snelle verkoop</p>
+                    <div class="price">
+                        €89
+                    </div>
+                    <ul>
+                        <li><i class="ri-check-line"></i> 30 dagen online</li>
+                        <li><i class="ri-check-line"></i> 15 foto's</li>
+                        <li><i class="ri-check-line"></i> Basis statistieken</li>
+                        <li><i class="ri-check-line"></i> Chat support</li>
+                    </ul>
+                    <a href="#" class="btn btn-glass" style="width: 100%;">Kies 30 Dagen</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <h3>60 Dagen</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Meest gekozen</p>
+                    <div class="price">
+                        €149
+                    </div>
+                    <ul>
+                        <li><i class="ri-check-line"></i> 60 dagen online</li>
+                        <li><i class="ri-check-line"></i> 25 foto's + video</li>
+                        <li><i class="ri-check-line"></i> Uitgebreide statistieken</li>
+                        <li><i class="ri-check-line"></i> Telefoon support</li>
+                        <li><i class="ri-check-line"></i> Toppositie 7 dagen</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Kies 60 Dagen</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>90 Dagen</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Maximaal bereik</p>
+                    <div class="price">
+                        €199
+                    </div>
+                    <ul>
+                        <li><i class="ri-check-line"></i> 90 dagen online</li>
+                        <li><i class="ri-check-line"></i> Onbeperkt foto's + video</li>
+                        <li><i class="ri-check-line"></i> Premium statistieken</li>
+                        <li><i class="ri-check-line"></i> Priority support</li>
+                        <li><i class="ri-check-line"></i> Toppositie 30 dagen</li>
+                    </ul>
+                    <a href="#" class="btn btn-glass" style="width: 100%;">Kies 90 Dagen</a>
+                </div>
+            </div>
+
+
+
+            <!-- Extra Options -->
+            <div style="margin-top: 60px; text-align: center;">
+                <h3 style="margin-bottom: 30px;">Extra Opties</h3>
+                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">€29</div>
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Toppositie 7 dagen</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">€79</div>
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Toppositie 30 dagen</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">€49</div>
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Verlenging 30 dagen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Klaar om te verkopen?</h2>
+            <p>Start vandaag nog en bereik duizenden potentiële kopers.</p>
+            <a href="#" class="btn btn-primary">Advertentie Plaatsen</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: var(--bg-section); padding: 60px 0;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;"></span>V</span> <span
+                        style="color: #3d3530; font-weight: 400;">I</span><span
+                        style="color: #3d3530; font-weight: 800;">MMO</span></a>
+                <p style="color: var(--text-muted);">© 2024 Vimmo International</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vimmo | Vind een plek die bij je past</title>
+    <meta name="description"
+        content="Vind woningen te koop en te huur in heel België. Echte woningen, duidelijke prijzen, direct contact. Of je nu koopt, huurt of verhuurt.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="cursor-glow"></div>
+
+    <!-- Animated Background Orbs -->
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="kopen.html">Te koop</a>
+                <a href="huren.html">Te huur</a>
+                <a href="nieuwbouw.html">Nieuwbouw</a>
+                <a href="register.html">Voor makelaars</a>
+                <a href="prijzen.html">Prijzen</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <a href="dashboard.html" class="btn btn-glass">Inloggen</a>
+                <a href="particulier.html" class="btn btn-primary">Plaats je woning</a>
+            </div>
+            <!-- Mobile Hamburger -->
+            <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <a href="#" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span></a>
+            <button class="close-menu" onclick="toggleMobileMenu()">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html" onclick="toggleMobileMenu()">Home</a>
+            <a href="kopen.html" onclick="toggleMobileMenu()">Te koop</a>
+            <a href="huren.html" onclick="toggleMobileMenu()">Te huur</a>
+            <a href="nieuwbouw.html" onclick="toggleMobileMenu()">Nieuwbouw</a>
+            <a href="register.html" onclick="toggleMobileMenu()">Voor makelaars</a>
+            <a href="prijzen.html" onclick="toggleMobileMenu()">Prijzen</a>
+            <a href="contact.html" onclick="toggleMobileMenu()">Contact</a>
+        </div>
+        <div class="mobile-menu-actions">
+            <a href="dashboard.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
+            <a href="particulier.html" class="btn btn-primary" style="width: 100%; text-align: center;">Plaats je
+                woning</a>
+        </div>
+    </div>
+
+    <header class="hero hero-split">
+        <div class="hero-content-left">
+            <div class="container">
+                <span class="label-pill"><i class="ri-home-heart-line"></i> Woningen in heel België</span>
+                <h1>
+                    Vind een plek die<br>
+                    <span class="text-gold">bij je past</span>
+                </h1>
+                <p class="hero-subtitle">Of je nu koopt, huurt, of gewoon rondkijkt — hier vind je woningen met
+                    duidelijke prijzen en direct contact. Zonder gedoe.</p>
+
+                <!-- Search Container -->
+                <div class="search-container">
+                    <div class="search-main">
+                        <div class="search-input-group">
+                            <i class="ri-search-line"></i>
+                            <input type="text" placeholder="Waar wil je wonen?">
+                        </div>
+                        <button class="btn btn-primary btn-search-main">Zoeken</button>
+                    </div>
+
+                    <!-- Quick Filters -->
+                    <div class="quick-filters">
+                        <div class="filter-group">
+                            <label>Type</label>
+                            <select>
+                                <option>Alle types</option>
+                                <option>Appartement</option>
+                                <option>Huis</option>
+                                <option>Villa</option>
+                                <option>Penthouse</option>
+                                <option>Grond</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Prijs tot</label>
+                            <select>
+                                <option>Geen max</option>
+                                <option>€ 300.000</option>
+                                <option>€ 500.000</option>
+                                <option>€ 750.000</option>
+                                <option>€ 1.000.000</option>
+                                <option>€ 2.000.000+</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Slaapkamers</label>
+                            <select>
+                                <option>Alle</option>
+                                <option>1+</option>
+                                <option>2+</option>
+                                <option>3+</option>
+                                <option>4+</option>
+                                <option>5+</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Popular Cities -->
+                    <div class="popular-cities">
+                        <span class="cities-label">Populair:</span>
+                        <a href="kopen.html" class="city-tag">Antwerpen</a>
+                        <a href="kopen.html" class="city-tag">Brussel</a>
+                        <a href="kopen.html" class="city-tag">Gent</a>
+                        <a href="kopen.html" class="city-tag">Knokke</a>
+                        <a href="kopen.html" class="city-tag">Leuven</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image-right">
+            <img src="assets/hero_villa_warm.png" alt="Moderne woning">
+            <div class="hero-image-overlay"></div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" data-count="2500" data-suffix="+">0</span>
+                    <span class="stat-label">Woningen</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="98" data-suffix="%">0</span>
+                    <span class="stat-label">Tevreden</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section-featured">
+            <div class="section-header-minimal">
+                <span class="section-label">Net toegevoegd</span>
+                <a href="kopen.html" class="link-arrow">Alles bekijken <i class="ri-arrow-right-line"></i></a>
+            </div>
+
+            <div id="property-grid" class="property-grid">
+                <!-- Javascript will inject magazine-style cards -->
+            </div>
+        </section>
+
+        <!-- Trust Section -->
+        <section style="padding: 80px 0;">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <span class="label-pill"><i class="ri-shield-check-line"></i> Waarom Vimmo</span>
+                <h2 style="font-size: 2.2rem; margin-top: 20px;">Zoeken naar een woning <span class="text-gold">zonder
+                        gedoe</span></h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 16px auto 0;">Woningen die beschikbaar
+                    zijn. Prijzen die kloppen. Contact dat werkt.</p>
+            </div>
+            <div
+                style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 1000px; margin: 0 auto;">
+                <!-- Trust 1 -->
+                <div
+                    style="background: var(--bg-card); padding: 32px 24px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); text-align: center;">
+                    <i class="ri-home-smile-line"
+                        style="font-size: 2.2rem; color: var(--primary); margin-bottom: 16px; display: block;"></i>
+                    <h4 style="font-size: 1rem; margin-bottom: 8px;">Actueel aanbod</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">Woningen die echt
+                        beschikbaar zijn</p>
+                </div>
+                <!-- Trust 2 -->
+                <div
+                    style="background: var(--bg-card); padding: 32px 24px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); text-align: center;">
+                    <i class="ri-price-tag-3-line"
+                        style="font-size: 2.2rem; color: var(--primary); margin-bottom: 16px; display: block;"></i>
+                    <h4 style="font-size: 1rem; margin-bottom: 8px;">Duidelijke prijzen</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">Je weet wat je kunt
+                        verwachten</p>
+                </div>
+                <!-- Trust 3 -->
+                <div
+                    style="background: var(--bg-card); padding: 32px 24px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); text-align: center;">
+                    <i class="ri-chat-smile-3-line"
+                        style="font-size: 2.2rem; color: var(--primary); margin-bottom: 16px; display: block;"></i>
+                    <h4 style="font-size: 1rem; margin-bottom: 8px;">Direct contact</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">Praat direct met de
+                        aanbieder</p>
+                </div>
+                <!-- Trust 4 -->
+                <div
+                    style="background: var(--bg-card); padding: 32px 24px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); text-align: center;">
+                    <i class="ri-user-heart-line"
+                        style="font-size: 2.2rem; color: var(--primary); margin-bottom: 16px; display: block;"></i>
+                    <h4 style="font-size: 1rem; margin-bottom: 8px;">Voor iedereen</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">Of je koopt, huurt of
+                        verkoopt</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section
+            style="background: var(--bg-section); padding: 50px; border-radius: var(--radius-lg); margin: 40px 0; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <h3 style="font-size: 1.3rem; margin-bottom: 8px;">Woning te verkopen of verhuren?</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Bereik duizenden mensen die op zoek zijn.
+                    Zonder vaste contracten.</p>
+            </div>
+            <a href="particulier.html" class="btn btn-primary">Plaats je woning →</a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content"
+                style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
+                <div class="footer-brand">
+                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
+                            style="color: #d63031; font-weight: 400;">V</span> <span
+                            style="color: #3d3530; font-weight: 400;">I</span><span
+                            style="color: #3d3530; font-weight: 800;">MMO</span></h3>
+                    <p style="color: var(--text-muted); max-width: 280px; font-size: 0.9rem; line-height: 1.6;">Vind een
+                        plek die bij je past. Woningen in heel België.</p>
+                </div>
+                <div class="footer-links" style="display: flex; gap: 60px; text-align: right;">
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">ZOEKEN</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="kopen.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te koop</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="huren.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te huur</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="nieuwbouw.html"
+                                style="color: var(--text-muted); text-decoration: none;">Nieuwbouw</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="prijzen.html"
+                                style="color: var(--text-muted); text-decoration: none;">Prijzen</a></li>
+                    </ul>
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">AANBIEDEN</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="particulier.html"
+                                style="color: var(--text-muted); text-decoration: none;">Plaats je woning</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="register.html"
+                                style="color: var(--text-muted); text-decoration: none;">Voor makelaars</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="contact.html"
+                                style="color: var(--text-muted); text-decoration: none;">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom"
+                style="text-align: left; padding-top: 30px; display: flex; justify-content: space-between;">
+                <p>&copy; 2024 Vimmo.</p>
+                <div style="display: flex; gap: 20px; color: var(--text-muted);">
+                    <a href="#" style="color: var(--text-muted);"><i class="ri-instagram-line"></i></a>
+                    <a href="#" style="color: var(--text-muted);"><i class="ri-linkedin-fill"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

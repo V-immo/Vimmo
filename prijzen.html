@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prijzen | Vimmo - Transparante Tarieven</title>
+    <meta name="description"
+        content="Eerlijke prijzen voor particulieren en makelaars. Geen verborgen kosten, geen lange contracten. Ontdek de Vimmo tarieven.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Pricing Page Specific Styles */
+        .pricing-hero {
+            padding: 160px 0 80px;
+            text-align: center;
+            background: linear-gradient(180deg, #f5f3f0 0%, #fafaf8 100%);
+        }
+
+        .pricing-hero h1 {
+            font-size: 3.2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .pricing-hero .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Pricing Toggle */
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 50px 0 40px;
+        }
+
+        .toggle-btn {
+            padding: 14px 32px;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: var(--transition-fast);
+        }
+
+        .toggle-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .toggle-btn:hover:not(.active) {
+            border-color: var(--primary);
+            color: var(--text-main);
+        }
+
+        /* Pricing Sections */
+        .pricing-section {
+            display: none;
+            padding: 40px 0 80px;
+        }
+
+        .pricing-section.active {
+            display: block;
+            animation: fadeUp 0.5s ease-out;
+        }
+
+        .section-intro {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-intro h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .section-intro p {
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Pricing Cards Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 40px 32px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            transition: var(--transition-fast);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--primary);
+            transform: scale(1.02);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.02) translateY(-4px);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .pricing-card .duration {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .price-amount {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .price-amount .currency {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .price-amount .value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .price-amount .period {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .pricing-card .features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .pricing-card .features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .pricing-card .features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-card .features li i {
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        /* Extras Section */
+        .extras-section {
+            padding: 60px 0;
+            background: var(--bg-section);
+            margin-top: 40px;
+        }
+
+        .extras-section h2 {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .extras-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .extra-card {
+            background: var(--bg-card);
+            padding: 28px 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            transition: var(--transition-fast);
+        }
+
+        .extra-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .extra-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .extra-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .extra-card .extra-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .extra-card .extra-unit {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Founding Banner */
+        .founding-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, #8a7355 100%);
+            padding: 60px 40px;
+            border-radius: var(--radius-lg);
+            margin: 80px auto;
+            max-width: 1100px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .founding-content h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        .founding-content p {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 450px;
+        }
+
+        .founding-prices {
+            display: flex;
+            gap: 24px;
+        }
+
+        .founding-price-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 24px 32px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .founding-price-box .tier {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .founding-price-box .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .founding-price-box .was {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            text-decoration: line-through;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .comparison-section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .comparison-section .subtitle {
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto 50px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .comparison-item {
+            background: var(--bg-card);
+            padding: 24px 20px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--glass-border);
+        }
+
+        .comparison-item i {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .comparison-item h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .comparison-item p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+                order: -1;
+            }
+
+            .extras-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .founding-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .founding-prices {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .comparison-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .pricing-hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .extras-grid,
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-toggle {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .toggle-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cursor-glow"></div>
+
+    <!-- Animated Background Orbs -->
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+
+    <nav class="navbar scrolled">
+        <div class="container nav-content">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#kopen">Te koop</a>
+                <a href="index.html#huren">Te huur</a>
+                <a href="index.html#nieuwbouw">Nieuwbouw</a>
+                <a href="register.html">Voor makelaars</a>
+                <a href="prijzen.html" class="active">Prijzen</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <a href="dashboard.html" class="btn btn-glass">Inloggen</a>
+                <a href="particulier.html" class="btn btn-primary">Plaats een pand</a>
+            </div>
+            <!-- Mobile Hamburger -->
+            <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span></a>
+            <button class="close-menu" onclick="toggleMobileMenu()">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#kopen" onclick="toggleMobileMenu()">Te koop</a>
+            <a href="index.html#huren" onclick="toggleMobileMenu()">Te huur</a>
+            <a href="index.html#nieuwbouw" onclick="toggleMobileMenu()">Nieuwbouw</a>
+            <a href="register.html" onclick="toggleMobileMenu()">Voor makelaars</a>
+            <a href="prijzen.html" onclick="toggleMobileMenu()">Prijzen</a>
+            <a href="contact.html" onclick="toggleMobileMenu()">Contact</a>
+        </div>
+        <div class="mobile-menu-actions">
+            <a href="dashboard.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
+            <a href="particulier.html" class="btn btn-primary" style="width: 100%; text-align: center;">Plaats een
+                pand</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pricing-hero">
+        <div class="container">
+            <h1>Eerlijke prijzen.<br><span class="text-gold">Maximale zichtbaarheid.</span></h1>
+            <p class="subtitle">Transparant, flexibel en resultaatgericht. Geen verborgen kosten, geen lange contracten.
+            </p>
+
+            <!-- Toggle -->
+            <div class="pricing-toggle">
+                <button class="toggle-btn active" onclick="showPricing('particulieren')">Particulieren</button>
+                <button class="toggle-btn" onclick="showPricing('makelaars')">Makelaars</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="container">
+        <!-- Particulieren Pricing -->
+        <section id="particulieren" class="pricing-section active">
+            <div class="section-intro">
+                <h2>Eenvoudig en betaalbaar</h2>
+                <p>Publiceer uw woning of appartement zonder gedoe. Kies de duur die bij u past.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- 30 Days -->
+                <div class="pricing-card">
+                    <h3>Standaard</h3>
+                    <p class="duration">30 dagen online</p>
+                    <div class="price-amount">
+                        <span class="currency">€</span>
+                        <span class="value">89</span>
+                    </div>
+                    <ul class="features">
+                        <li><i class="ri-check-line"></i> Zichtbaar voor alle zoekers</li>
+                        <li><i class="ri-check-line"></i> Foto's en beschrijving</li>
+                        <li><i class="ri-check-line"></i> Direct contact met geïnteresseerden</li>
+                        <li><i class="ri-check-line"></i> Dashboard met statistieken</li>
+                    </ul>
+                    <a href="particulier.html" class="btn btn-glass">Selecteer</a>
+                </div>
+
+                <!-- 60 Days - Featured -->
+                <div class="pricing-card featured">
+                    <span class="featured-badge">Meest Gekozen</span>
+                    <h3>Optimaal</h3>
+                    <p class="duration">60 dagen online</p>
+                    <div class="price-amount">
+                        <span class="currency">€</span>
+                        <span class="value">149</span>
+                    </div>
+                    <ul class="features">
+                        <li><i class="ri-check-line"></i> Alles van Standaard</li>
+                        <li><i class="ri-check-line"></i> Dubbele zichtbaarheid</li>
+                        <li><i class="ri-check-line"></i> 1 week toppositie inbegrepen</li>
+                        <li><i class="ri-check-line"></i> Priority support</li>
+                    </ul>
+                    <a href="particulier.html" class="btn btn-primary">Selecteer</a>
+                </div>
+
+                <!-- 90 Days -->
+                <div class="pricing-card">
+                    <h3>Maximum</h3>
+                    <p class="duration">90 dagen online</p>
+                    <div class="price-amount">
+                        <span class="currency">€</span>
+                        <span class="value">199</span>
+                    </div>
+                    <ul class="features">
+                        <li><i class="ri-check-line"></i> Alles van Optimaal</li>
+                        <li><i class="ri-check-line"></i> Maximaal bereik</li>
+                        <li><i class="ri-check-line"></i> 2 weken toppositie inbegrepen</li>
+                        <li><i class="ri-check-line"></i> Gratis verlenging advies</li>
+                    </ul>
+                    <a href="particulier.html" class="btn btn-glass">Selecteer</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Makelaars Pricing -->
+        <section id="makelaars" class="pricing-section">
+            <div class="section-intro">
+                <h2>Maandelijks opzegbaar</h2>
+                <p>Geen kleine lettertjes. Volledige controle over uw vastgoedportfolio.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Start -->
+                <div class="pricing-card">
+                    <h3>Start</h3>
+                    <p class="duration">Ideaal voor starters</p>
+                    <div class="price-amount">
+                        <span class="currency">€</span>
+                        <span class="value">149</span>
+                        <span class="period">/maand</span>
+                    </div>
+                    <ul class="features">
+                        <li><i class="ri-check-line"></i> Tot 10 actieve panden</li>
+                        <li><i class="ri-check-line"></i> Standaard zichtbaarheid</li>
+                        <li><i class="ri-check-line"></i> Makelaarsprofiel</li>
+                        <li><i class="ri-check-line"></i> Basis statistieken</li>
+                    </ul>
+                    <a href="register.html" class="btn btn-glass">Start Nu</a>
+                </div>
+
+                <!-- Professional - Featured -->
+                <div class="pricing-card featured">
+                    <span class="featured-badge">Beste Keuze</span>
+                    <h3>Professional</h3>
+                    <p class="duration">Groeiende kantoren</p>
+                    <div class="price-amount">
+                        <span class="currency">€</span>
+                        <span class="value">299</span>
+                        <span class="period">/maand</span>
+                    </div>
+                    <ul class="features">
+                        <li><i class="ri-check-line"></i> Tot 25 actieve panden</li>
+                        <li><i class="ri-check-line"></i> Voorrang in zoekresultaten</li>
+                        <li><i class="ri-check-line"></i> Eigen makelaarspagina</li>
+                        <li><i class="ri-check-line"></i> Uitgebreide analytics</li>
+                    </ul>
+                    <a href="register.html" class="btn btn-primary">Start Nu</a>
+                </div>
+
+                <!-- Elite -->
+                <div class="pricing-card">
+                    <h3>Elite</h3>
+                    <p class="duration">Dominante kantoren</p>
+                    <div class="price-amount">
+                        <span class="currency">€</span>
+                        <span class="value">499</span>
+                        <span class="period">/maand</span>
+                    </div>
+                    <ul class="features">
+                        <li><i class="ri-check-line"></i> Tot 75 actieve panden</li>
+                        <li><i class="ri-check-line"></i> Altijd boven particulieren</li>
+                        <li><i class="ri-check-line"></i> Topvermelding inbegrepen</li>
+                        <li><i class="ri-check-line"></i> Priority support 24/7</li>
+                    </ul>
+                    <a href="register.html" class="btn btn-glass">Start Nu</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Extra Options -->
+    <section class="extras-section">
+        <div class="container">
+            <h2>Extra Zichtbaarheid</h2>
+            <div class="extras-grid">
+                <div class="extra-card">
+                    <i class="ri-rocket-line"></i>
+                    <h4>Toppositie 7 dagen</h4>
+                    <div class="extra-price">€29</div>
+                    <div class="extra-unit">per pand</div>
+                </div>
+                <div class="extra-card">
+                    <i class="ri-star-line"></i>
+                    <h4>Toppositie 30 dagen</h4>
+                    <div class="extra-price">€79</div>
+                    <div class="extra-unit">per pand</div>
+                </div>
+                <div class="extra-card">
+                    <i class="ri-refresh-line"></i>
+                    <h4>Verlenging 30 dagen</h4>
+                    <div class="extra-price">€49</div>
+                    <div class="extra-unit">particulieren</div>
+                </div>
+                <div class="extra-card">
+                    <i class="ri-map-pin-line"></i>
+                    <h4>Extra Regio</h4>
+                    <div class="extra-price">€49</div>
+                    <div class="extra-unit">per maand</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Vimmo Section -->
+    <section class="comparison-section">
+        <div class="container">
+            <h2>Waarom Vimmo?</h2>
+            <p class="subtitle">Andere platforms werken met vaste contracten en complexe pakketten. Wij doen het anders.
+            </p>
+
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <i class="ri-money-euro-circle-line"></i>
+                    <h4>Lagere Prijzen</h4>
+                    <p>Tot 40% goedkoper dan traditionele platforms</p>
+                </div>
+                <div class="comparison-item">
+                    <i class="ri-calendar-check-line"></i>
+                    <h4>Maandelijks Opzegbaar</h4>
+                    <p>Geen jaarcontracten of verplichtingen</p>
+                </div>
+                <div class="comparison-item">
+                    <i class="ri-eye-line"></i>
+                    <h4>Transparant</h4>
+                    <p>Geen verborgen kosten of fees</p>
+                </div>
+                <div class="comparison-item">
+                    <i class="ri-speed-line"></i>
+                    <h4>Sneller Resultaat</h4>
+                    <p>Moderne interface, betere conversie</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content"
+                style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
+                <div class="footer-brand">
+                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
+                            style="color: #d63031; font-weight: 400;">V</span> <span
+                            style="color: #3d3530; font-weight: 400;">I</span><span
+                            style="color: #3d3530; font-weight: 800;">MMO</span></h3>
+                </div>
+                <div class="footer-links" style="display: flex; gap: 60px; text-align: right;">
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">PLATFORM</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="index.html"
+                                style="color: var(--text-muted); text-decoration: none;">Kopen</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="prijzen.html"
+                                style="color: var(--text-muted); text-decoration: none;">Prijzen</a></li>
+                    </ul>
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">CONTACT</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="contact.html"
+                                style="color: var(--text-muted); text-decoration: none;">Contact</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="register.html"
+                                style="color: var(--text-muted); text-decoration: none;">Makelaars</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom"
+                style="text-align: left; padding-top: 30px; display: flex; justify-content: space-between;">
+                <p>&copy; 2024 Vimmo International.</p>
+                <div style="display: flex; gap: 20px; color: var(--text-muted);">
+                    <span>Instagram</span>
+                    <span>LinkedIn</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sticky Mobile CTA -->
+    <div class="mobile-cta">
+        <a href="particulier.html" class="btn btn-primary">Plaats uw pand</a>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+        }
+
+        function showPricing(type) {
+            // Update buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update sections
+            document.querySelectorAll('.pricing-section').forEach(section => section.classList.remove('active'));
+            document.getElementById(type).classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

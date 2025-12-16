@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nieuwbouw | Vimmo - Nieuwbouwprojecten in België</title>
+    <meta name="description"
+        content="Ontdek nieuwbouwprojecten in België. Appartementen, huizen en villa's rechtstreeks van ontwikkelaars. Moderne woningen met garantie.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .nieuwbouw-hero {
+            padding: 140px 0 60px;
+            background: linear-gradient(135deg, #3d3530 0%, #5a4a40 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .nieuwbouw-hero h1 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .nieuwbouw-hero .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 40px;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #d4a574;
+        }
+
+        .hero-stat-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Benefits */
+        .benefits-section {
+            padding: 60px 0;
+            background: var(--bg-section);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .benefit-card {
+            background: white;
+            padding: 28px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            border: 1px solid var(--glass-border);
+        }
+
+        .benefit-card i {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .benefit-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .benefit-card p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Projects Section */
+        .projects-section {
+            padding: 70px 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-tab {
+            padding: 10px 20px;
+            border: 1px solid var(--glass-border);
+            background: white;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .filter-tab:hover,
+        .filter-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Project Cards */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition-fast);
+        }
+
+        .project-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .project-image {
+            height: 260px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .project-status {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-bouw {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .status-verkoop {
+            background: #22c55e;
+            color: white;
+        }
+
+        .status-binnenkort {
+            background: var(--primary);
+            color: white;
+        }
+
+        .project-developer {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            background: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .project-content {
+            padding: 26px;
+        }
+
+        .project-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .project-location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .project-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .project-detail {
+            text-align: center;
+        }
+
+        .project-detail-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .project-detail-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .project-cta {
+            margin-top: 24px;
+        }
+
+        .project-cta .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #e8e0d6 100%);
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .cta-section p {
+            color: var(--text-muted);
+            margin-bottom: 28px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 900px) {
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-stats {
+                flex-wrap: wrap;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .nieuwbouw-hero h1 {
+                font-size: 2rem;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar scrolled">
+        <div class="container nav-content">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="kopen.html">Te koop</a>
+                <a href="huren.html">Te huur</a>
+                <a href="nieuwbouw.html" class="active">Nieuwbouw</a>
+                <a href="register.html">Voor makelaars</a>
+                <a href="prijzen.html">Prijzen</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <a href="dashboard.html" class="btn btn-glass">Inloggen</a>
+                <a href="particulier.html" class="btn btn-primary">Plaats een pand</a>
+            </div>
+            <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span></a>
+            <button class="close-menu" onclick="toggleMobileMenu()"><i class="ri-close-line"></i></button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html">Home</a>
+            <a href="kopen.html">Te koop</a>
+            <a href="huren.html">Te huur</a>
+            <a href="nieuwbouw.html">Nieuwbouw</a>
+            <a href="register.html">Voor makelaars</a>
+            <a href="prijzen.html">Prijzen</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <div class="mobile-menu-actions">
+            <a href="dashboard.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
+            <a href="particulier.html" class="btn btn-primary" style="width: 100%; text-align: center;">Plaats een
+                pand</a>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="nieuwbouw-hero">
+        <div class="container">
+            <h1>Nieuwbouw<span style="color: #d63031;">projecten</span></h1>
+            <p class="subtitle">Moderne woningen rechtstreeks van ontwikkelaars. Kies uit de nieuwste projecten in
+                België.</p>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-number">48</div>
+                    <div class="hero-stat-label">Actieve projecten</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">320+</div>
+                    <div class="hero-stat-label">Beschikbare units</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">15</div>
+                    <div class="hero-stat-label">Ontwikkelaars</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="benefits-section">
+        <div class="container">
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <i class="ri-shield-check-line"></i>
+                    <h4>10 Jaar Garantie</h4>
+                    <p>Wettelijke garantie op alle nieuwbouwwoningen</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="ri-leaf-line"></i>
+                    <h4>Energiezuinig</h4>
+                    <p>Voldoet aan de nieuwste energienormen</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="ri-paint-brush-line"></i>
+                    <h4>Personalisatie</h4>
+                    <p>Kies uw eigen afwerking en indeling</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="ri-bank-card-line"></i>
+                    <h4>BTW Voordeel</h4>
+                    <p>6% BTW op bepaalde nieuwbouwprojecten</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="projects-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Lopende projecten</h2>
+                <div class="filter-tabs">
+                    <button class="filter-tab active">Alle</button>
+                    <button class="filter-tab">Appartementen</button>
+                    <button class="filter-tab">Huizen</button>
+                    <button class="filter-tab">Villa's</button>
+                </div>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image"
+                        style="background-image: url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80')">
+                        <span class="project-status status-verkoop">In verkoop</span>
+                        <div class="project-developer"><i class="ri-building-2-line"></i> Matexi</div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-name">Residentie Aurora</h3>
+                        <div class="project-location"><i class="ri-map-pin-line"></i> Antwerpen, Eilandje</div>
+                        <div class="project-details">
+                            <div class="project-detail">
+                                <div class="project-detail-value">24</div>
+                                <div class="project-detail-label">Units</div>
+                            </div>
+                            <div class="project-detail">
+                                <div class="project-detail-value">€285k</div>
+                                <div class="project-detail-label">Vanaf</div>
+                            </div>
+                            <div class="project-detail">
+                                <div class="project-detail-value">Q2 2025</div>
+                                <div class="project-detail-label">Oplevering</div>
+                            </div>
+                        </div>
+                        <div class="project-cta">
+                            <a href="#" class="btn btn-primary">Bekijk project</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image"
+                        style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80')">
+                        <span class="project-status status-bouw">In bouw</span>
+                        <div class="project-developer"><i class="ri-building-2-line"></i> Immobel</div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-name">Green Valley</h3>
+                        <div class="project-location"><i class="ri-map-pin-line"></i> Gent, Mariakerke</div>
+                        <div class="project-details">
+                            <div class="project-detail">
+                                <div class="project-detail-value">36</div>
+                                <div class="project-detail-label">Units</div>
+                            </div>
+                            <div class="project-detail">
+                                <div class="project-detail-value">€245k</div>
+                                <div class="project-detail-label">Vanaf</div>
+                            </div>
+                            <div class="project-detail">
+                                <div class="project-detail-value">Q4 2025</div>
+                                <div class="project-detail-label">Oplevering</div>
+                            </div>
+                        </div>
+                        <div class="project-cta">
+                            <a href="#" class="btn btn-primary">Bekijk project</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image"
+                        style="background-image: url('https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80')">
+                        <span class="project-status status-binnenkort">Binnenkort</span>
+                        <div class="project-developer"><i class="ri-building-2-line"></i> Groep Van Roey</div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-name">Villa Park Heide</h3>
+                        <div class="project-location"><i class="ri-map-pin-line"></i> Kalmthout</div>
+                        <div class="project-details">
+                            <div class="project-detail">
+                                <div class="project-detail-value">12</div>
+                                <div class="project-detail-label">Villa's</div>
+                            </div>
+                            <div class="project-detail">
+                                <div class="project-detail-value">€695k</div>
+                                <div class="project-detail-label">Vanaf</div>
+                            </div>
+                            <div class="project-detail">
+                                <div class="project-detail-value">Q1 2026</div>
+                                <div class="project-detail-label">Oplevering</div>
+                            </div>
+                        </div>
+                        <div class="project-cta">
+                            <a href="#" class="btn btn-primary">Bekijk project</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image"
+                        style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80')">
+                        <span class="project-status status-verkoop">In verkoop</span>
+                        <div class="project-developer"><i class="ri-building-2-line"></i> Cores Development</div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-name">The Tribune</h3>
+                        <div class="project-location"><i class="ri-map-pin-line"></i> Brussel, Europese wijk</div>
+                        <div class="project-details">
+                            <div class="project-detail">
+                                <div class="project-detail-value">48</div>
+                                <div class="project-detail-label">Units</div>
+                            </div>
+                            <div class="project-detail">
+                                <div class="project-detail-value">€425k</div>
+                                <div class="project-detail-label">Vanaf</div>
+                            </div>
+                            <div class="project-detail">
+                                <div class="project-detail-value">Q3 2025</div>
+                                <div class="project-detail-label">Oplevering</div>
+                            </div>
+                        </div>
+                        <div class="project-cta">
+                            <a href="#" class="btn btn-primary">Bekijk project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Bent u projectontwikkelaar?</h2>
+            <p>Publiceer uw nieuwbouwprojecten op Vimmo en bereik duizenden potentiële kopers.</p>
+            <a href="contact.html" class="btn btn-primary">Neem contact op</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content"
+                style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
+                <div class="footer-brand">
+                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
+                            style="color: #d63031; font-weight: 400;">V</span> <span
+                            style="color: #3d3530; font-weight: 400;">I</span><span
+                            style="color: #3d3530; font-weight: 800;">MMO</span></h3>
+                </div>
+                <div class="footer-links" style="display: flex; gap: 60px; text-align: right;">
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">PLATFORM</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="kopen.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te koop</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="huren.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te huur</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="nieuwbouw.html"
+                                style="color: var(--text-muted); text-decoration: none;">Nieuwbouw</a></li>
+                    </ul>
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">DIENSTEN</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="register.html"
+                                style="color: var(--text-muted); text-decoration: none;">Voor makelaars</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="particulier.html"
+                                style="color: var(--text-muted); text-decoration: none;">Plaats een pand</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="contact.html"
+                                style="color: var(--text-muted); text-decoration: none;">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom" style="padding-top: 30px;">
+                <p>&copy; 2024 Vimmo International.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+        }
+    </script>
+</body>
+
+</html>

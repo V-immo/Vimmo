@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Te Koop | Vimmo - Woningen & Appartementen</title>
+    <meta name="description"
+        content="Bekijk alle woningen te koop op Vimmo. Appartementen, huizen, villa's en meer in heel België. Vind uw droomwoning.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Listing Page Styles */
+        .listing-hero {
+            padding: 130px 0 40px;
+            background: linear-gradient(180deg, #f5f3f0 0%, #fafaf8 100%);
+        }
+
+        .listing-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .listing-hero .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Search Bar */
+        .search-section {
+            background: white;
+            padding: 24px 30px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-top: 30px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            padding: 14px 16px 14px 46px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+        }
+
+        .search-input-wrapper input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .filter-select {
+            padding: 14px 40px 14px 16px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%237d7068' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") no-repeat right 14px center;
+            appearance: none;
+            cursor: pointer;
+            min-width: 140px;
+        }
+
+        .search-btn {
+            padding: 14px 32px;
+        }
+
+        /* Results Header */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0 20px;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .results-count {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .results-count strong {
+            color: var(--text-main);
+        }
+
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sort-options label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Filters Sidebar */
+        .listing-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+            padding: 40px 0 80px;
+        }
+
+        .filters-sidebar {
+            background: white;
+            padding: 28px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--glass-border);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .filter-group {
+            margin-bottom: 28px;
+        }
+
+        .filter-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-group h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+        }
+
+        .price-range {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .price-range input {
+            flex: 1;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .reset-filters {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-section);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            transition: var(--transition-fast);
+        }
+
+        .reset-filters:hover {
+            background: var(--bg-dark);
+        }
+
+        /* Property Grid */
+        .property-listing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 28px;
+        }
+
+        .property-listing-card {
+            background: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition-fast);
+        }
+
+        .property-listing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-image {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .card-badges {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-new {
+            background: var(--primary);
+            color: white;
+        }
+
+        .badge-verified {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--accent-red);
+        }
+
+        .card-favorite {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 38px;
+            height: 38px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .card-favorite:hover {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .card-content {
+            padding: 22px;
+        }
+
+        .card-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .card-location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 16px;
+        }
+
+        .card-specs {
+            display: flex;
+            gap: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .spec-item i {
+            color: var(--primary);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 50px 0;
+        }
+
+        .page-btn {
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--glass-border);
+            background: white;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition-fast);
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .listing-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-sidebar {
+                position: static;
+                display: none;
+            }
+
+            .filters-sidebar.open {
+                display: block;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .listing-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .search-section {
+                flex-direction: column;
+            }
+
+            .search-input-wrapper {
+                width: 100%;
+            }
+
+            .filter-select {
+                width: 100%;
+            }
+
+            .property-listing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar scrolled">
+        <div class="container nav-content">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="kopen.html" class="active">Te koop</a>
+                <a href="huren.html">Te huur</a>
+                <a href="nieuwbouw.html">Nieuwbouw</a>
+                <a href="register.html">Voor makelaars</a>
+                <a href="prijzen.html">Prijzen</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <a href="dashboard.html" class="btn btn-glass">Inloggen</a>
+                <a href="particulier.html" class="btn btn-primary">Plaats een pand</a>
+            </div>
+            <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span></a>
+            <button class="close-menu" onclick="toggleMobileMenu()">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html" onclick="toggleMobileMenu()">Home</a>
+            <a href="kopen.html" onclick="toggleMobileMenu()">Te koop</a>
+            <a href="huren.html" onclick="toggleMobileMenu()">Te huur</a>
+            <a href="nieuwbouw.html" onclick="toggleMobileMenu()">Nieuwbouw</a>
+            <a href="register.html" onclick="toggleMobileMenu()">Voor makelaars</a>
+            <a href="prijzen.html" onclick="toggleMobileMenu()">Prijzen</a>
+            <a href="contact.html" onclick="toggleMobileMenu()">Contact</a>
+        </div>
+        <div class="mobile-menu-actions">
+            <a href="dashboard.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
+            <a href="particulier.html" class="btn btn-primary" style="width: 100%; text-align: center;">Plaats een
+                pand</a>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="listing-hero">
+        <div class="container">
+            <h1>Woningen <span style="color: #d63031;">te koop</span></h1>
+            <p class="subtitle">Vind uw droomwoning in België</p>
+
+            <div class="search-section">
+                <div class="search-input-wrapper">
+                    <i class="ri-search-line"></i>
+                    <input type="text" placeholder="Zoek op stad, wijk of postcode...">
+                </div>
+                <select class="filter-select">
+                    <option>Alle types</option>
+                    <option>Appartement</option>
+                    <option>Huis</option>
+                    <option>Villa</option>
+                    <option>Penthouse</option>
+                    <option>Grond</option>
+                </select>
+                <select class="filter-select">
+                    <option>Prijs</option>
+                    <option>Tot €200.000</option>
+                    <option>Tot €350.000</option>
+                    <option>Tot €500.000</option>
+                    <option>Tot €750.000</option>
+                    <option>€750.000+</option>
+                </select>
+                <button class="btn btn-primary search-btn">Zoeken</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Listings -->
+    <section class="container">
+        <div class="results-header">
+            <p class="results-count"><strong>247</strong> woningen gevonden</p>
+            <div class="sort-options">
+                <label>Sorteren:</label>
+                <select class="filter-select" style="min-width: 160px;">
+                    <option>Meest recent</option>
+                    <option>Prijs laag-hoog</option>
+                    <option>Prijs hoog-laag</option>
+                    <option>Oppervlakte</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="listing-layout">
+            <!-- Filters -->
+            <aside class="filters-sidebar">
+                <div class="filter-group">
+                    <h4>Prijs</h4>
+                    <div class="price-range">
+                        <input type="number" placeholder="Min €">
+                        <span>—</span>
+                        <input type="number" placeholder="Max €">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Slaapkamers</h4>
+                    <select>
+                        <option>Alle</option>
+                        <option>1+</option>
+                        <option>2+</option>
+                        <option>3+</option>
+                        <option>4+</option>
+                        <option>5+</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Oppervlakte</h4>
+                    <div class="price-range">
+                        <input type="number" placeholder="Min m²">
+                        <span>—</span>
+                        <input type="number" placeholder="Max m²">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Type woning</h4>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" checked> Appartement
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" checked> Huis
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" checked> Villa
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox"> Penthouse
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox"> Grond
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Extra</h4>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox"> Met tuin
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox"> Met garage
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox"> Met terras
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox"> Nieuwbouw
+                        </label>
+                    </div>
+                </div>
+
+                <button class="reset-filters">
+                    <i class="ri-refresh-line"></i> Filters wissen
+                </button>
+            </aside>
+
+            <!-- Property Grid -->
+            <div class="property-listing-grid" id="propertyGrid">
+                <!-- Properties will be injected by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="page-btn"><i class="ri-arrow-left-s-line"></i></button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn">5</button>
+            <button class="page-btn"><i class="ri-arrow-right-s-line"></i></button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content"
+                style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
+                <div class="footer-brand">
+                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
+                            style="color: #d63031; font-weight: 400;">V</span> <span
+                            style="color: #3d3530; font-weight: 400;">I</span><span
+                            style="color: #3d3530; font-weight: 800;">MMO</span></h3>
+                </div>
+                <div class="footer-links" style="display: flex; gap: 60px; text-align: right;">
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">PLATFORM</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="kopen.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te koop</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="huren.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te huur</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="prijzen.html"
+                                style="color: var(--text-muted); text-decoration: none;">Prijzen</a></li>
+                    </ul>
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">DIENSTEN</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="register.html"
+                                style="color: var(--text-muted); text-decoration: none;">Voor makelaars</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="particulier.html"
+                                style="color: var(--text-muted); text-decoration: none;">Plaats een pand</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="contact.html"
+                                style="color: var(--text-muted); text-decoration: none;">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom"
+                style="text-align: left; padding-top: 30px; display: flex; justify-content: space-between;">
+                <p>&copy; 2024 Vimmo International.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+        }
+
+        // Sample properties data
+        const properties = [
+            {
+                image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
+                price: '€395.000',
+                title: 'Moderne woning met tuin',
+                location: 'Antwerpen, Berchem',
+                beds: 3,
+                baths: 2,
+                sqm: 145,
+                isNew: true,
+                isVerified: true
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+                price: '€275.000',
+                title: 'Licht appartement centrum',
+                location: 'Gent, Centrum',
+                beds: 2,
+                baths: 1,
+                sqm: 95,
+                isNew: false,
+                isVerified: true
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
+                price: '€895.000',
+                title: 'Luxe villa met zwembad',
+                location: 'Knokke-Heist',
+                beds: 5,
+                baths: 3,
+                sqm: 320,
+                isNew: true,
+                isVerified: true
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=80',
+                price: '€185.000',
+                title: 'Gezellig rijhuis',
+                location: 'Leuven, Kessel-Lo',
+                beds: 2,
+                baths: 1,
+                sqm: 85,
+                isNew: false,
+                isVerified: false
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=800&q=80',
+                price: '€425.000',
+                title: 'Penthouse met dakterras',
+                location: 'Brussel, Elsene',
+                beds: 3,
+                baths: 2,
+                sqm: 165,
+                isNew: true,
+                isVerified: true
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=800&q=80',
+                price: '€545.000',
+                title: 'Karaktervolle hoeve',
+                location: 'Brugge, Sint-Andries',
+                beds: 4,
+                baths: 2,
+                sqm: 240,
+                isNew: false,
+                isVerified: true
+            }
+        ];
+
+        function renderProperties() {
+            const grid = document.getElementById('propertyGrid');
+            grid.innerHTML = properties.map(prop => `
+                <div class="property-listing-card">
+                    <div class="card-image" style="background-image: url('${prop.image}')">
+                        <div class="card-badges">
+                            ${prop.isNew ? '<span class="badge badge-new">Nieuw</span>' : ''}
+                            ${prop.isVerified ? '<span class="badge badge-verified"><i class="ri-verified-badge-fill"></i> Verified</span>' : ''}
+                        </div>
+                        <div class="card-favorite">
+                            <i class="ri-heart-line"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-price">${prop.price}</div>
+                        <h3 class="card-title">${prop.title}</h3>
+                        <div class="card-location">
+                            <i class="ri-map-pin-line"></i>
+                            ${prop.location}
+                        </div>
+                        <div class="card-specs">
+                            <div class="spec-item">
+                                <i class="ri-hotel-bed-line"></i>
+                                ${prop.beds} slpk
+                            </div>
+                            <div class="spec-item">
+                                <i class="ri-drop-line"></i>
+                                ${prop.baths} badk
+                            </div>
+                            <div class="spec-item">
+                                <i class="ri-ruler-line"></i>
+                                ${prop.sqm} m²
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        renderProperties();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penthouse aan de Schelde | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .property-hero {
+            height: 70vh;
+            position: relative;
+        }
+
+        .property-hero img,
+        .property-hero video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .property-content {
+            margin-top: -100px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .sticky-sidebar {
+            position: sticky;
+            top: 120px;
+        }
+
+        /* Video Tour Styles */
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        .play-button:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: white;
+        }
+
+        .play-button i {
+            font-size: 2.5rem;
+            color: #09090b;
+            margin-left: 5px;
+        }
+
+        .media-gallery {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .gallery-thumb {
+            width: 80px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .gallery-thumb:hover,
+        .gallery-thumb.active {
+            border-color: white;
+        }
+
+        .gallery-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-thumb.video::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-thumb.video i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1.5rem;
+            z-index: 1;
+        }
+
+        .video-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 100px;
+            color: white;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .video-badge i {
+            color: #ef4444;
+        }
+
+        /* Video Modal */
+        .video-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .video-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .video-modal .close-btn {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-modal .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .video-placeholder {
+            width: 80%;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .video-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        /* Calendar Styles */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-day {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+        }
+
+        .calendar-day:hover {
+            background: var(--bg-section);
+        }
+
+        .calendar-day.selected {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .btn-itsme {
+            background: #FF562C;
+            color: white;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+        }
+
+        .btn-itsme:hover {
+            background: #e04b25;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            transform: translateY(20px);
+            transition: 0.3s;
+        }
+
+        .modal-overlay.open .modal-card {
+            transform: translateY(0);
+        }
+
+        .time-slot {
+            padding: 12px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .time-slot.selected {
+            border-color: var(--primary);
+            background: rgba(194, 155, 64, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cursor-glow"></div>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span></a>
+            <div class="nav-links">
+                <a href="index.html">Terug naar overzicht</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="property-hero">
+        <!-- Video Badge -->
+        <div class="video-badge">
+            <i class="ri-live-fill"></i> Virtual Tour Beschikbaar
+        </div>
+
+        <!-- Main Image -->
+        <img id="heroMedia"
+            src="https://images.unsplash.com/photo-1600596542815-40b510412bba?auto=format&fit=crop&q=80&w=1600"
+            alt="Penthouse">
+
+        <!-- Play Button -->
+        <div class="play-button" onclick="openVideoModal()">
+            <i class="ri-play-fill"></i>
+        </div>
+
+        <!-- Thumbnail Gallery -->
+        <div class="media-gallery">
+            <div class="gallery-thumb active"
+                onclick="switchMedia('https://images.unsplash.com/photo-1600596542815-40b510412bba?auto=format&fit=crop&q=80&w=1600', this)">
+                <img src="https://images.unsplash.com/photo-1600596542815-40b510412bba?auto=format&fit=crop&q=80&w=200">
+            </div>
+            <div class="gallery-thumb"
+                onclick="switchMedia('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1600', this)">
+                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=200">
+            </div>
+            <div class="gallery-thumb"
+                onclick="switchMedia('https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=1600', this)">
+                <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=200">
+            </div>
+            <div class="gallery-thumb video" onclick="openVideoModal()">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=200">
+                <i class="ri-play-fill"></i>
+            </div>
+        </div>
+
+        <!-- Gradient Overlay -->
+        <div
+            style="position: absolute; inset: 0; background: linear-gradient(to top, #09090b, transparent); pointer-events: none;">
+        </div>
+    </header>
+
+    <main class="container property-content">
+        <div class="grid-layout">
+            <!-- Left: Details -->
+            <div class="glass-container">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
+                    <div>
+                        <div class="verified-badge"
+                            style="position: static; display: inline-flex; margin-bottom: 16px;">
+                            <i class="ri-verified-badge-fill"></i> Vimmo Verified
+                        </div>
+                        <h1 style="font-size: 2.5rem; line-height: 1.1;">Penthouse aan de Schelde</h1>
+                        <p class="text-muted" style="font-size: 1.1rem; margin-top: 8px;">
+                            <i class="ri-map-pin-line"></i> Antwerpen, Zuid
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="price" style="font-size: 2rem; font-weight: 600; color: white;">€ 1.250.000</div>
+                    </div>
+                </div>
+
+                <div class="specs"
+                    style="font-size: 1.1rem; gap: 40px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 30px; margin-bottom: 30px;">
+                    <span><i class="ri-hotel-bed-line text-gold"></i> 3 Slaapkamers</span>
+                    <span><i class="ri-drop-line text-gold"></i> 2 Badkamers</span>
+                    <span><i class="ri-ruler-line text-gold"></i> 210 m²</span>
+                    <span><i class="ri-building-line text-gold"></i> 2022 Bouwjaar</span>
+                </div>
+
+                <h3 style="margin-bottom: 20px;">Omschrijving</h3>
+                <p class="text-muted" style="margin-bottom: 40px;">
+                    Ervaar ultieme luxe in dit exceptionele penthouse met panoramisch zicht over de Schelde.
+                    Afgewerkt met de meest hoogwaardige materialen en voorzien van domotica.
+                    Inclusief privé-lift, dakterras van 80m² en wellness-faciliteiten.
+                    Gelegen in het bruisende Nieuw Zuid.
+                </p>
+
+                <h3 style="margin-bottom: 20px;">Kenmerken</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; color: #ccc;">
+                    <div><i class="ri-check-line text-gold"></i> Domotica Systeem</div>
+                    <div><i class="ri-check-line text-gold"></i> Vloerverwarming</div>
+                    <div><i class="ri-check-line text-gold"></i> Privé Lift</div>
+                    <div><i class="ri-check-line text-gold"></i> Dakterras</div>
+                </div>
+            </div>
+
+            <!-- Right: Action Sidebar -->
+            <div class="sticky-sidebar">
+                <div class="glass-container" style="padding: 30px;">
+                    <h3 style="margin-bottom: 8px;">Interesse?</h3>
+                    <p class="text-muted" style="margin-bottom: 24px;">Plan direct uw bezichtiging in de agenda van de
+                        eigenaar.</p>
+
+                    <button onclick="openBooking()" class="btn btn-primary"
+                        style="width: 100%; padding: 18px; font-size: 1rem; margin-bottom: 16px;">
+                        <i class="ri-calendar-check-line"></i> Plan Bezichtiging
+                    </button>
+
+                    <button onclick="openMessage()" class="btn btn-glass" style="width: 100%; padding: 18px;">
+                        <i class="ri-message-3-line"></i> Stuur bericht
+                    </button>
+
+                    <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; gap: 16px; align-items: center;">
+                            <div
+                                style="width: 50px; height: 50px; background: #333; border-radius: 50%; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=100"
+                                    style="width:100%; height:100%; object-fit:cover;">
+                            </div>
+                            <div>
+                                <h4 style="font-size: 1rem;">Thomas De Vries</h4>
+                                <p class="text-muted" style="font-size: 0.8rem;">Vimmo Premium Agent</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="video-modal">
+        <button class="close-btn" onclick="closeVideoModal()"><i class="ri-close-line"></i></button>
+        <div class="video-placeholder">
+            <i class="ri-vidicon-line"></i>
+            <h2>Virtual Tour</h2>
+            <p style="color: #888; margin-top: 10px;">360° rondleiding door dit pand</p>
+            <p style="color: #666; font-size: 0.9rem; margin-top: 20px;">(Video placeholder - echte video kan hier
+                komen)</p>
+        </div>
+    </div>
+
+    <!-- Modal for Booking -->
+    <div id="bookingModal" class="modal-overlay">
+        <div class="modal-card">
+            <div id="step1">
+                <h2 style="margin-bottom: 12px;">Kies uw momenten</h2>
+                <p class="text-muted" style="margin-bottom: 24px;">Selecteer 3 voorkeursmomenten. De makelaar bevestigt
+                    er één.</p>
+
+                <div style="margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 8px;">Deze Week</h4>
+                    <div class="calendar-grid">
+                        <div class="calendar-day">Ma</div>
+                        <div class="calendar-day">Di</div>
+                        <div class="calendar-day selected">Wo</div>
+                        <div class="calendar-day">Do</div>
+                        <div class="calendar-day">Vr</div>
+                        <div class="calendar-day">Za</div>
+                        <div class="calendar-day">Zo</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h4 style="margin-bottom: 8px;">Beschikbare tijden (Woensdag)</h4>
+                    <div class="time-slot" onclick="toggleSlot(this)">
+                        <span>09:30 - 10:00</span>
+                        <i class="ri-add-line"></i>
+                    </div>
+                    <div class="time-slot selected" onclick="toggleSlot(this)">
+                        <span>14:00 - 14:30</span>
+                        <i class="ri-check-line text-gold"></i>
+                    </div>
+                    <div class="time-slot" onclick="toggleSlot(this)">
+                        <span>16:30 - 17:00</span>
+                        <i class="ri-add-line"></i>
+                    </div>
+                </div>
+
+                <button onclick="goToStep2()" class="btn btn-primary" style="width: 100%;">Volgende stap</button>
+            </div>
+
+            <div id="step2" style="display: none;">
+                <h2 style="margin-bottom: 12px;">Identificeer uzelf</h2>
+                <p class="text-muted" style="margin-bottom: 24px;">Om fraude te voorkomen en snel te handelen vragen we
+                    verificatie.</p>
+
+                <button onclick="simulateItsme()" class="btn btn-itsme" id="itsmeBtn" style="margin-bottom: 20px;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Itsme_logo.svg/1200px-Itsme_logo.svg.png"
+                        style="height: 24px; filter: brightness(0) invert(1);">
+                    Inloggen met itsme
+                </button>
+
+                <div style="text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 20px;">- of handmatig -
+                </div>
+
+                <input type="email" placeholder="E-mailadres"
+                    style="width: 100%; padding: 14px; background: #222; border: 1px solid #333; color: white; border-radius: 4px; margin-bottom: 12px;">
+                <button class="btn btn-glass" style="width: 100%;">Verder zonder itsme</button>
+            </div>
+
+            <div id="step3" style="display: none; text-align: center;">
+                <div
+                    style="width: 80px; height: 80px; background: rgba(194, 155, 64, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+                    <i class="ri-check-line text-gold" style="font-size: 3rem;"></i>
+                </div>
+                <h2>Aanvraag Verzonden!</h2>
+                <p class="text-muted" style="margin-bottom: 30px;">
+                    Makelaar Thomas heeft uw profiel en ID ontvangen.<br>
+                    U ontvangt binnen 2 uur een bevestiging voor <strong>Woensdag 14:00</strong>.
+                </p>
+                <button onclick="closeModal()" class="btn btn-primary">Terug naar pand</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Messaging -->
+    <div id="messageModal" class="modal-overlay">
+        <div class="modal-card">
+            <h2 style="margin-bottom: 24px;">Stuur bericht aan makelaar</h2>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #888; font-size: 0.9rem;">Onderwerp</label>
+                <input type="text" value="Vraag over: Penthouse aan de Schelde (Ref: VIM-2049)" readonly
+                    style="width: 100%; padding: 14px; background: #222; border: 1px solid #333; color: white; border-radius: 4px; opacity: 0.7;">
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 8px; color: #888; font-size: 0.9rem;">Uw vraag</label>
+                <textarea placeholder="Typ hier uw bericht..." rows="4"
+                    style="width: 100%; padding: 14px; background: #222; border: 1px solid #333; color: white; border-radius: 4px; font-family: inherit; resize: none;"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+                <button class="btn"
+                    style="flex: 1; background: #25D366; color: white; padding: 14px; border-radius: 4px; font-weight: 600;">
+                    <i class="ri-whatsapp-line"></i> Via WhatsApp
+                </button>
+                <button class="btn"
+                    style="flex: 1; background: var(--primary); color: white; padding: 14px; border-radius: 4px; font-weight: 600;">
+                    <i class="ri-mail-send-line"></i> Via Email
+                </button>
+            </div>
+
+            <button onclick="closeMessage()" class="btn btn-glass" style="width: 100%;">Annuleren</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Video Modal
+        function openVideoModal() {
+            document.getElementById('videoModal').classList.add('open');
+        }
+
+        function closeVideoModal() {
+            document.getElementById('videoModal').classList.remove('open');
+        }
+
+        // Gallery switcher
+        function switchMedia(url, el) {
+            document.getElementById('heroMedia').src = url;
+            document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        // Booking Modal
+        function openBooking() {
+            document.getElementById('bookingModal').classList.add('open');
+        }
+
+        function openMessage() {
+            document.getElementById('messageModal').classList.add('open');
+        }
+
+        function closeMessage() {
+            document.getElementById('messageModal').classList.remove('open');
+        }
+
+        function closeModal() {
+            document.getElementById('bookingModal').classList.remove('open');
+            setTimeout(() => {
+                document.getElementById('step1').style.display = 'block';
+                document.getElementById('step2').style.display = 'none';
+                document.getElementById('step3').style.display = 'none';
+            }, 500);
+        }
+
+        function toggleSlot(el) {
+            el.classList.toggle('selected');
+        }
+
+        function goToStep2() {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+        }
+
+        function simulateItsme() {
+            const btn = document.getElementById('itsmeBtn');
+            btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Bevestig in itsme app...';
+
+            setTimeout(() => {
+                document.getElementById('step2').style.display = 'none';
+                document.getElementById('step3').style.display = 'block';
+            }, 2000);
+        }
+
+        // Close modals on overlay click
+        document.getElementById('bookingModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('bookingModal')) closeModal();
+        });
+        document.getElementById('messageModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('messageModal')) closeMessage();
+        });
+        document.getElementById('videoModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('videoModal')) closeVideoModal();
+        });
+    </script>
+</body>
+
+</html>
