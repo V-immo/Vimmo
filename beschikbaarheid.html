@@ -39,47 +39,93 @@
             margin-bottom: 20px;
         }
 
+        .sidebar-nav {
+            padding: 0 15px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
         .main-content {
             margin-left: 280px;
             flex: 1;
             padding: 40px;
+            max-width: 1400px;
         }
 
         .calendar-container {
             background: var(--bg-card);
             border-radius: var(--radius-lg);
-            padding: 30px;
+            padding: 40px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            margin-bottom: 24px;
+            margin-bottom: 30px;
         }
 
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .calendar-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 12px;
         }
 
         .calendar-nav button {
-            padding: 8px 16px;
+            padding: 10px 20px;
             border: 1px solid rgba(0, 0, 0, 0.1);
             background: white;
             border-radius: var(--radius-md);
             cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .calendar-nav button:hover {
+            background: var(--bg-light);
+            border-color: var(--primary);
         }
 
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
+            gap: 12px;
         }
 
         .calendar-day-header {
             text-align: center;
             font-weight: 600;
-            padding: 12px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
+            padding: 16px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .calendar-day {
@@ -87,29 +133,34 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid transparent;
+            border: 2px solid rgba(0, 0, 0, 0.06);
             border-radius: var(--radius-md);
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
+            font-size: 1.1rem;
+            font-weight: 500;
+            background: white;
         }
 
         .calendar-day:hover {
-            background: var(--bg-light);
+            border-color: var(--primary);
+            transform: scale(1.05);
         }
 
         .calendar-day.selected {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
+            transform: scale(1.05);
         }
 
         .calendar-day.has-slots::after {
             content: '';
             position: absolute;
-            bottom: 4px;
-            width: 6px;
-            height: 6px;
+            bottom: 8px;
+            width: 8px;
+            height: 8px;
             background: var(--primary);
             border-radius: 50%;
         }
@@ -121,61 +172,71 @@
         .timeslots-container {
             background: var(--bg-card);
             border-radius: var(--radius-lg);
-            padding: 30px;
+            padding: 40px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .timeslots-container h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
         }
 
         .timeslots-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 30px;
         }
 
         .timeslot {
-            padding: 12px;
+            padding: 16px;
             border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: var(--radius-md);
             cursor: pointer;
             text-align: center;
             transition: all 0.2s;
+            font-weight: 500;
+            font-size: 1.05rem;
+            background: white;
         }
 
         .timeslot:hover {
             border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .timeslot.active {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(214, 48, 49, 0.3);
         }
 
         .btn-save {
-            margin-top: 24px;
-            padding: 14px 32px;
+            margin-top: 30px;
+            padding: 16px 40px;
             background: var(--primary);
             color: white;
             border: none;
             border-radius: var(--radius-md);
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-save:hover {
+            background: #c52a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(214, 48, 49, 0.3);
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-
-            .calendar-grid {
-                gap: 4px;
-            }
 
             .timeslots-grid {
                 grid-template-columns: repeat(2, 1fr);
