@@ -579,9 +579,103 @@
             el.classList.add('active');
         }
 
-        // Booking Modal
+        // Booking Modal with Dynamic Availability
+        let selectedDate = null;
+        let selectedSlots = [];
+
         function openBooking() {
             document.getElementById('bookingModal').classList.add('open');
+            loadAvailability();
+        }
+
+        function loadAvailability() {
+            const availability = JSON.parse(localStorage.getItem('availability') || '{}');
+            const today = new Date();
+            const calendarGrid = document.querySelector('.calendar-grid');
+            const daysOfWeek = ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'];
+
+            // Clear and rebuild calendar
+            calendarGrid.innerHTML = '';
+
+            // Show next 7 days
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.textContent = daysOfWeek[date.getDay()];
+                dayEl.setAttribute('data-date', dateStr);
+
+                // Check if this date has available slots
+                if (availability[dateStr] && availability[dateStr].length > 0) {
+                    dayEl.style.cursor = 'pointer';
+                    dayEl.onclick = () => selectDate(dateStr);
+                } else {
+                    dayEl.style.opacity = '0.3';
+                    dayEl.style.cursor = 'not-allowed';
+                }
+
+                calendarGrid.appendChild(dayEl);
+            }
+
+            // Auto-select first available date
+            const firstAvailable = Object.keys(availability).find(date => {
+                const d = new Date(date);
+                return d >= today && availability[date].length > 0;
+            });
+
+            if (firstAvailable) {
+                selectDate(firstAvailable);
+            }
+        }
+
+        function selectDate(dateStr) {
+            selectedDate = dateStr;
+            const availability = JSON.parse(localStorage.getItem('availability') || '{}');
+            const slots = availability[dateStr] || [];
+
+            // Update calendar UI
+            document.querySelectorAll('.calendar-day').forEach(day => {
+                day.classList.remove('selected');
+                if (day.getAttribute('data-date') === dateStr) {
+                    day.classList.add('selected');
+                }
+            });
+
+            // Update date label
+            const date = new Date(dateStr);
+            const dayNames = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
+            document.querySelector('#step1 h4:last-of-type').textContent = `Beschikbare tijden (${dayNames[date.getDay()]})`;
+
+            // Render timeslots
+            const container = document.querySelector('#step1 > div:last-of-type');
+            container.innerHTML = '<h4 style="margin-bottom: 8px;">Beschikbare tijden (' + dayNames[date.getDay()] + ')</h4>';
+
+            if (slots.length === 0) {
+                container.innerHTML += '<p style="color: #888;">Geen beschikbare tijden voor deze dag</p>';
+                return;
+            }
+
+            slots.forEach(time => {
+                const slotEl = document.createElement('div');
+                slotEl.className = 'time-slot';
+                slotEl.innerHTML = `
+                    <span>${time} - ${addMinutes(time, 30)}</span>
+                    <i class="ri-add-line"></i>
+                `;
+                slotEl.onclick = () => toggleSlot(slotEl, time);
+                container.appendChild(slotEl);
+            });
+        }
+
+        function addMinutes(time, minutes) {
+            const [hours, mins] = time.split(':').map(Number);
+            const totalMins = hours * 60 + mins + minutes;
+            const newHours = Math.floor(totalMins / 60);
+            const newMins = totalMins % 60;
+            return `${String(newHours).padStart(2, '0')}:${String(newMins).padStart(2, '0')}`;
         }
 
         function openMessage() {
@@ -594,6 +688,7 @@
 
         function closeModal() {
             document.getElementById('bookingModal').classList.remove('open');
+            selectedSlots = [];
             setTimeout(() => {
                 document.getElementById('step1').style.display = 'block';
                 document.getElementById('step2').style.display = 'none';
@@ -601,11 +696,27 @@
             }, 500);
         }
 
-        function toggleSlot(el) {
-            el.classList.toggle('selected');
+        function toggleSlot(el, time) {
+            if (el.classList.contains('selected')) {
+                el.classList.remove('selected');
+                el.querySelector('i').className = 'ri-add-line';
+                selectedSlots = selectedSlots.filter(s => s !== time);
+            } else {
+                if (selectedSlots.length >= 3) {
+                    alert('U kunt maximaal 3 tijdslots selecteren');
+                    return;
+                }
+                el.classList.add('selected');
+                el.querySelector('i').className = 'ri-check-line text-gold';
+                selectedSlots.push(time);
+            }
         }
 
         function goToStep2() {
+            if (selectedSlots.length === 0) {
+                alert('Selecteer minimaal 1 tijdslot');
+                return;
+            }
             document.getElementById('step1').style.display = 'none';
             document.getElementById('step2').style.display = 'block';
         }
@@ -615,6 +726,18 @@
             btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Bevestig in itsme app...';
 
             setTimeout(() => {
+                // Save booking request
+                const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+                bookings.push({
+                    id: 'booking-' + Date.now(),
+                    propertyId: 'prop-123',
+                    date: selectedDate,
+                    slots: selectedSlots,
+                    status: 'pending',
+                    timestamp: new Date().toISOString()
+                });
+                localStorage.setItem('bookings', JSON.stringify(bookings));
+
                 document.getElementById('step2').style.display = 'none';
                 document.getElementById('step3').style.display = 'block';
             }, 2000);
