@@ -778,7 +778,63 @@
         </div>
     </main>
 
+    <script src="propertyContext.js"></script>
     <script>
+        // Load stats for current property
+        function loadStatsForProperty() {
+            const stats = propertyContext.getStats();
+            const property = propertyContext.getCurrent();
+
+            // Update stats display
+            document.querySelector('.stats-grid .stat-card:nth-child(1) .stat-value').textContent = stats.views || 0;
+            document.querySelector('.stats-grid .stat-card:nth-child(2) .stat-value').textContent = stats.requests || 0;
+            document.querySelector('.stats-grid .stat-card:nth-child(3) .stat-value').textContent = stats.saves || 0;
+            document.querySelector('.stats-grid .stat-card:nth-child(4) .stat-value').textContent = stats.messages || 0;
+
+            console.log(`Loaded stats for ${property.name}:`, stats);
+        }
+
+        // Switch property
+        function switchProperty() {
+            const select = document.getElementById('propertySwitcher');
+            const propertyId = select.value;
+
+            if (propertyId === 'all') {
+                // Show combined stats for all properties
+                const allStats = {
+                    views: 0,
+                    requests: 0,
+                    saves: 0,
+                    messages: 0
+                };
+
+                Object.keys(PROPERTIES).forEach(id => {
+                    const stats = propertyContext.getData('stats', id) || {};
+                    allStats.views += stats.views || 0;
+                    allStats.requests += stats.requests || 0;
+                    allStats.saves += stats.saves || 0;
+                    allStats.messages += stats.messages || 0;
+                });
+
+                // Update display with combined stats
+                document.querySelector('.stats-grid .stat-card:nth-child(1) .stat-value').textContent = allStats.views;
+                document.querySelector('.stats-grid .stat-card:nth-child(2) .stat-value').textContent = allStats.requests;
+                document.querySelector('.stats-grid .stat-card:nth-child(3) .stat-value').textContent = allStats.saves;
+                document.querySelector('.stats-grid .stat-card:nth-child(4) .stat-value').textContent = allStats.messages;
+
+                console.log('Showing combined stats for all properties');
+            } else {
+                // Switch to specific property
+                propertyContext.switch(propertyId);
+            }
+        }
+
+        // Listen for property changes
+        window.addEventListener('propertyChanged', (e) => {
+            console.log('Property changed to:', e.detail.property.name);
+            loadStatsForProperty();
+        });
+
         function confirmRequest(btn) {
             const item = btn.closest('.request-item');
             btn.innerHTML = '<i class="ri-check-line"></i> Bevestigd';
@@ -790,29 +846,14 @@
             }, 1000);
         }
 
-        function switchProperty() {
-            const select = document.getElementById('propertySwitcher');
-            const propertyId = select.value;
-
-            if (propertyId === 'all') {
-                // Show all properties stats
-                alert('📊 Weergave: Alle Panden\n\nStats worden gecombineerd voor al uw panden.');
-            } else {
-                // Show specific property
-                const propertyName = select.options[select.selectedIndex].text;
-                alert(`🏠 Gefilterd op: ${propertyName}\n\nStats en aanvragen worden nu gefilterd voor dit pand.`);
-            }
-
-            // Save selection to localStorage
-            localStorage.setItem('selectedProperty', propertyId);
-        }
-
-        // Load saved property selection
+        // Load on page load
         window.addEventListener('load', () => {
-            const saved = localStorage.getItem('selectedProperty');
-            if (saved) {
-                document.getElementById('propertySwitcher').value = saved;
-            }
+            // Set property selector to current property
+            const currentId = propertyContext.getCurrentId();
+            document.getElementById('propertySwitcher').value = currentId;
+
+            // Load stats for current property
+            loadStatsForProperty();
         });
     </script>
 </body>
