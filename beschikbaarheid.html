@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beschikbaarheid Instellen | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .beschikbaarheid-page {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-light);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar .brand {
+            padding: 0 30px 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .calendar-container {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            margin-bottom: 24px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .calendar-nav button {
+            padding: 8px 16px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 600;
+            padding: 12px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: var(--bg-light);
+        }
+
+        .calendar-day.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .calendar-day.has-slots::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        .calendar-day.selected.has-slots::after {
+            background: white;
+        }
+
+        .timeslots-container {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .timeslots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .timeslot {
+            padding: 12px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .timeslot:hover {
+            border-color: var(--primary);
+        }
+
+        .timeslot.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-save {
+            margin-top: 24px;
+            padding: 14px 32px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .calendar-grid {
+                gap: 4px;
+            }
+
+            .timeslots-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="beschikbaarheid-page">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard-particulier.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="dashboard-particulier.html#advertentie" class="nav-item">
+                    <i class="ri-home-4-line"></i> Mijn Advertentie
+                </a>
+                <a href="beschikbaarheid.html" class="nav-item active">
+                    <i class="ri-calendar-line"></i> Beschikbaarheid
+                </a>
+                <a href="agenda.html" class="nav-item">
+                    <i class="ri-calendar-check-line"></i> Aanvragen
+                </a>
+                <a href="berichten.html" class="nav-item">
+                    <i class="ri-message-3-line"></i> Berichten
+                </a>
+
+                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+
+                <a href="account.html" class="nav-item">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="index.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div style="margin-bottom: 30px;">
+                <h1 style="font-size: 2rem; margin-bottom: 8px;">Beschikbaarheid Instellen</h1>
+                <p style="color: var(--text-muted);">Stel de tijden in waarop u bezichtigingen kunt ontvangen</p>
+            </div>
+
+            <!-- Calendar -->
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h2 id="currentMonth">December 2024</h2>
+                    <div class="calendar-nav">
+                        <button onclick="previousMonth()"><i class="ri-arrow-left-s-line"></i></button>
+                        <button onclick="today()">Vandaag</button>
+                        <button onclick="nextMonth()"><i class="ri-arrow-right-s-line"></i></button>
+                    </div>
+                </div>
+
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Timeslots -->
+            <div class="timeslots-container">
+                <h3 style="margin-bottom: 8px;">Beschikbare tijden voor <span id="selectedDate">18 december 2024</span>
+                </h3>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Selecteer de tijdslots waarop u bezichtigingen
+                    kunt ontvangen</p>
+
+                <div class="timeslots-grid" id="timeslotsGrid">
+                    <!-- Timeslots will be rendered here -->
+                </div>
+
+                <button class="btn-save" onclick="saveAvailability()">
+                    <i class="ri-save-line"></i> Beschikbaarheid Opslaan
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let currentDate = new Date();
+        let selectedDay = new Date();
+        let availability = JSON.parse(localStorage.getItem('availability') || '{}');
+
+        const timeslots = [
+            '09:00', '10:00', '11:00', '12:00',
+            '13:00', '14:00', '15:00', '16:00',
+            '17:00', '18:00', '19:00'
+        ];
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            // Update header
+            const monthNames = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni',
+                'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
+            document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+
+            // Day headers
+            const dayNames = ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'];
+            dayNames.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day-header';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+
+            // Empty cells before first day
+            const startDay = firstDay === 0 ? 6 : firstDay - 1;
+            for (let i = 0; i < startDay; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+
+            // Days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.textContent = day;
+
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                // Check if has slots
+                if (availability[dateStr] && availability[dateStr].length > 0) {
+                    dayEl.classList.add('has-slots');
+                }
+
+                // Check if selected
+                if (day === selectedDay.getDate() &&
+                    month === selectedDay.getMonth() &&
+                    year === selectedDay.getFullYear()) {
+                    dayEl.classList.add('selected');
+                }
+
+                dayEl.onclick = () => selectDay(year, month, day);
+                grid.appendChild(dayEl);
+            }
+        }
+
+        function selectDay(year, month, day) {
+            selectedDay = new Date(year, month, day);
+            renderCalendar();
+            renderTimeslots();
+
+            const monthNames = ['januari', 'februari', 'maart', 'april', 'mei', 'juni',
+                'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
+            document.getElementById('selectedDate').textContent =
+                `${day} ${monthNames[month]} ${year}`;
+        }
+
+        function renderTimeslots() {
+            const dateStr = `${selectedDay.getFullYear()}-${String(selectedDay.getMonth() + 1).padStart(2, '0')}-${String(selectedDay.getDate()).padStart(2, '0')}`;
+            const selectedSlots = availability[dateStr] || [];
+
+            const grid = document.getElementById('timeslotsGrid');
+            grid.innerHTML = '';
+
+            timeslots.forEach(time => {
+                const slot = document.createElement('div');
+                slot.className = 'timeslot';
+                if (selectedSlots.includes(time)) {
+                    slot.classList.add('active');
+                }
+                slot.textContent = time;
+                slot.onclick = () => toggleTimeslot(time);
+                grid.appendChild(slot);
+            });
+        }
+
+        function toggleTimeslot(time) {
+            const dateStr = `${selectedDay.getFullYear()}-${String(selectedDay.getMonth() + 1).padStart(2, '0')}-${String(selectedDay.getDate()).padStart(2, '0')}`;
+
+            if (!availability[dateStr]) {
+                availability[dateStr] = [];
+            }
+
+            const index = availability[dateStr].indexOf(time);
+            if (index > -1) {
+                availability[dateStr].splice(index, 1);
+            } else {
+                availability[dateStr].push(time);
+            }
+
+            renderTimeslots();
+            renderCalendar();
+        }
+
+        function saveAvailability() {
+            localStorage.setItem('availability', JSON.stringify(availability));
+            alert('Beschikbaarheid opgeslagen!');
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function today() {
+            currentDate = new Date();
+            selectedDay = new Date();
+            renderCalendar();
+            renderTimeslots();
+        }
+
+        // Initialize
+        renderCalendar();
+        renderTimeslots();
+    </script>
+</body>
+
+</html>
