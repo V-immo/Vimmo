@@ -220,7 +220,8 @@
                         <h3>Naam</h3>
                         <p>Emma Peeters</p>
                     </div>
-                    <button class="btn-edit">Bewerken</button>
+                    <button class="btn-edit"
+                        onclick="editField('Naam', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
                 </div>
 
                 <div class="setting-item">
@@ -228,7 +229,8 @@
                         <h3>E-mailadres</h3>
                         <p>emma.peeters@example.com</p>
                     </div>
-                    <button class="btn-edit">Bewerken</button>
+                    <button class="btn-edit"
+                        onclick="editField('E-mailadres', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
                 </div>
 
                 <div class="setting-item">
@@ -236,7 +238,8 @@
                         <h3>Telefoonnummer</h3>
                         <p>+32 475 12 34 56</p>
                     </div>
-                    <button class="btn-edit">Bewerken</button>
+                    <button class="btn-edit"
+                        onclick="editField('Telefoonnummer', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
                 </div>
 
                 <div class="setting-item">
@@ -244,7 +247,8 @@
                         <h3>Wachtwoord</h3>
                         <p>••••••••</p>
                     </div>
-                    <button class="btn-edit">Wijzigen</button>
+                    <button class="btn-edit"
+                        onclick="alert('Wachtwoord wijzigen functionaliteit komt binnenkort!')">Wijzigen</button>
                 </div>
             </div>
 
@@ -295,7 +299,7 @@
                         <h3>Twee-factor authenticatie</h3>
                         <p>Extra beveiliging voor uw account</p>
                     </div>
-                    <button class="btn-edit">Inschakelen</button>
+                    <button class="btn-edit" onclick="alert('2FA wordt binnenkort toegevoegd!')">Inschakelen</button>
                 </div>
 
                 <div class="setting-item">
@@ -303,7 +307,7 @@
                         <h3>Privacy instellingen</h3>
                         <p>Beheer wie uw profiel kan zien</p>
                     </div>
-                    <button class="btn-edit">Beheren</button>
+                    <button class="btn-edit" onclick="alert('Privacy instellingen komen binnenkort!')">Beheren</button>
                 </div>
             </div>
 
@@ -316,13 +320,79 @@
                         <h3>Account verwijderen</h3>
                         <p>Permanent uw account en alle gegevens verwijderen</p>
                     </div>
-                    <button class="btn-edit" style="color: #dc3545; border-color: #dc3545;">Verwijderen</button>
+                    <button class="btn-edit" style="color: #dc3545; border-color: #dc3545;"
+                        onclick="if(confirm('Weet u zeker dat u uw account wilt verwijderen?')) alert('Account verwijderen functionaliteit komt binnenkort!')">Verwijderen</button>
                 </div>
             </div>
         </main>
     </div>
 
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div
+            style="background: var(--bg-card); border-radius: var(--radius-lg); padding: 30px; max-width: 500px; width: 90%;">
+            <h3 id="modalTitle" style="margin-bottom: 20px;">Bewerken</h3>
+            <input type="text" id="modalInput"
+                style="width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); margin-bottom: 20px;">
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button onclick="closeEditModal()"
+                    style="padding: 10px 20px; background: white; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); cursor: pointer;">Annuleren</button>
+                <button onclick="saveEdit()"
+                    style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: var(--radius-md); cursor: pointer;">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
+    <script>
+        let currentEditField = null;
+        let currentEditElement = null;
+
+        function editField(field, currentValue, element) {
+            currentEditField = field;
+            currentEditElement = element;
+            document.getElementById('modalTitle').textContent = `${field} bewerken`;
+            document.getElementById('modalInput').value = currentValue;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function saveEdit() {
+            const newValue = document.getElementById('modalInput').value;
+            if (newValue.trim()) {
+                currentEditElement.textContent = newValue;
+
+                // Save to localStorage
+                const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+                settings[currentEditField] = newValue;
+                localStorage.setItem('userSettings', JSON.stringify(settings));
+
+                alert(`✅ ${currentEditField} bijgewerkt!`);
+                closeEditModal();
+            }
+        }
+
+        // Close modal on overlay click
+        document.getElementById('editModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('editModal')) {
+                closeEditModal();
+            }
+        });
+
+        // Load saved settings
+        window.addEventListener('load', () => {
+            const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+            if (settings.Naam) document.querySelector('.setting-item:nth-child(1) p').textContent = settings.Naam;
+            if (settings['E-mailadres']) document.querySelector('.setting-item:nth-child(2) p').textContent = settings['E-mailadres'];
+            if (settings.Telefoonnummer) document.querySelector('.setting-item:nth-child(3) p').textContent = settings.Telefoonnummer;
+        });
+    </script>
 </body>
 
 </html>
