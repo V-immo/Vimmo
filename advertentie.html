@@ -372,11 +372,23 @@
 
                 <div class="edit-section">
                     <h3><i class="ri-image-line"></i> Foto's</h3>
-                    <div class="photo-upload" onclick="alert('Foto upload functionaliteit komt binnenkort!')">
+
+                    <!-- Photo Gallery -->
+                    <div id="photoGallery"
+                        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                    </div>
+
+                    <!-- Upload Area -->
+                    <input type="file" id="photoInput" accept="image/*" multiple style="display: none;"
+                        onchange="handlePhotoUpload(event)">
+                    <div class="photo-upload" onclick="document.getElementById('photoInput').click()"
+                        ondrop="handleDrop(event)" ondragover="handleDragOver(event)"
+                        ondragleave="handleDragLeave(event)">
                         <i class="ri-upload-cloud-line"
                             style="font-size: 3rem; color: var(--primary); margin-bottom: 12px;"></i>
                         <p style="font-weight: 600; margin-bottom: 4px;">Klik om foto's te uploaden</p>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">Of sleep foto's hierheen</p>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Of sleep foto's hierheen (max 20 foto's)
+                        </p>
                     </div>
                 </div>
             </div>
@@ -385,6 +397,8 @@
 
     <script src="app.js"></script>
     <script>
+        let photos = [];
+
         function updatePreview() {
             document.getElementById('propertyTitle').textContent = document.getElementById('editTitle').value;
             document.getElementById('propertyPrice').textContent = '€ ' + parseInt(document.getElementById('editPrice').value).toLocaleString('nl-BE');
@@ -393,6 +407,12 @@
             document.getElementById('bedrooms').textContent = document.getElementById('editBedrooms').value + ' Slaapkamers';
             document.getElementById('bathrooms').textContent = document.getElementById('editBathrooms').value + ' Badkamers';
             document.getElementById('surface').textContent = document.getElementById('editSurface').value + ' m²';
+
+            // Update main image if photos exist
+            if (photos.length > 0) {
+                const coverPhoto = photos.find(p => p.isCover) || photos[0];
+                document.querySelector('.property-image').src = coverPhoto.url;
+            }
         }
 
         function saveAdvertentie() {
@@ -404,11 +424,94 @@
                 bedrooms: document.getElementById('editBedrooms').value,
                 bathrooms: document.getElementById('editBathrooms').value,
                 surface: document.getElementById('editSurface').value,
-                type: document.getElementById('editType').value
+                type: document.getElementById('editType').value,
+                photos: photos
             };
 
             localStorage.setItem('myAdvertentie', JSON.stringify(advertentie));
             alert('✅ Advertentie opgeslagen!');
+        }
+
+        // Photo Management
+        function handlePhotoUpload(event) {
+            const files = Array.from(event.target.files);
+            if (photos.length + files.length > 20) {
+                alert('⚠️ Maximum 20 foto\'s toegestaan!');
+                return;
+            }
+
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    photos.push({
+                        url: e.target.result,
+                        isCover: photos.length === 0,
+                        name: file.name
+                    });
+                    renderPhotoGallery();
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.style.borderColor = 'var(--primary)';
+            e.currentTarget.style.background = 'rgba(214, 48, 49, 0.1)';
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.style.borderColor = 'rgba(0,0,0,0.2)';
+            e.currentTarget.style.background = 'transparent';
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            handleDragLeave(e);
+            const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+            if (files.length > 0) {
+                const event = { target: { files } };
+                handlePhotoUpload(event);
+            }
+        }
+
+        function renderPhotoGallery() {
+            const gallery = document.getElementById('photoGallery');
+            gallery.innerHTML = photos.map((photo, index) => `
+                <div style="position: relative; border-radius: var(--radius-md); overflow: hidden; border: ${photo.isCover ? '3px solid var(--primary)' : '2px solid rgba(0,0,0,0.1)'};">
+                    <img src="${photo.url}" style="width: 100%; height: 150px; object-fit: cover; display: block;">
+                    ${photo.isCover ? '<div style="position: absolute; top: 8px; left: 8px; background: var(--primary); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">COVER</div>' : ''}
+                    <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px;">
+                        ${!photo.isCover ? `<button onclick="setCoverPhoto(${index})" style="background: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Set as cover"><i class="ri-star-line"></i></button>` : ''}
+                        <button onclick="deletePhoto(${index})" style="background: #dc3545; color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                    </div>
+                    <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); padding: 8px; color: white; font-size: 0.75rem;">
+                        Foto ${index + 1}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setCoverPhoto(index) {
+            photos.forEach((p, i) => p.isCover = i === index);
+            renderPhotoGallery();
+            updatePreview();
+        }
+
+        function deletePhoto(index) {
+            if (confirm('Weet u zeker dat u deze foto wilt verwijderen?')) {
+                const wasCover = photos[index].isCover;
+                photos.splice(index, 1);
+
+                // Set new cover if deleted was cover
+                if (wasCover && photos.length > 0) {
+                    photos[0].isCover = true;
+                }
+
+                renderPhotoGallery();
+                updatePreview();
+            }
         }
 
         // Load saved data
@@ -423,6 +526,12 @@
                 document.getElementById('editBathrooms').value = saved.bathrooms;
                 document.getElementById('editSurface').value = saved.surface;
                 document.getElementById('editType').value = saved.type;
+
+                if (saved.photos && saved.photos.length > 0) {
+                    photos = saved.photos;
+                    renderPhotoGallery();
+                }
+
                 updatePreview();
             }
         });
