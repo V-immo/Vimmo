@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opgeslagen Woningen | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .opgeslagen-page {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-light);
+        }
+
+        .sidebar-zoeker {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-zoeker .brand {
+            padding: 0 30px 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-nav-zoeker {
+            padding: 0 15px;
+        }
+
+        .nav-item-zoeker {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-item-zoeker:hover {
+            background: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        .nav-item-zoeker.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-zoeker {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="opgeslagen-page">
+        <!-- Sidebar -->
+        <aside class="sidebar-zoeker">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+
+            <nav class="sidebar-nav-zoeker">
+                <a href="dashboard-zoeker.html" class="nav-item-zoeker">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="opgeslagen.html" class="nav-item-zoeker active">
+                    <i class="ri-heart-line"></i> Opgeslagen
+                </a>
+                <a href="agenda.html" class="nav-item-zoeker">
+                    <i class="ri-calendar-check-line"></i> Bezichtigingen
+                </a>
+                <a href="berichten.html" class="nav-item-zoeker">
+                    <i class="ri-message-3-line"></i> Berichten
+                </a>
+                <a href="dashboard-zoeker.html#zoekopdrachten" class="nav-item-zoeker">
+                    <i class="ri-search-line"></i> Zoekopdrachten
+                </a>
+
+                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+
+                <a href="account.html" class="nav-item-zoeker">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="index.html" class="nav-item-zoeker">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div>
+                <h1 style="font-size: 2rem; margin-bottom: 8px;">Opgeslagen Woningen</h1>
+                <p style="color: var(--text-muted);">Al uw favoriete woningen op één plek (7 woningen)</p>
+            </div>
+
+            <div class="properties-grid" id="propertiesGrid">
+                <!-- Properties will be rendered here by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Render all saved properties
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('propertiesGrid');
+
+            // Use the properties from app.js
+            const savedProperties = properties.slice(0, 7); // First 7 properties as "saved"
+
+            savedProperties.forEach(property => {
+                const card = document.createElement('a');
+                card.href = 'property.html';
+                card.className = 'property-card';
+                card.style.textDecoration = 'none';
+                card.style.color = 'inherit';
+
+                card.innerHTML = `
+                    <div class="property-image">
+                        <img src="${property.image}" alt="${property.title}">
+                        ${property.tag ? `<span class="property-tag">${property.tag}</span>` : ''}
+                        <button class="favorite-btn active" onclick="event.preventDefault(); this.classList.toggle('active')">
+                            <i class="ri-heart-fill"></i>
+                        </button>
+                    </div>
+                    <div class="property-info">
+                        <div class="property-price">${property.price}</div>
+                        <h3 class="property-title">${property.title}</h3>
+                        <p class="property-location">
+                            <i class="ri-map-pin-line"></i> ${property.location}
+                        </p>
+                        <div class="property-features">
+                            <span><i class="ri-hotel-bed-line"></i> ${property.beds}</span>
+                            <span><i class="ri-drop-line"></i> ${property.baths}</span>
+                            <span><i class="ri-ruler-line"></i> ${property.area}</span>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        });
+    </script>
+</body>
+
+</html>

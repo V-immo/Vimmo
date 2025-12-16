@@ -602,7 +602,12 @@
         function submitRegister(e) {
             e.preventDefault();
             alert('Account aangemaakt! U wordt doorgestuurd naar uw dashboard.');
-            window.location.href = 'dashboard.html';
+            // Redirect based on account type
+            if (currentType === 'particulier') {
+                window.location.href = 'dashboard-particulier.html';
+            } else if (currentType === 'makelaar') {
+                window.location.href = 'dashboard.html';
+            }
         }
 
         document.getElementById('registerModal').addEventListener('click', (e) => {
