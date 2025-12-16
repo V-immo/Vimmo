@@ -498,34 +498,34 @@
         <nav class="sidebar-nav">
             <div class="nav-section">
                 <div class="nav-section-title">Menu</div>
-                <a href="#" class="nav-item active">
+                <a href="dashboard.html" class="nav-item active">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
-                <a href="#" class="nav-item">
+                <a href="dashboard.html#panden" class="nav-item">
                     <i class="ri-home-4-line"></i> Mijn Panden
                 </a>
-                <a href="#" class="nav-item">
+                <a href="dashboard.html#aanvragen" class="nav-item">
                     <i class="ri-calendar-check-line"></i> Aanvragen
                     <span class="badge">3</span>
                 </a>
-                <a href="#" class="nav-item">
+                <a href="contact.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
                 </a>
             </div>
 
             <div class="nav-section">
                 <div class="nav-section-title">Premium</div>
-                <a href="#" class="nav-item">
+                <a href="dashboard.html#boost" class="nav-item">
                     <i class="ri-rocket-line"></i> Boost Pand
                 </a>
-                <a href="#" class="nav-item">
+                <a href="dashboard.html#stats" class="nav-item">
                     <i class="ri-bar-chart-box-line"></i> Analytics
                 </a>
             </div>
 
             <div class="nav-section">
                 <div class="nav-section-title">Account</div>
-                <a href="#" class="nav-item">
+                <a href="account.html" class="nav-item">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
                 <a href="index.html" class="nav-item">
@@ -556,7 +556,7 @@
         </div>
 
         <!-- Stats -->
-        <div class="stats-grid">
+        <div class="stats-grid" id="stats">
             <div class="stat-card">
                 <div class="stat-label"><i class="ri-eye-line"></i> Totale Views</div>
                 <div class="stat-value">4,892</div>
@@ -582,10 +582,10 @@
         <!-- Content Grid -->
         <div class="content-grid">
             <!-- Requests -->
-            <div class="card">
+            <div class="card" id="aanvragen">
                 <div class="card-header">
                     <h3 class="card-title">Nieuwe Bezichtigingsaanvragen</h3>
-                    <a href="#" style="color: var(--primary); font-size: 0.9rem;">Bekijk alle</a>
+                    <a href="dashboard.html#aanvragen" style="color: var(--primary); font-size: 0.9rem;">Bekijk alle</a>
                 </div>
 
                 <div class="request-item">
@@ -678,10 +678,10 @@
         </div>
 
         <!-- Properties Preview -->
-        <div class="card" style="margin-top: 24px;">
+        <div class="card" id="panden" style="margin-top: 24px;">
             <div class="card-header">
                 <h3 class="card-title">Mijn Panden</h3>
-                <a href="#" style="color: var(--primary); font-size: 0.9rem;">Beheer alle</a>
+                <a href="dashboard.html#panden" style="color: var(--primary); font-size: 0.9rem;">Beheer alle</a>
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
@@ -714,7 +714,7 @@
         </div>
 
         <!-- Boost Section -->
-        <div class="card"
+        <div class="card" id="boost"
             style="margin-top: 24px; background: linear-gradient(135deg, #3d3530 0%, #5a4a40 100%); color: white;">
             <div class="card-header" style="border-bottom-color: rgba(255,255,255,0.1);">
                 <h3 class="card-title" style="color: white;"><i class="ri-rocket-line" style="color: #d4a574;"></i>
