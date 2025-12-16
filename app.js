@@ -233,4 +233,13 @@ function initEffects() {
     });
 }
 
+// Mobile Menu Toggle Function
+function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenu) {
+        mobileMenu.classList.toggle('open');
+        document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', initEffects);

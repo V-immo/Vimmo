@@ -200,9 +200,9 @@
                     style="color: #3d3530; font-weight: 800;">MMO</span></a>
             <div class="nav-links">
                 <a href="index.html">Home</a>
-                <a href="index.html#kopen">Te koop</a>
-                <a href="index.html#huren">Te huur</a>
-                <a href="index.html#nieuwbouw">Nieuwbouw</a>
+                <a href="kopen.html">Te koop</a>
+                <a href="huren.html">Te huur</a>
+                <a href="nieuwbouw.html">Nieuwbouw</a>
                 <a href="register.html">Voor makelaars</a>
                 <a href="prijzen.html">Prijzen</a>
                 <a href="contact.html">Contact</a>
@@ -211,8 +211,39 @@
                 <a href="dashboard.html" class="btn btn-glass">Inloggen</a>
                 <a href="#start" class="btn btn-primary">Plaats een pand</a>
             </div>
+            <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span></a>
+            <button class="close-menu" onclick="toggleMobileMenu()">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html" onclick="toggleMobileMenu()">Home</a>
+            <a href="kopen.html" onclick="toggleMobileMenu()">Te koop</a>
+            <a href="huren.html" onclick="toggleMobileMenu()">Te huur</a>
+            <a href="nieuwbouw.html" onclick="toggleMobileMenu()">Nieuwbouw</a>
+            <a href="register.html" onclick="toggleMobileMenu()">Voor makelaars</a>
+            <a href="prijzen.html" onclick="toggleMobileMenu()">Prijzen</a>
+            <a href="contact.html" onclick="toggleMobileMenu()">Contact</a>
+        </div>
+        <div class="mobile-menu-actions">
+            <a href="dashboard.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
+            <a href="#start" class="btn btn-primary" style="width: 100%; text-align: center;">Plaats een pand</a>
+        </div>
+    </div>
+
 
     <!-- Hero -->
     <section class="particulier-hero">
