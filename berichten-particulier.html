@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berichten | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .messages-page {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-light);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar .brand {
+            padding: 0 30px 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-nav {
+            padding: 0 15px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .messages-container {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            max-width: 1200px;
+        }
+
+        .messages-header {
+            padding: 24px 30px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .messages-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .conversation-item {
+            display: flex;
+            gap: 16px;
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .conversation-item:hover {
+            background: var(--bg-light);
+        }
+
+        .conversation-item.unread {
+            background: #f0f7ff;
+        }
+
+        .conversation-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .conversation-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .conversation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .conversation-name {
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .conversation-time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .conversation-property {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .conversation-preview {
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .conversation-item.unread .conversation-preview {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .unread-badge {
+            width: 10px;
+            height: 10px;
+            background: var(--accent-red);
+            border-radius: 50%;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="messages-page">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard-particulier.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="opgeslagen.html" class="nav-item">
+                    <i class="ri-heart-line"></i> Opgeslagen
+                </a>
+                <a href="agenda.html" class="nav-item">
+                    <i class="ri-calendar-check-line"></i> Bezichtigingen
+                </a>
+                <a href="berichten.html" class="nav-item active">
+                    <i class="ri-message-3-line"></i> Berichten
+                    <span class="badge"
+                        style="margin-left: auto; background: var(--accent-red); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                </a>
+                <a href="zoekopdrachten.html" class="nav-item">
+                    <i class="ri-search-line"></i> Zoekopdrachten
+                </a>
+
+                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+
+                <a href="instellingen.html" class="nav-item">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="index.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="messages-container">
+                <div class="messages-header">
+                    <h1>Berichten</h1>
+                    <p style="color: var(--text-muted);">Al uw conversaties met makelaars en verkopers</p>
+                </div>
+
+                <!-- Conversation 1 - Unread -->
+                <div class="conversation-item unread" onclick="window.location.href='chat.html?id=1'">
+                    <div class="conversation-avatar">MV</div>
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <div class="conversation-name">
+                                Makelaar Vastgoed
+                                <span class="unread-badge"></span>
+                            </div>
+                            <div class="conversation-time">2u geleden</div>
+                        </div>
+                        <div class="conversation-property">
+                            <i class="ri-home-4-line"></i> Penthouse aan de Schelde
+                        </div>
+                        <div class="conversation-preview">
+                            De bezichtiging voor morgen is bevestigd. Tot dan!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversation 2 - Unread -->
+                <div class="conversation-item unread" onclick="window.location.href='chat.html?id=2'">
+                    <div class="conversation-avatar">JD</div>
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <div class="conversation-name">
+                                Jan De Vries
+                                <span class="unread-badge"></span>
+                            </div>
+                            <div class="conversation-time">1d geleden</div>
+                        </div>
+                        <div class="conversation-property">
+                            <i class="ri-home-4-line"></i> Stadsloft in historisch pand
+                        </div>
+                        <div class="conversation-preview">
+                            Bedankt voor uw interesse. Wanneer schikt het u?
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversation 3 - Read -->
+                <div class="conversation-item" onclick="window.location.href='chat.html?id=3'">
+                    <div class="conversation-avatar">PH</div>
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <div class="conversation-name">Premium Homes</div>
+                            <div class="conversation-time">3d geleden</div>
+                        </div>
+                        <div class="conversation-property">
+                            <i class="ri-home-4-line"></i> Duurzaam Wonen in 't Groen
+                        </div>
+                        <div class="conversation-preview">
+                            De documenten zijn beschikbaar in het portaal
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversation 4 - Read -->
+                <div class="conversation-item" onclick="window.location.href='chat.html?id=4'">
+                    <div class="conversation-avatar">EV</div>
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <div class="conversation-name">Elite Vastgoed</div>
+                            <div class="conversation-time">1w geleden</div>
+                        </div>
+                        <div class="conversation-property">
+                            <i class="ri-home-4-line"></i> Modern Villa met Zwembad
+                        </div>
+                        <div class="conversation-preview">
+                            Hartelijk dank voor uw bezoek. Heeft u nog vragen?
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
