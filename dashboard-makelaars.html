@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makelaars Dashboard | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary-makelaars: #d63031;
+            --primary-dark-makelaars: #c0392b;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--glass-border);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar-brand {
+            font-size: 1.6rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: var(--text-main);
+            text-decoration: none;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            padding: 0 12px;
+        }
+
+        .sidebar-brand span {
+            font-weight: 700;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+        }
+
+        .nav-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            padding: 0 12px;
+            margin-bottom: 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-section);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background: rgba(214, 48, 49, 0.15);
+            color: var(--primary-makelaars);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+        }
+
+        .nav-item .badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-weight: 600;
+        }
+
+        .sidebar-user {
+            padding: 16px;
+            background: var(--bg-section);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-makelaars);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .user-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+            color: var(--text-main);
+        }
+
+        .user-info p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 40px;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-section) 50%, var(--bg-light) 100%);
+            min-height: 100vh;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 500;
+        }
+
+        .page-subtitle {
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+
+        .stat-change.positive {
+            color: #22c55e;
+        }
+
+        .stat-change.negative {
+            color: #ef4444;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Requests List */
+        .request-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .request-item:last-child {
+            border-bottom: none;
+        }
+
+        .request-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-section);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+        }
+
+        .request-info {
+            flex: 1;
+        }
+
+        .request-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .verified-tag {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .request-property {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .request-times {
+            font-size: 0.8rem;
+            color: #888;
+            text-align: right;
+        }
+
+        .request-times strong {
+            display: block;
+            color: var(--text-main);
+        }
+
+        .btn-confirm {
+            background: var(--primary-makelaars);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-confirm:hover {
+            background: var(--primary-dark-makelaars);
+        }
+
+        /* Property Mini Cards */
+        .property-mini {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .property-mini:last-child {
+            border-bottom: none;
+        }
+
+        .property-mini-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .property-mini-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .property-mini-info p {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .property-mini-stats {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .property-mini-stats .views {
+            color: var(--primary-makelaars);
+            font-weight: 600;
+        }
+
+        /* Activity Feed */
+        .activity-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.9rem;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .activity-icon.view {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .activity-icon.lead {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .activity-icon.message {
+            background: rgba(214, 48, 49, 0.2);
+            color: var(--primary-makelaars);
+        }
+
+        .activity-text {
+            flex: 1;
+            color: var(--text-muted);
+        }
+
+        .activity-text strong {
+            color: white;
+        }
+
+        .activity-time {
+            color: #555;
+            font-size: 0.8rem;
+        }
+
+        /* Dashboard Mobile Responsive */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 20px;
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .sidebar-nav {
+                display: none;
+            }
+
+            .sidebar-user {
+                display: none;
+            }
+
+            .sidebar-brand {
+                font-size: 1.4rem;
+                margin-bottom: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .page-title {
+                font-size: 1.4rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .request-item {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .request-times {
+                order: 3;
+                width: 100%;
+                text-align: left;
+            }
+
+            .btn-confirm {
+                width: 100%;
+                order: 4;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 1.2rem;
+            }
+
+            .sidebar-brand {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-brand"><span style="color: #d63031; font-weight: 400;">V</span><span
+                style="color: #3d3530; font-weight: 400;">I</span><span
+                style="color: #3d3530; font-weight: 800;">MMO</span></a>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Menu</div>
+                <a href="dashboard-makelaars.html" class="nav-item active">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="advertentie-makelaars.html" class="nav-item">
+                    <i class="ri-home-4-line"></i> Mijn Panden
+                </a>
+                <a href="agenda-makelaars.html" class="nav-item">
+                    <i class="ri-calendar-check-line"></i> Aanvragen
+                    <span class="badge">3</span>
+                </a>
+                <a href="berichten-makelaars.html" class="nav-item">
+                    <i class="ri-message-3-line"></i> Berichten
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Premium</div>
+                <a href="dashboard-makelaars.html#boost" class="nav-item">
+                    <i class="ri-rocket-line"></i> Boost Pand
+                </a>
+                <a href="dashboard-makelaars.html#stats" class="nav-item">
+                    <i class="ri-bar-chart-box-line"></i> Analytics
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Account</div>
+                <a href="instellingen.html" class="nav-item">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="index.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+            </div>
+        </nav>
+
+        <div class="sidebar-user">
+            <div class="user-avatar">TD</div>
+            <div class="user-info">
+                <h4>Thomas De Vries</h4>
+                <p>Vimmo Verified ✓</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Goedenavond, Thomas</h1>
+                <p style="color: var(--text-muted);">Hier is uw overzicht van vandaag</p>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <!-- Property Switcher -->
+                <select id="propertySwitcher" onchange="switchProperty()"
+                    style="padding: 12px 16px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); background: white; cursor: pointer; min-width: 250px;">
+                    <option value="all">📊 Alle Panden (3)</option>
+                    <option value="1" selected>🏠 Moderne Woning - Antwerpen</option>
+                    <option value="2">🏢 Penthouse - Schelde</option>
+                    <option value="3">🏡 Villa - Brasschaat</option>
+                </select>
+
+                <!-- Add Property Button -->
+                <button onclick="window.location.href='verkopen.html'"
+                    style="padding: 12px 24px; background: var(--primary-makelaars); color: white; border: none; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap;">
+                    <i class="ri-add-line"></i> Nieuw Pand
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="stats">
+            <div class="stat-card">
+                <div class="stat-label"><i class="ri-eye-line"></i> Totale Views</div>
+                <div class="stat-value">4,892</div>
+                <div class="stat-change positive">↑ 12% vs vorige maand</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label"><i class="ri-user-add-line"></i> Nieuwe Leads</div>
+                <div class="stat-value">23</div>
+                <div class="stat-change positive">↑ 8% vs vorige maand</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label"><i class="ri-home-4-line"></i> Actieve Panden</div>
+                <div class="stat-value">7</div>
+                <div class="stat-change">+2 deze maand</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label"><i class="ri-percent-line"></i> Conversie</div>
+                <div class="stat-value">4.7%</div>
+                <div class="stat-change positive">↑ 0.3%</div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Requests -->
+            <div class="card" id="aanvragen">
+                <div class="card-header">
+                    <h3 class="card-title">Nieuwe Bezichtigingsaanvragen</h3>
+                    <a href="agenda-makelaars.html" style="color: var(--primary-makelaars); font-size: 0.9rem;">Bekijk
+                        alle</a>
+                </div>
+
+                <div class="request-item">
+                    <div class="request-avatar"><i class="ri-user-line"></i></div>
+                    <div class="request-info">
+                        <div class="request-name">
+                            Emma Peeters
+                            <span class="verified-tag"><i class="ri-shield-check-line"></i> Itsme</span>
+                        </div>
+                        <div class="request-property">Penthouse aan de Schelde</div>
+                    </div>
+                    <div class="request-times">
+                        <strong>Wo 14:00</strong>
+                        Do 10:00, Vr 16:00
+                    </div>
+                    <button class="btn-confirm" onclick="confirmRequest(this)">Bevestig</button>
+                </div>
+
+                <div class="request-item">
+                    <div class="request-avatar"><i class="ri-user-line"></i></div>
+                    <div class="request-info">
+                        <div class="request-name">
+                            Lucas Van Damme
+                            <span class="verified-tag"><i class="ri-shield-check-line"></i> Itsme</span>
+                        </div>
+                        <div class="request-property">Villa Sint-Martens-Latem</div>
+                    </div>
+                    <div class="request-times">
+                        <strong>Za 11:00</strong>
+                        Ma 15:00
+                    </div>
+                    <button class="btn-confirm" onclick="confirmRequest(this)">Bevestig</button>
+                </div>
+
+                <div class="request-item">
+                    <div class="request-avatar"><i class="ri-user-line"></i></div>
+                    <div class="request-info">
+                        <div class="request-name">
+                            Sophie Janssens
+                            <span class="verified-tag"><i class="ri-shield-check-line"></i> Itsme</span>
+                        </div>
+                        <div class="request-property">Stadsloft Gent Centrum</div>
+                    </div>
+                    <div class="request-times">
+                        <strong>Di 09:30</strong>
+                        Wo 14:00
+                    </div>
+                    <button class="btn-confirm" onclick="confirmRequest(this)">Bevestig</button>
+                </div>
+            </div>
+
+            <!-- Activity Feed -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Recente Activiteit</h3>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon lead"><i class="ri-calendar-check-line"></i></div>
+                    <div class="activity-text">
+                        <strong>Emma Peeters</strong> vraagt bezichtiging aan
+                    </div>
+                    <div class="activity-time">5 min</div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon view"><i class="ri-eye-line"></i></div>
+                    <div class="activity-text">
+                        <strong>Penthouse</strong> kreeg 34 views vandaag
+                    </div>
+                    <div class="activity-time">1 uur</div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon message"><i class="ri-message-3-line"></i></div>
+                    <div class="activity-text">
+                        Nieuw bericht over <strong>Villa</strong>
+                    </div>
+                    <div class="activity-time">2 uur</div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon lead"><i class="ri-calendar-check-line"></i></div>
+                    <div class="activity-text">
+                        <strong>Lucas Van Damme</strong> vraagt bezichtiging aan
+                    </div>
+                    <div class="activity-time">3 uur</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Properties Preview -->
+        <div class="card" id="panden" style="margin-top: 24px;">
+            <div class="card-header">
+                <h3 class="card-title">Mijn Panden</h3>
+                <a href=\"advertentie-makelaars.html\" style=\"color: var(--primary-makelaars); font-size:
+                    0.9rem;\">Beheer alle</a>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                <div class="property-mini">
+                    <img src="https://images.unsplash.com/photo-1600596542815-40b510412bba?auto=format&fit=crop&q=80&w=200"
+                        class="property-mini-img">
+                    <div class="property-mini-info">
+                        <h4>Penthouse aan de Schelde</h4>
+                        <p>€ 1.250.000 · Antwerpen</p>
+                    </div>
+                    <div class="property-mini-stats">
+                        <div class="views">892 views</div>
+                        <div style="color: #666; font-size: 0.8rem;">12 leads</div>
+                    </div>
+                </div>
+
+                <div class="property-mini">
+                    <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=200"
+                        class="property-mini-img">
+                    <div class="property-mini-info">
+                        <h4>Villa Sint-Martens-Latem</h4>
+                        <p>€ 2.400.000 · Gent</p>
+                    </div>
+                    <div class="property-mini-stats">
+                        <div class="views">1.2k views</div>
+                        <div style="color: #666; font-size: 0.8rem;">8 leads</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boost Section -->
+        <div class="card" id="boost"
+            style="margin-top: 24px; background: linear-gradient(135deg, #3d3530 0%, #5a4a40 100%); color: white;">
+            <div class="card-header" style="border-bottom-color: rgba(255,255,255,0.1);">
+                <h3 class="card-title" style="color: white;"><i class="ri-rocket-line" style="color: #d4a574;"></i>
+                    Boost uw Panden</h3>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding-top: 8px;">
+                <!-- Toppositie -->
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; text-align: center;">
+                    <i class="ri-arrow-up-circle-line"
+                        style="font-size: 2rem; color: #d4a574; margin-bottom: 12px;"></i>
+                    <h4 style="font-size: 1rem; margin-bottom: 8px;">Toppositie</h4>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 16px;">7 dagen bovenaan in zoekresultaten
+                    </p>
+                    <div style="font-size: 1.2rem; font-weight: 700; color: #d4a574; margin-bottom: 12px;">€29</div>
+                    <button class="btn"
+                        style="background: rgba(255,255,255,0.2); color: white; width: 100%; padding: 10px;">Activeren</button>
+                </div>
+
+                <!-- Featured Banner -->
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; text-align: center;">
+                    <i class="ri-star-line" style="font-size: 2rem; color: #d4a574; margin-bottom: 12px;"></i>
+                    <h4 style="font-size: 1rem; margin-bottom: 8px;">Featured Banner</h4>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 16px;">Homepage uitgelicht sectie</p>
+                    <div style="font-size: 1.2rem; font-weight: 700; color: #d4a574; margin-bottom: 12px;">€49</div>
+                    <button class="btn"
+                        style="background: rgba(255,255,255,0.2); color: white; width: 100%; padding: 10px;">Activeren</button>
+                </div>
+
+                <!-- Virtuele Video Tour - NEW -->
+                <div
+                    style="background: linear-gradient(135deg, #d4a574 0%, #b8956a 100%); padding: 20px; border-radius: 12px; text-align: center; position: relative;">
+                    <span
+                        style="position: absolute; top: -8px; right: 12px; background: #22c55e; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600;">NIEUW</span>
+                    <i class="ri-vidicon-line" style="font-size: 2rem; color: white; margin-bottom: 12px;"></i>
+                    <h4 style="font-size: 1rem; margin-bottom: 8px; color: white;">Virtuele Video Tour</h4>
+                    <p style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 16px; color: white;">Upload uw eigen
+                        video rondleiding</p>
+                    <div style="font-size: 1.2rem; font-weight: 700; color: white; margin-bottom: 12px;">€79</div>
+                    <button class="btn btn-primary"
+                        style="background: white; color: #3d3530; width: 100%; padding: 10px;">Upload Video</button>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 20px; font-size: 0.85rem; opacity: 0.7;">
+                <i class="ri-information-line"></i> Boosts zijn geldig per pand. Combineer voor maximale zichtbaarheid.
+            </p>
+        </div>
+    </main>
+
+    <script src="propertyContext.js"></script>
+    <script>
+        // Load stats for current property
+        function loadStatsForProperty() {
+            const stats = propertyContext.getStats();
+            const property = propertyContext.getCurrent();
+
+            // Update stats display
+            document.querySelector('.stats-grid .stat-card:nth-child(1) .stat-value').textContent = stats.views || 0;
+            document.querySelector('.stats-grid .stat-card:nth-child(2) .stat-value').textContent = stats.requests || 0;
+            document.querySelector('.stats-grid .stat-card:nth-child(3) .stat-value').textContent = stats.saves || 0;
+            document.querySelector('.stats-grid .stat-card:nth-child(4) .stat-value').textContent = stats.messages || 0;
+
+            console.log(`Loaded stats for ${property.name}:`, stats);
+        }
+
+        // Switch property
+        function switchProperty() {
+            const select = document.getElementById('propertySwitcher');
+            const propertyId = select.value;
+
+            if (propertyId === 'all') {
+                // Show combined stats for all properties
+                const allStats = {
+                    views: 0,
+                    requests: 0,
+                    saves: 0,
+                    messages: 0
+                };
+
+                Object.keys(PROPERTIES).forEach(id => {
+                    const stats = propertyContext.getData('stats', id) || {};
+                    allStats.views += stats.views || 0;
+                    allStats.requests += stats.requests || 0;
+                    allStats.saves += stats.saves || 0;
+                    allStats.messages += stats.messages || 0;
+                });
+
+                // Update display with combined stats
+                document.querySelector('.stats-grid .stat-card:nth-child(1) .stat-value').textContent = allStats.views;
+                document.querySelector('.stats-grid .stat-card:nth-child(2) .stat-value').textContent = allStats.requests;
+                document.querySelector('.stats-grid .stat-card:nth-child(3) .stat-value').textContent = allStats.saves;
+                document.querySelector('.stats-grid .stat-card:nth-child(4) .stat-value').textContent = allStats.messages;
+
+                console.log('Showing combined stats for all properties');
+            } else {
+                // Switch to specific property
+                propertyContext.switch(propertyId);
+            }
+        }
+
+        // Listen for property changes
+        window.addEventListener('propertyChanged', (e) => {
+            console.log('Property changed to:', e.detail.property.name);
+            loadStatsForProperty();
+        });
+
+        function confirmRequest(btn) {
+            const item = btn.closest('.request-item');
+            btn.innerHTML = '<i class="ri-check-line"></i> Bevestigd';
+            btn.style.background = '#22c55e';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                item.style.opacity = '0.5';
+            }, 1000);
+        }
+
+        // Load on page load
+        window.addEventListener('load', () => {
+            // Set property selector to current property
+            const currentId = propertyContext.getCurrentId();
+            document.getElementById('propertySwitcher').value = currentId;
+
+            // Load stats for current property
+            loadStatsForProperty();
+        });
+    </script>
+</body>
+
+</html>
