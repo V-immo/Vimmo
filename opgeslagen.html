@@ -19,7 +19,7 @@
             background: var(--bg-light);
         }
 
-        .sidebar-zoeker {
+        .sidebar {
             width: 280px;
             background: var(--bg-card);
             border-right: 1px solid rgba(0, 0, 0, 0.06);
@@ -29,7 +29,7 @@
             overflow-y: auto;
         }
 
-        .sidebar-zoeker .brand {
+        .sidebar .brand {
             padding: 0 30px 30px;
             font-size: 1.5rem;
             font-weight: 700;
@@ -39,11 +39,11 @@
             margin-bottom: 20px;
         }
 
-        .sidebar-nav-zoeker {
+        .sidebar-nav {
             padding: 0 15px;
         }
 
-        .nav-item-zoeker {
+        .nav-item {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -55,12 +55,12 @@
             transition: all 0.2s;
         }
 
-        .nav-item-zoeker:hover {
+        .nav-item:hover {
             background: var(--bg-light);
             color: var(--text-main);
         }
 
-        .nav-item-zoeker.active {
+        .nav-item.active {
             background: var(--primary);
             color: white;
         }
@@ -79,7 +79,7 @@
         }
 
         @media (max-width: 768px) {
-            .sidebar-zoeker {
+            .sidebar {
                 display: none;
             }
 
@@ -98,36 +98,36 @@
 <body>
     <div class="opgeslagen-page">
         <!-- Sidebar -->
-        <aside class="sidebar-zoeker">
+        <aside class="sidebar">
             <a href="index.html" class="brand">
                 <span style="color: #d63031; font-weight: 400;">V</span> <span
                     style="color: #3d3530; font-weight: 400;">I</span><span
                     style="color: #3d3530; font-weight: 800;">MMO</span>
             </a>
 
-            <nav class="sidebar-nav-zoeker">
-                <a href="dashboard-zoeker.html" class="nav-item-zoeker">
+            <nav class="sidebar-nav">
+                <a href="dashboard-particulier.html" class="nav-item">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
-                <a href="opgeslagen.html" class="nav-item-zoeker active">
+                <a href="opgeslagen.html" class="nav-item active">
                     <i class="ri-heart-line"></i> Opgeslagen
                 </a>
-                <a href="agenda.html" class="nav-item-zoeker">
+                <a href="agenda.html" class="nav-item">
                     <i class="ri-calendar-check-line"></i> Bezichtigingen
                 </a>
-                <a href="berichten.html" class="nav-item-zoeker">
+                <a href="berichten.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
                 </a>
-                <a href="dashboard-zoeker.html#zoekopdrachten" class="nav-item-zoeker">
+                <a href="dashboard-particulier.html#zoekopdrachten" class="nav-item">
                     <i class="ri-search-line"></i> Zoekopdrachten
                 </a>
 
                 <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
 
-                <a href="instellingen.html" class="nav-item-zoeker">
+                <a href="instellingen.html" class="nav-item">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item-zoeker">
+                <a href="index.html" class="nav-item">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
             </nav>
