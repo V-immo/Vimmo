@@ -287,7 +287,23 @@
         <main class="main-content">
             <div style="margin-bottom: 30px;">
                 <h1 style="font-size: 2rem; margin-bottom: 8px;">Beschikbaarheid Instellen</h1>
-                <p style="color: var(--text-muted);">Stel de tijden in waarop u bezichtigingen kunt ontvangen</p>
+                <p style="color: var(--text-muted); margin-bottom: 16px;">Stel de tijden in waarop u bezichtigingen kunt
+                    ontvangen</p>
+
+                <!-- Property Selector -->
+                <div
+                    style="background: white; padding: 20px; border-radius: var(--radius-md); border: 2px solid var(--primary); margin-top: 20px;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <i class="ri-home-4-line" style="font-size: 1.5rem; color: var(--primary);"></i>
+                        <strong style="font-size: 1.1rem;">Beschikbaarheid instellen voor:</strong>
+                    </div>
+                    <select id="propertySelector" onchange="switchProperty()"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); background: white; cursor: pointer; font-size: 1rem;">
+                        <option value="prop-1" selected>🏠 Moderne Woning - Antwerpen</option>
+                        <option value="prop-2">🏢 Penthouse - Schelde</option>
+                        <option value="prop-3">🏡 Villa - Brasschaat</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Calendar -->
