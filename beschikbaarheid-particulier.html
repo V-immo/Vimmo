@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
+        :root {
+            --primary-particulier: #10b981;
+            --primary-dark-particulier: #059669;
+        }
+
         .beschikbaarheid-page {
             display: flex;
             min-height: 100vh;
@@ -61,7 +66,7 @@
         }
 
         .nav-item.active {
-            background: var(--primary);
+            background: var(--primary-particulier);
             color: white;
         }
 
@@ -109,7 +114,7 @@
 
         .calendar-nav button:hover {
             background: var(--bg-light);
-            border-color: var(--primary);
+            border-color: var(--primary-particulier);
         }
 
         .calendar-grid {
@@ -144,14 +149,14 @@
         }
 
         .calendar-day:hover {
-            border-color: var(--primary);
+            border-color: var(--primary-particulier);
             transform: scale(1.05);
         }
 
         .calendar-day.selected {
-            background: var(--primary);
+            background: var(--primary-particulier);
             color: white;
-            border-color: var(--primary);
+            border-color: var(--primary-particulier);
             transform: scale(1.05);
         }
 
@@ -161,7 +166,7 @@
             bottom: 8px;
             width: 8px;
             height: 8px;
-            background: var(--primary);
+            background: var(--primary-particulier);
             border-radius: 50%;
         }
 
@@ -207,17 +212,17 @@
         }
 
         .timeslot.active {
-            background: var(--primary);
+            background: var(--primary-particulier);
             color: white;
-            border-color: var(--primary);
+            border-color: var(--primary-particulier);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(214, 48, 49, 0.3);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
         .btn-save {
             margin-top: 30px;
             padding: 16px 40px;
-            background: var(--primary);
+            background: var(--primary-particulier);
             color: white;
             border: none;
             border-radius: var(--radius-md);
@@ -231,9 +236,9 @@
         }
 
         .btn-save:hover {
-            background: #c52a2b;
+            background: var(--primary-dark-particulier);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(214, 48, 49, 0.3);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
         @media (max-width: 768px) {
@@ -259,22 +264,22 @@
                 <a href="dashboard-particulier.html" class="nav-item">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
-                <a href="dashboard-particulier.html#advertentie" class="nav-item">
+                <a href="advertentie-particulier.html" class="nav-item">
                     <i class="ri-home-4-line"></i> Mijn Advertentie
                 </a>
-                <a href="beschikbaarheid.html" class="nav-item active">
+                <a href="beschikbaarheid-particulier.html" class="nav-item active">
                     <i class="ri-calendar-line"></i> Beschikbaarheid
                 </a>
-                <a href="agenda.html" class="nav-item">
+                <a href="agenda-particulier.html" class="nav-item">
                     <i class="ri-calendar-check-line"></i> Aanvragen
                 </a>
-                <a href="berichten.html" class="nav-item">
+                <a href="berichten-particulier.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
                 </a>
 
                 <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
 
-                <a href="account.html" class="nav-item">
+                <a href="instellingen.html" class="nav-item">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
                 <a href="index.html" class="nav-item">
@@ -290,11 +295,10 @@
                 <p style="color: var(--text-muted); margin-bottom: 16px;">Stel de tijden in waarop u bezichtigingen kunt
                     ontvangen</p>
 
-                <!-- Property Selector -->
                 <div
-                    style="background: white; padding: 20px; border-radius: var(--radius-md); border: 2px solid var(--primary); margin-top: 20px;">
+                    style="background: white; padding: 20px; border-radius: var(--radius-md); border: 2px solid var(--primary-particulier); margin-top: 20px;">
                     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                        <i class="ri-home-4-line" style="font-size: 1.5rem; color: var(--primary);"></i>
+                        <i class="ri-home-4-line" style="font-size: 1.5rem; color: var(--primary-particulier);"></i>
                         <strong style="font-size: 1.1rem;">Beschikbaarheid instellen voor:</strong>
                     </div>
                     <select id="propertySelector" onchange="switchProperty()"
