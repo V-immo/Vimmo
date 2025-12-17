@@ -52,12 +52,22 @@
 .opgeslagen-page,
 .zoekopdrachten-page {
     animation: pageSlideIn 0.25s ease-out;
+    min-height: 100vh;
+    background: var(--bg-light) !important;
 }
 
-/* Main content area fade in */
-.main-content,
-.main-content-zoeker {
-    animation: pageSlideIn 0.3s ease-out 0.05s both;
+/* Override body background for dashboard pages to prevent flash */
+body:has(.dashboard-zoeker),
+body:has(.dashboard-particulier),
+body:has(.dashboard-makelaars),
+body:has(.settings-page),
+body:has(.messages-page),
+body:has(.agenda-page),
+body:has(.advertentie-page),
+body:has(.beschikbaarheid-page),
+body:has(.opgeslagen-page),
+body:has(.zoekopdrachten-page) {
+    background: var(--bg-light) !important;
 }
 
 * {
