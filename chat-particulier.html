@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .chat-page {
+            display: flex;
+            height: 100vh;
+            background: var(--bg-light);
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-card);
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .chat-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: white;
+        }
+
+        .chat-header .back-btn {
+            padding: 8px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .chat-header .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .chat-header .info {
+            flex: 1;
+        }
+
+        .chat-header .name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .chat-header .property {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 70%;
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .message.sent .message-avatar {
+            background: var(--primary);
+        }
+
+        .message-content {
+            background: var(--bg-light);
+            padding: 12px 16px;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.sent .message-content {
+            background: var(--primary);
+            color: white;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-text {
+            margin-bottom: 4px;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .chat-input-container {
+            padding: 20px 30px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            background: white;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 24px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+        }
+
+        .send-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: background 0.2s;
+        }
+
+        .send-btn:hover {
+            background: #c52a2b;
+        }
+
+        .property-card-link {
+            background: var(--bg-light);
+            padding: 16px;
+            border-radius: 12px;
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s;
+        }
+
+        .property-card-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .property-card-link img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .property-card-link .info {
+            flex: 1;
+        }
+
+        .property-card-link .price {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .property-card-link .title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .property-card-link .location {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .chat-messages {
+                padding: 20px;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-page">
+        <div class="chat-container">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <button class="back-btn" onclick="window.location.href='berichten.html'">
+                    <i class="ri-arrow-left-line"></i>
+                </button>
+                <div class="avatar">MV</div>
+                <div class="info">
+                    <div class="name">Makelaar Vastgoed</div>
+                    <div class="property"><i class="ri-home-4-line"></i> Penthouse aan de Schelde</div>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages">
+                <!-- Received Message -->
+                <div class="message">
+                    <div class="message-avatar">MV</div>
+                    <div class="message-content">
+                        <div class="message-text">Goedemiddag! Bedankt voor uw interesse in onze penthouse. Wanneer zou
+                            het u schikken voor een bezichtiging?</div>
+                        <div class="message-time">Gisteren 14:23</div>
+                    </div>
+                </div>
+
+                <!-- Sent Message -->
+                <div class="message sent">
+                    <div class="message-avatar">E</div>
+                    <div class="message-content">
+                        <div class="message-text">Hallo! Morgen om 14:00 zou perfect zijn voor mij.</div>
+                        <div class="message-time">Gisteren 15:10</div>
+                    </div>
+                </div>
+
+                <!-- Received Message with Property Card -->
+                <div class="message">
+                    <div class="message-avatar">MV</div>
+                    <div class="message-content">
+                        <div class="message-text">Perfect! Ik heb de afspraak voor u ingepland.</div>
+                        <a href="property.html" class="property-card-link">
+                            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=200&q=80"
+                                alt="Penthouse">
+                            <div class="info">
+                                <div class="price">€ 1.250.000</div>
+                                <div class="title">Penthouse aan de Schelde</div>
+                                <div class="location">Antwerpen, Zuid</div>
+                            </div>
+                        </a>
+                        <div class="message-time">Gisteren 15:45</div>
+                    </div>
+                </div>
+
+                <!-- Sent Message -->
+                <div class="message sent">
+                    <div class="message-avatar">E</div>
+                    <div class="message-content">
+                        <div class="message-text">Geweldig, dank u wel! Tot morgen.</div>
+                        <div class="message-time">Gisteren 16:02</div>
+                    </div>
+                </div>
+
+                <!-- Received Message -->
+                <div class="message">
+                    <div class="message-avatar">MV</div>
+                    <div class="message-content">
+                        <div class="message-text">De bezichtiging voor morgen is bevestigd. Tot dan!</div>
+                        <div class="message-time">2u geleden</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <input type="text" class="chat-input" placeholder="Typ een bericht...">
+                    <button class="send-btn">
+                        <i class="ri-send-plane-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        const chatInput = document.querySelector('.chat-input');
+        const sendBtn = document.querySelector('.send-btn');
+        const messagesContainer = document.querySelector('.chat-messages');
+
+        function sendMessage() {
+            const messageText = chatInput.value.trim();
+            if (!messageText) return;
+
+            // Create message element
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message sent';
+
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+
+            messageDiv.innerHTML = `
+                <div class="message-avatar">E</div>
+                <div class="message-content">
+                    <div class="message-text">${messageText}</div>
+                    <div class="message-time">${timeString}</div>
+                </div>
+            `;
+
+            // Add to chat
+            messagesContainer.appendChild(messageDiv);
+
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Clear input
+            chatInput.value = '';
+
+            // Save to localStorage
+            const chatId = new URLSearchParams(window.location.search).get('id') || '1';
+            const messages = JSON.parse(localStorage.getItem(`chat_${chatId}`) || '[]');
+            messages.push({
+                text: messageText,
+                time: timeString,
+                sent: true,
+                timestamp: now.getTime()
+            });
+            localStorage.setItem(`chat_${chatId}`, JSON.stringify(messages));
+
+            // Simulate response after 2 seconds
+            setTimeout(() => {
+                const responseDiv = document.createElement('div');
+                responseDiv.className = 'message';
+                responseDiv.innerHTML = `
+                    <div class="message-avatar">MV</div>
+                    <div class="message-content">
+                        <div class="message-text">Bedankt voor uw bericht! Ik kom zo snel mogelijk bij u terug.</div>
+                        <div class="message-time">${new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}</div>
+                    </div>
+                `;
+                messagesContainer.appendChild(responseDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 2000);
+        }
+
+        // Send on button click
+        sendBtn.addEventListener('click', sendMessage);
+
+        // Send on Enter key
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Load saved messages
+        window.addEventListener('load', () => {
+            const chatId = new URLSearchParams(window.location.search).get('id') || '1';
+            const messages = JSON.parse(localStorage.getItem(`chat_${chatId}`) || '[]');
+
+            messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = msg.sent ? 'message sent' : 'message';
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">${msg.sent ? 'E' : 'MV'}</div>
+                    <div class="message-content">
+                        <div class="message-text">${msg.text}</div>
+                        <div class="message-time">${msg.time}</div>
+                    </div>
+                `;
+                messagesContainer.appendChild(messageDiv);
+            });
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        });
+    </script>
+</body>
+
+</html>
