@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instellingen | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        :root {
+            --primary-zoeker: #8b5cf6;
+            --primary-dark-zoeker: #7c3aed;
+        }
+
+        .settings-page {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-light);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar .brand {
+            padding: 0 30px 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-nav {
+            padding: 0 15px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background: var(--primary-zoeker);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            max-width: 1200px;
+        }
+
+        .settings-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            margin-bottom: 24px;
+        }
+
+        .settings-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .setting-item {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info h3 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .setting-info p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .btn-edit {
+            padding: 8px 20px;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-edit:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: #ccc;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-zoeker);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: left 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            left: 27px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="settings-page">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard-zoeker.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="opgeslagen-zoeker.html" class="nav-item">
+                    <i class="ri-heart-line"></i> Opgeslagen
+                </a>
+                <a href="agenda-zoeker.html" class="nav-item">
+                    <i class="ri-calendar-check-line"></i> Bezichtigingen
+                </a>
+                <a href="berichten-zoeker.html" class="nav-item">
+                    <i class="ri-message-3-line"></i> Berichten
+                </a>
+                <a href="zoekopdrachten-zoeker.html" class="nav-item">
+                    <i class="ri-search-line"></i> Zoekopdrachten
+                </a>
+
+                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+
+                <a href="instellingen-zoeker.html" class="nav-item active">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="index.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div style="margin-bottom: 30px;">
+                <h1 style="font-size: 2rem; margin-bottom: 8px;">Instellingen</h1>
+                <p style="color: var(--text-muted);">Beheer uw account en voorkeuren</p>
+            </div>
+
+            <!-- Account Info -->
+            <div class="settings-card">
+                <h2><i class="ri-user-line"></i> Account Informatie</h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Naam</h3>
+                        <p>Emma Peeters</p>
+                    </div>
+                    <button class="btn-edit"
+                        onclick="editField('Naam', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>E-mailadres</h3>
+                        <p>emma.peeters@example.com</p>
+                    </div>
+                    <button class="btn-edit"
+                        onclick="editField('E-mailadres', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Telefoonnummer</h3>
+                        <p>+32 475 12 34 56</p>
+                    </div>
+                    <button class="btn-edit"
+                        onclick="editField('Telefoonnummer', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Wachtwoord</h3>
+                        <p>••••••••</p>
+                    </div>
+                    <button class="btn-edit"
+                        onclick="alert('Wachtwoord wijzigen functionaliteit komt binnenkort!')">Wijzigen</button>
+                </div>
+            </div>
+
+            <!-- Notifications -->
+            <div class="settings-card">
+                <h2><i class="ri-notification-line"></i> Notificaties</h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>E-mail notificaties</h3>
+                        <p>Ontvang updates over bezichtigingen en berichten</p>
+                    </div>
+                    <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Nieuwe woningen</h3>
+                        <p>Waarschuwing bij nieuwe woningen die aan uw zoekopdrachten voldoen</p>
+                    </div>
+                    <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Prijswijzigingen</h3>
+                        <p>Notificatie bij prijswijzigingen van opgeslagen woningen</p>
+                    </div>
+                    <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
+                </div>
+            </div>
+
+            <!-- Privacy -->
+            <div class="settings-card">
+                <h2><i class="ri-shield-check-line"></i> Privacy & Beveiliging</h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Itsme Verificatie</h3>
+                        <p>Geverifieerd met itsme</p>
+                    </div>
+                    <span style="color: #28a745; font-weight: 600;"><i class="ri-checkbox-circle-fill"></i>
+                        Actief</span>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Twee-factor authenticatie</h3>
+                        <p>Extra beveiliging voor uw account</p>
+                    </div>
+                    <button class="btn-edit" onclick="alert('2FA wordt binnenkort toegevoegd!')">Inschakelen</button>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Privacy instellingen</h3>
+                        <p>Beheer wie uw profiel kan zien</p>
+                    </div>
+                    <button class="btn-edit" onclick="alert('Privacy instellingen komen binnenkort!')">Beheren</button>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="settings-card">
+                <h2 style="color: #dc3545;"><i class="ri-error-warning-line"></i> Account Beheer</h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Account verwijderen</h3>
+                        <p>Permanent uw account en alle gegevens verwijderen</p>
+                    </div>
+                    <button class="btn-edit" style="color: #dc3545; border-color: #dc3545;"
+                        onclick="if(confirm('Weet u zeker dat u uw account wilt verwijderen?')) alert('Account verwijderen functionaliteit komt binnenkort!')">Verwijderen</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div
+            style="background: var(--bg-card); border-radius: var(--radius-lg); padding: 30px; max-width: 500px; width: 90%;">
+            <h3 id="modalTitle" style="margin-bottom: 20px;">Bewerken</h3>
+            <input type="text" id="modalInput"
+                style="width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); margin-bottom: 20px;">
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button onclick="closeEditModal()"
+                    style="padding: 10px 20px; background: white; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); cursor: pointer;">Annuleren</button>
+                <button onclick="saveEdit()"
+                    style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: var(--radius-md); cursor: pointer;">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let currentEditField = null;
+        let currentEditElement = null;
+
+        function editField(field, currentValue, element) {
+            currentEditField = field;
+            currentEditElement = element;
+            document.getElementById('modalTitle').textContent = `${field} bewerken`;
+            document.getElementById('modalInput').value = currentValue;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function saveEdit() {
+            const newValue = document.getElementById('modalInput').value;
+            if (newValue.trim()) {
+                currentEditElement.textContent = newValue;
+
+                // Save to localStorage
+                const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+                settings[currentEditField] = newValue;
+                localStorage.setItem('userSettings', JSON.stringify(settings));
+
+                alert(`✅ ${currentEditField} bijgewerkt!`);
+                closeEditModal();
+            }
+        }
+
+        // Close modal on overlay click
+        document.getElementById('editModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('editModal')) {
+                closeEditModal();
+            }
+        });
+
+        // Load saved settings
+        window.addEventListener('load', () => {
+            const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+            if (settings.Naam) document.querySelector('.setting-item:nth-child(1) p').textContent = settings.Naam;
+            if (settings['E-mailadres']) document.querySelector('.setting-item:nth-child(2) p').textContent = settings['E-mailadres'];
+            if (settings.Telefoonnummer) document.querySelector('.setting-item:nth-child(3) p').textContent = settings.Telefoonnummer;
+        });
+    </script>
+</body>
+
+</html>
