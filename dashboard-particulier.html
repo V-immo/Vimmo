@@ -102,6 +102,10 @@
             gap: 6px;
         }
 
+        .stat-label i {
+            color: var(--primary-particulier);
+        }
+
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
@@ -115,7 +119,7 @@
         }
 
         .stat-change.positive {
-            color: #28a745;
+            color: var(--primary-particulier);
         }
 
         .card {
@@ -136,6 +140,34 @@
         .card-title {
             font-size: 1.3rem;
             font-weight: 600;
+            color: var(--primary-particulier);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--primary-particulier);
+            border-radius: 2px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 5px;
+            height: 28px;
+            background: var(--primary-particulier);
+            border-radius: 3px;
         }
 
         .property-listing {
@@ -186,19 +218,109 @@
         .btn-edit,
         .btn-stats {
             padding: 8px 16px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            background: white;
+            border: none;
+            background: var(--primary-particulier);
+            color: white;
             border-radius: var(--radius-md);
             cursor: pointer;
             font-size: 0.9rem;
             transition: all 0.2s;
+            font-weight: 500;
         }
 
         .btn-edit:hover,
         .btn-stats:hover {
+            background: var(--primary-dark-particulier);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            border: 2px solid var(--primary-particulier);
+            background: white;
+            color: var(--primary-particulier);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .btn-secondary:hover {
             background: var(--primary-particulier);
             color: white;
-            border-color: var(--primary-particulier);
+        }
+
+        .property-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            border-left: 4px solid var(--primary-particulier);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .property-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+        }
+
+        .property-card.active {
+            border-left-width: 6px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 100%);
+        }
+
+        .property-card-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .property-card-emoji {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: var(--radius-md);
+        }
+
+        .property-card-details h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .property-card-details p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .property-card-stats {
+            display: flex;
+            gap: 24px;
+            margin-right: 20px;
+        }
+
+        .property-card-stat {
+            text-align: center;
+        }
+
+        .property-card-stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-particulier);
+        }
+
+        .property-card-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
 
         .request-item {
@@ -335,8 +457,11 @@
         <!-- Main Content -->
         <main class="main-content">
             <div style="margin-bottom: 30px;">
-                <h1 style="font-size: 2rem; margin-bottom: 8px;">Welkom terug, Thomas!</h1>
-                <p style="color: var(--text-muted);">Hier is een overzicht van uw advertentie en bezichtigingsaanvragen
+                <h1 style="font-size: 2rem; margin-bottom: 8px; display: flex; align-items: center; gap: 12px;">
+                    <span style="width: 6px; height: 40px; background: var(--primary-particulier); border-radius: 3px;"></span>
+                    Welkom terug, Thomas!
+                </h1>
+                <p style="color: var(--text-muted); margin-left: 18px;">Hier is een overzicht van uw advertentie en bezichtigingsaanvragen
                 </p>
             </div>
 
@@ -464,25 +589,21 @@
             <!-- Mijn Panden Section -->
             <div style="margin-top: 40px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h2 style="font-size: 1.5rem; margin: 0;">Mijn Panden</h2>
-                    <button onclick="window.location.href='verkopen.html'"
-                        style="padding: 12px 24px; background: var(--primary-particulier); color: white; border: none; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                    <h2 class="section-title">Mijn Panden</h2>
+                    <button onclick="window.location.href='verkopen.html'" class="btn-edit" style="padding: 12px 24px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
                         <i class="ri-add-line"></i> Nieuw Pand Toevoegen
                     </button>
                 </div>
 
-                <div id="propertyListGrid" style="display: grid; gap: 20px;">
+                <div id="propertyListGrid" style="display: grid; gap: 16px;">
                     <!-- Properties loaded by JavaScript -->
-                    <div style="padding: 40px; text-align: center; color: var(--text-muted);">
-                        <i class="ri-home-4-line" style="font-size: 3rem; opacity: 0.3;"></i>
-                        <p>Laden...</p>
-                    </div>
                 </div>
             </div>
         </main>
     </div>
 
     <script src="app.js"></script>
+    <script src="propertyContext.js"></script>
     <script>
         // Handle Accept/Decline for booking requests
         function acceptRequest(requestId, name, date, time) {
@@ -520,6 +641,96 @@
                 event.target.closest('.request-item').remove();
             }
         }
+
+        // Render property list from PropertyContext
+        function renderPropertyList() {
+            const grid = document.getElementById('propertyListGrid');
+            if (!grid) return;
+
+            const properties = propertyContext.getActive();
+            const currentId = propertyContext.getCurrentId();
+
+            if (properties.length === 0) {
+                grid.innerHTML = `
+                    <div style="padding: 60px; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-lg);">
+                        <i class="ri-home-4-line" style="font-size: 3rem; opacity: 0.3; color: var(--primary-particulier);"></i>
+                        <p style="margin-top: 16px;">Nog geen panden toegevoegd</p>
+                        <button onclick="window.location.href='verkopen.html'" class="btn-edit" style="margin-top: 16px;">
+                            <i class="ri-add-line"></i> Eerste pand toevoegen
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = properties.map(prop => {
+                const stats = propertyContext.getData('stats', prop.id) || { views: 0, saves: 0, requests: 0 };
+                const isActive = prop.id === currentId;
+                
+                return `
+                    <div class="property-card ${isActive ? 'active' : ''}" onclick="switchProperty('${prop.id}')">
+                        <div class="property-card-info">
+                            <div class="property-card-emoji">${prop.emoji}</div>
+                            <div class="property-card-details">
+                                <h4>${prop.name} ${isActive ? '<span style="font-size: 0.75rem; background: var(--primary-particulier); color: white; padding: 2px 8px; border-radius: 12px; margin-left: 8px;">Actief</span>' : ''}</h4>
+                                <p><i class="ri-map-pin-line"></i> ${prop.address}</p>
+                            </div>
+                        </div>
+                        <div class="property-card-stats">
+                            <div class="property-card-stat">
+                                <div class="property-card-stat-value">${stats.views}</div>
+                                <div class="property-card-stat-label">Views</div>
+                            </div>
+                            <div class="property-card-stat">
+                                <div class="property-card-stat-value">${stats.requests}</div>
+                                <div class="property-card-stat-label">Aanvragen</div>
+                            </div>
+                            <div class="property-card-stat">
+                                <div class="property-card-stat-value">${stats.saves}</div>
+                                <div class="property-card-stat-label">Opgeslagen</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-edit" onclick="event.stopPropagation(); window.location.href='advertentie-particulier.html?prop=${prop.id}'">
+                                <i class="ri-edit-line"></i>
+                            </button>
+                            <button class="btn-secondary" onclick="event.stopPropagation(); viewPropertyStats('${prop.id}')">
+                                <i class="ri-bar-chart-line"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function switchProperty(propertyId) {
+            propertyContext.switch(propertyId);
+            renderPropertyList();
+            // Update stats display for new property
+            updateStatsDisplay();
+        }
+
+        function viewPropertyStats(propertyId) {
+            const stats = propertyContext.getData('stats', propertyId) || { views: 0, saves: 0, requests: 0, messages: 0 };
+            const prop = propertyContext.getAll()[propertyId];
+            alert(`📊 Statistieken - ${prop.name}\n\n👁️ ${stats.views} Weergaven\n❤️ ${stats.saves} Opgeslagen\n📅 ${stats.requests} Bezichtigingsaanvragen\n💬 ${stats.messages || 0} Berichten`);
+        }
+
+        function updateStatsDisplay() {
+            const stats = propertyContext.getStats();
+            // Update the stats cards if they exist
+            const statCards = document.querySelectorAll('.stat-value');
+            if (statCards.length >= 3) {
+                statCards[0].textContent = stats.views?.toLocaleString() || '0';
+                statCards[1].textContent = stats.requests || '0';
+                statCards[2].textContent = stats.saves || '0';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPropertyList();
+        });
     </script>
 </body>
 
