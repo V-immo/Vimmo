@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoekopdrachten | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        :root {
+            --primary-zoeker: #8b5cf6;
+            --primary-dark-zoeker: #7c3aed;
+        }
+
+        .zoekopdrachten-page {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-light);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar .brand {
+            padding: 0 30px 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-nav {
+            padding: 0 15px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background: var(--primary-zoeker);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .search-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .search-details {
+            display: flex;
+            gap: 16px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-view {
+            background: var(--primary-zoeker);
+            color: white;
+            border: none;
+        }
+
+        .btn-delete {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .search-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="zoekopdrachten-page">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard-zoeker.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="opgeslagen-zoeker.html" class="nav-item">
+                    <i class="ri-heart-line"></i> Opgeslagen
+                </a>
+                <a href="agenda-zoeker.html" class="nav-item">
+                    <i class="ri-calendar-check-line"></i> Bezichtigingen
+                </a>
+                <a href="berichten-zoeker.html" class="nav-item">
+                    <i class="ri-message-3-line"></i> Berichten
+                </a>
+                <a href="zoekopdrachten-zoeker.html" class="nav-item active">
+                    <i class="ri-search-line"></i> Zoekopdrachten
+                </a>
+
+                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+
+                <a href="instellingen.html" class="nav-item">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="index.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div>
+                <h1 style="font-size: 2rem; margin-bottom: 8px;">Mijn Zoekopdrachten</h1>
+                <p style="color: var(--text-muted);">Ontvang notificaties wanneer nieuwe woningen aan uw criteria
+                    voldoen</p>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <!-- Search 1 -->
+                <div class="search-card">
+                    <div class="search-info">
+                        <h3>Appartement in Antwerpen</h3>
+                        <div class="search-details">
+                            <span><i class="ri-home-4-line"></i> Appartement</span>
+                            <span><i class="ri-money-euro-circle-line"></i> €200k - €400k</span>
+                            <span><i class="ri-hotel-bed-line"></i> Min. 2 slaapkamers</span>
+                        </div>
+                    </div>
+                    <div class="search-actions">
+                        <button class="btn-small btn-view" onclick="window.location.href='kopen.html'">Bekijk
+                            resultaten</button>
+                        <button class="btn-small btn-delete">Verwijderen</button>
+                    </div>
+                </div>
+
+                <!-- Search 2 -->
+                <div class="search-card">
+                    <div class="search-info">
+                        <h3>Huis in Gent</h3>
+                        <div class="search-details">
+                            <span><i class="ri-home-4-line"></i> Huis</span>
+                            <span><i class="ri-money-euro-circle-line"></i> €300k - €600k</span>
+                            <span><i class="ri-hotel-bed-line"></i> Min. 3 slaapkamers</span>
+                        </div>
+                    </div>
+                    <div class="search-actions">
+                        <button class="btn-small btn-view" onclick="window.location.href='kopen.html'">Bekijk
+                            resultaten</button>
+                        <button class="btn-small btn-delete">Verwijderen</button>
+                    </div>
+                </div>
+
+                <!-- Search 3 -->
+                <div class="search-card">
+                    <div class="search-info">
+                        <h3>Nieuwbouw in Leuven</h3>
+                        <div class="search-details">
+                            <span><i class="ri-building-line"></i> Nieuwbouw</span>
+                            <span><i class="ri-money-euro-circle-line"></i> Tot €500k</span>
+                            <span><i class="ri-hotel-bed-line"></i> Min. 2 slaapkamers</span>
+                        </div>
+                    </div>
+                    <div class="search-actions">
+                        <button class="btn-small btn-view" onclick="window.location.href='nieuwbouw.html'">Bekijk
+                            resultaten</button>
+                        <button class="btn-small btn-delete">Verwijderen</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

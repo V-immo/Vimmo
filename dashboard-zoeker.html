@@ -122,7 +122,7 @@
         }
 
         .section-header a {
-            color: var(--primary);
+            color: var(--primary-zoeker);
             text-decoration: none;
             font-size: 0.9rem;
         }
@@ -158,7 +158,7 @@
         .property-card-mini .price {
             font-size: 1.1rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--primary-zoeker);
             margin-bottom: 4px;
         }
 
@@ -182,7 +182,7 @@
             background: var(--bg-light);
             border-radius: var(--radius-md);
             margin-bottom: 12px;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--primary-zoeker);
         }
 
         .appointment-date {
@@ -253,14 +253,14 @@
 
         .message-preview.unread {
             background: #f0f7ff;
-            border-left: 3px solid var(--primary);
+            border-left: 3px solid var(--primary-zoeker);
         }
 
         .message-avatar {
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: var(--primary);
+            background: var(--primary-zoeker);
             color: white;
             display: flex;
             align-items: center;
@@ -333,18 +333,18 @@
                 <a href="dashboard-zoeker.html" class="nav-item-zoeker active">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
-                <a href="opgeslagen.html" class="nav-item-zoeker">
+                <a href="opgeslagen-zoeker.html" class="nav-item-zoeker">
                     <i class="ri-heart-line"></i> Opgeslagen
                 </a>
-                <a href="agenda.html" class="nav-item-zoeker">
+                <a href="agenda-zoeker.html" class="nav-item-zoeker">
                     <i class="ri-calendar-check-line"></i> Bezichtigingen
                 </a>
-                <a href="berichten.html" class="nav-item-zoeker">
+                <a href="berichten-zoeker.html" class="nav-item-zoeker">
                     <i class="ri-message-3-line"></i> Berichten
                     <span class="badge"
-                        style="margin-left: auto; background: var(--accent-red); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                        style="margin-left: auto; background: var(--primary-zoeker); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
                 </a>
-                <a href="zoekopdrachten.html" class="nav-item-zoeker">
+                <a href="zoekopdrachten-zoeker.html" class="nav-item-zoeker">
                     <i class="ri-search-line"></i> Zoekopdrachten
                 </a>
 
@@ -370,8 +370,8 @@
                 <!-- Opgeslagen Woningen -->
                 <div class="section-card" id="opgeslagen">
                     <div class="section-header">
-                        <h2><i class="ri-heart-fill" style="color: var(--accent-red);"></i> Opgeslagen Woningen</h2>
-                        <a href="opgeslagen.html">Bekijk alle (7)</a>
+                        <h2><i class="ri-heart-fill" style="color: var(--primary-zoeker);"></i> Opgeslagen Woningen</h2>
+                        <a href="opgeslagen-zoeker.html">Bekijk alle (7)</a>
                     </div>
 
                     <div class="saved-properties-grid">
@@ -414,7 +414,7 @@
                 <div class="section-card" id="bezichtigingen">
                     <div class="section-header">
                         <h2><i class="ri-calendar-check-line"></i> Aankomende Bezichtigingen</h2>
-                        <a href="agenda.html">Agenda bekijken</a>
+                        <a href="agenda-zoeker.html">Agenda bekijken</a>
                     </div>
 
                     <div class="appointment-item">
@@ -452,7 +452,7 @@
                 <div class="section-card">
                     <div class="section-header">
                         <h2><i class="ri-message-3-line"></i> Recente Berichten</h2>
-                        <a href="berichten.html">Alle berichten</a>
+                        <a href="berichten-zoeker.html">Alle berichten</a>
                     </div>
 
                     <div class="message-preview unread" onclick="window.location.href='chat.html?id=1'">

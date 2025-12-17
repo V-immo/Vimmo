@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
+        :root {
+            --primary-zoeker: #8b5cf6;
+            --primary-dark-zoeker: #7c3aed;
+        }
+
         .messages-page {
             display: flex;
             min-height: 100vh;
@@ -61,7 +66,7 @@
         }
 
         .nav-item.active {
-            background: var(--primary);
+            background: var(--primary-zoeker);
             color: white;
         }
 
@@ -114,7 +119,7 @@
             width: 56px;
             height: 56px;
             border-radius: 50%;
-            background: var(--primary);
+            background: var(--primary-zoeker);
             color: white;
             display: flex;
             align-items: center;
@@ -196,21 +201,21 @@
             </a>
 
             <nav class="sidebar-nav">
-                <a href="dashboard-particulier.html" class="nav-item">
+                <a href="dashboard-zoeker.html" class="nav-item">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
-                <a href="opgeslagen.html" class="nav-item">
+                <a href="opgeslagen-zoeker.html" class="nav-item">
                     <i class="ri-heart-line"></i> Opgeslagen
                 </a>
-                <a href="agenda.html" class="nav-item">
+                <a href="agenda-zoeker.html" class="nav-item">
                     <i class="ri-calendar-check-line"></i> Bezichtigingen
                 </a>
-                <a href="berichten.html" class="nav-item active">
+                <a href="berichten-zoeker.html" class="nav-item active">
                     <i class="ri-message-3-line"></i> Berichten
                     <span class="badge"
-                        style="margin-left: auto; background: var(--accent-red); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                        style="margin-left: auto; background: var(--primary-zoeker); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
                 </a>
-                <a href="zoekopdrachten.html" class="nav-item">
+                <a href="zoekopdrachten-zoeker.html" class="nav-item">
                     <i class="ri-search-line"></i> Zoekopdrachten
                 </a>
 

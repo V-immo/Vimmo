@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opgeslagen Woningen | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        :root {
+            --primary-zoeker: #8b5cf6;
+            --primary-dark-zoeker: #7c3aed;
+        }
+
+        .opgeslagen-page {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-light);
+        }
+
+        .sidebar-zoeker {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-zoeker .brand {
+            padding: 0 30px 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-nav-zoeker {
+            padding: 0 15px;
+        }
+
+        .nav-item-zoeker {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background: var(--primary-zoeker);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="opgeslagen-page">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard-zoeker.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="opgeslagen-zoeker.html" class="nav-item active">
+                    <i class="ri-heart-line"></i> Opgeslagen
+                </a>
+                <a href="agenda-zoeker.html" class="nav-item">
+                    <i class="ri-calendar-check-line"></i> Bezichtigingen
+                </a>
+                <a href="berichten-zoeker.html" class="nav-item">
+                    <i class="ri-message-3-line"></i> Berichten
+                </a>
+                <a href="zoekopdrachten-zoeker.html" class="nav-item">
+                    <i class="ri-search-line"></i> Zoekopdrachten
+                </a>
+
+                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+
+                <a href="instellingen.html" class="nav-item">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="index.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div>
+                <h1 style="font-size: 2rem; margin-bottom: 8px;">Opgeslagen Woningen</h1>
+                <p style="color: var(--text-muted);">Al uw favoriete woningen op één plek (<span
+                        id="propertyCount">0</span> woningen)</p>
+            </div>
+
+            <!-- Filters & Sort -->
+            <div
+                style="background: var(--bg-card); padding: 24px; border-radius: var(--radius-lg); margin: 30px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+                <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Sorteer op:</label>
+                        <select id="sortSelect" onchange="renderProperties()"
+                            style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md);">
+                            <option value="newest">Nieuwste eerst</option>
+                            <option value="price-low">Prijs: laag naar hoog</option>
+                            <option value="price-high">Prijs: hoog naar laag</option>
+                            <option value="location">Locatie</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Filter op type:</label>
+                        <select id="typeFilter" onchange="renderProperties()"
+                            style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md);">
+                            <option value="all">Alle types</option>
+                            <option value="huis">Huis</option>
+                            <option value="appartement">Appartement</option>
+                            <option value="villa">Villa</option>
+                            <option value="penthouse">Penthouse</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Prijs max:</label>
+                        <input type="number" id="priceFilter" placeholder="€ 500.000" onchange="renderProperties()"
+                            style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md);">
+                    </div>
+                    <div style="align-self: flex-end;">
+                        <button onclick="clearFilters()"
+                            style="padding: 10px 20px; background: white; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); cursor: pointer;">
+                            <i class="ri-refresh-line"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="properties-grid" id="propertiesGrid">
+                <!-- Properties will be rendered here by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let savedProperties = [];
+
+        function renderProperties() {
+            const grid = document.getElementById('propertiesGrid');
+            const sortValue = document.getElementById('sortSelect').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            const priceFilter = parseInt(document.getElementById('priceFilter').value) || Infinity;
+
+            // Get saved property IDs from localStorage
+            const savedIds = JSON.parse(localStorage.getItem('savedProperties') || '[]');
+
+            // Filter properties
+            let filtered = properties.filter(p => savedIds.includes(p.id || 'prop-' + p.title.toLowerCase().replace(/\s+/g, '-')));
+
+            // Apply type filter
+            if (typeFilter !== 'all') {
+                filtered = filtered.filter(p => (p.type || 'huis').toLowerCase() === typeFilter);
+            }
+
+            // Apply price filter
+            filtered = filtered.filter(p => {
+                const price = parseInt(p.price.replace(/[^0-9]/g, ''));
+                return price <= priceFilter;
+            });
+
+            // Sort
+            filtered.sort((a, b) => {
+                const priceA = parseInt(a.price.replace(/[^0-9]/g, ''));
+                const priceB = parseInt(b.price.replace(/[^0-9]/g, ''));
+
+                switch (sortValue) {
+                    case 'price-low': return priceA - priceB;
+                    case 'price-high': return priceB - priceA;
+                    case 'location': return a.location.localeCompare(b.location);
+                    default: return 0; // newest
+                }
+            });
+
+            // Update count
+            document.getElementById('propertyCount').textContent = filtered.length;
+
+            // Render
+            grid.innerHTML = filtered.map(property => `
+                <div class="property-card" style="position: relative;">
+                    <div class="property-image">
+                        <img src="${property.image}" alt="${property.title}">
+                        ${property.tag ? `<span class="property-tag">${property.tag}</span>` : ''}
+                        <button class="favorite-btn active" onclick="removeProperty('${property.id || 'prop-' + property.title.toLowerCase().replace(/\s+/g, '-')}', event)" title="Verwijder uit opgeslagen">
+                            <i class="ri-heart-fill"></i>
+                        </button>
+                    </div>
+                    <a href="property.html" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="property-info">
+                            <div class="property-price">${property.price}</div>
+                            <h3 class="property-title">${property.title}</h3>
+                            <p class="property-location">
+                                <i class="ri-map-pin-line"></i> ${property.location}
+                            </p>
+                            <div class="property-features">
+                                <span><i class="ri-hotel-bed-line"></i> ${property.beds}</span>
+                                <span><i class="ri-drop-line"></i> ${property.baths}</span>
+                                <span><i class="ri-ruler-line"></i> ${property.area}</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            `).join('');
+
+            // Show empty state if no properties
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+                        <i class="ri-heart-line" style="font-size: 4rem; opacity: 0.3; margin-bottom: 16px; display: block;"></i>
+                        <h3>Geen opgeslagen woningen</h3>
+                        <p>Begin met het opslaan van woningen die u interessant vindt!</p>
+                        <a href="kopen.html" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background: var(--primary); color: white; text-decoration: none; border-radius: var(--radius-md);">
+                            Woningen bekijken
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        function removeProperty(propertyId, event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (confirm('Woning verwijderen uit opgeslagen?')) {
+                const saved = JSON.parse(localStorage.getItem('savedProperties') || '[]');
+                const index = saved.indexOf(propertyId);
+                if (index > -1) {
+                    saved.splice(index, 1);
+                    localStorage.setItem('savedProperties', JSON.stringify(saved));
+                    renderProperties();
+                }
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('sortSelect').value = 'newest';
+            document.getElementById('typeFilter').value = 'all';
+            document.getElementById('priceFilter').value = '';
+            renderProperties();
+        }
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', renderProperties);
+    </script>
+</body>
+
+</html>
