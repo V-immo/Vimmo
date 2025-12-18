@@ -150,12 +150,24 @@
     display: block;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     margin-bottom: 20px;
-    color: var(--accent-red);
+    color: var(--text-main);
 }
 
-/* Logo styling - V is red, IMMO is bold brown */
-.sidebar-brand span,
-.sidebar .brand span {
+/* Logo styling - V is red, I is normal, MMO is bold */
+.sidebar-brand .logo-v,
+.sidebar .brand .logo-v {
+    color: var(--accent-red);
+    font-weight: 400;
+}
+
+.sidebar-brand .logo-i,
+.sidebar .brand .logo-i {
+    color: var(--text-main);
+    font-weight: 400;
+}
+
+.sidebar-brand .logo-mmo,
+.sidebar .brand .logo-mmo {
     color: var(--text-main);
     font-weight: 800;
 }
