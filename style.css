@@ -145,12 +145,19 @@
 .sidebar-brand {
     padding: 0 30px 30px;
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 400;
     text-decoration: none;
     display: block;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     margin-bottom: 20px;
+    color: var(--accent-red);
+}
+
+/* Logo styling - V is red, IMMO is bold brown */
+.sidebar-brand span,
+.sidebar .brand span {
     color: var(--text-main);
+    font-weight: 800;
 }
 
 .sidebar-nav {
