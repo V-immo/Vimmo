@@ -1523,9 +1523,7 @@ h4,
 .dashboard-makelaars .sidebar-brand {
     font-family: var(--font-heading);
     font-size: 1.6rem;
-    font-weight: 300;
     letter-spacing: 2px;
-    color: var(--text-main);
     text-decoration: none;
     text-transform: uppercase;
     margin-bottom: 40px;
@@ -1533,8 +1531,20 @@ h4,
     display: block;
 }
 
-.dashboard-makelaars .sidebar-brand span {
-    font-weight: 700;
+/* Logo colors for Makelaars - use specific classes */
+.dashboard-makelaars .sidebar-brand .logo-v {
+    color: var(--accent-red);
+    font-weight: 400;
+}
+
+.dashboard-makelaars .sidebar-brand .logo-i {
+    color: var(--text-main);
+    font-weight: 400;
+}
+
+.dashboard-makelaars .sidebar-brand .logo-mmo {
+    color: var(--text-main);
+    font-weight: 800;
 }
 
 .dashboard-makelaars .nav-section {
