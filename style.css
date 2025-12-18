@@ -25,6 +25,20 @@
     --font-body: 'Inter', sans-serif;
     --transition-slow: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     --transition-fast: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* Dashboard Theme Colors */
+    /* Particulier - Green */
+    --primary-particulier: #10b981;
+    --primary-dark-particulier: #059669;
+    --accent-particulier: #34d399;
+
+    /* Makelaars - Red */
+    --primary-makelaars: #d63031;
+    --primary-dark-makelaars: #c52a2b;
+
+    /* Zoeker - Purple */
+    --primary-zoeker: #8b5cf6;
+    --primary-dark-zoeker: #7c3aed;
 }
 
 /* Page Transition - Smooth fade in for dashboard pages */
