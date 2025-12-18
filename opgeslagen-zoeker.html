@@ -12,97 +12,6 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
     <link rel="stylesheet" href="style.css">
-
-    <style>
-        :root {
-            --primary-zoeker: #8b5cf6;
-            --primary-dark-zoeker: #7c3aed;
-        }
-
-        .dashboard-zoeker {
-            display: flex;
-            min-height: 100vh;
-            background: var(--bg-light);
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--bg-card);
-            border-right: 1px solid rgba(0, 0, 0, 0.06);
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .sidebar .brand {
-            padding: 0 30px 30px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: block;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-nav {
-            padding: 0 15px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 15px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: var(--radius-md);
-            margin-bottom: 4px;
-            transition: all 0.2s;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-light);
-            color: var(--text-main);
-        }
-
-        .nav-item.active {
-            background: var(--primary-zoeker);
-            color: white;
-        }
-
-        .nav-item i {
-            font-size: 1.2rem;
-        }
-
-        .main-content {
-            margin-left: 280px;
-            flex: 1;
-            padding: 40px;
-        }
-
-        .properties-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 24px;
-            margin-top: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-
-            .properties-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -113,31 +22,31 @@
                 V<span>IMMO</span>
             </a>
 
-            <nav class="sidebar-nav-zoeker">
-                <a href="dashboard-zoeker.html" class="nav-item-zoeker">
+            <nav class="sidebar-nav">
+                <a href="dashboard-zoeker.html" class="nav-item">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
-                <a href="opgeslagen-zoeker.html" class="nav-item-zoeker active">
+                <a href="opgeslagen-zoeker.html" class="nav-item active">
                     <i class="ri-heart-line"></i> Opgeslagen
                 </a>
-                <a href="agenda-zoeker.html" class="nav-item-zoeker">
+                <a href="agenda-zoeker.html" class="nav-item">
                     <i class="ri-calendar-check-line"></i> Bezichtigingen
                 </a>
-                <a href="berichten-zoeker.html" class="nav-item-zoeker">
+                <a href="berichten-zoeker.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
                     <span class="badge"
                         style="margin-left: auto; background: var(--primary-zoeker); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
                 </a>
-                <a href="zoekopdrachten-zoeker.html" class="nav-item-zoeker">
+                <a href="zoekopdrachten-zoeker.html" class="nav-item">
                     <i class="ri-search-line"></i> Zoekopdrachten
                 </a>
 
                 <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
 
-                <a href="instellingen-zoeker.html" class="nav-item-zoeker">
+                <a href="instellingen-zoeker.html" class="nav-item">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item-zoeker">
+                <a href="index.html" class="nav-item">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
             </nav>
