@@ -7,257 +7,90 @@
     <title>Beschikbaarheid Instellen | Vimmo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
     <link rel="stylesheet" href="style.css">
+    padding: 40px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    }
 
-    <style>
-        :root {
-            --primary-particulier: #10b981;
-            --primary-dark-particulier: #059669;
-        }
+    .timeslots-container h3 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    }
 
-        .beschikbaarheid-page {
-            display: flex;
-            min-height: 100vh;
-            background: var(--bg-light);
-        }
+    .timeslots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+    margin-top: 30px;
+    }
 
-        .sidebar {
-            width: 280px;
-            background: var(--bg-card);
-            border-right: 1px solid rgba(0, 0, 0, 0.06);
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
+    .timeslot {
+    padding: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-weight: 500;
+    font-size: 1.05rem;
+    background: white;
+    }
 
-        .sidebar .brand {
-            padding: 0 30px 30px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: block;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            margin-bottom: 20px;
-        }
+    .timeslot:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
 
-        .sidebar-nav {
-            padding: 0 15px;
-        }
+    .timeslot.active {
+    background: var(--primary-particulier);
+    color: white;
+    border-color: var(--primary-particulier);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
 
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 15px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: var(--radius-md);
-            margin-bottom: 4px;
-            transition: all 0.2s;
-        }
+    .btn-save {
+    margin-top: 30px;
+    padding: 16px 40px;
+    background: var(--primary-particulier);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 1.05rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    }
 
-        .nav-item:hover {
-            background: var(--bg-light);
-            color: var(--text-main);
-        }
+    .btn-save:hover {
+    background: var(--primary-dark-particulier);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
 
-        .nav-item.active {
-            background: var(--primary-particulier);
-            color: white;
-        }
+    @media (max-width: 768px) {
 
-        .main-content {
-            margin-left: 280px;
-            flex: 1;
-            padding: 40px;
-            max-width: 1400px;
-        }
-
-        .calendar-container {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 40px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            margin-bottom: 30px;
-        }
-
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        .calendar-header h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
-
-        .calendar-nav {
-            display: flex;
-            gap: 12px;
-        }
-
-        .calendar-nav button {
-            padding: 10px 20px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            background: white;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .calendar-nav button:hover {
-            background: var(--bg-light);
-            border-color: var(--primary-particulier);
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 12px;
-        }
-
-        .calendar-day-header {
-            text-align: center;
-            font-weight: 600;
-            padding: 16px;
-            color: var(--text-main);
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .calendar-day {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid rgba(0, 0, 0, 0.06);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            font-size: 1.1rem;
-            font-weight: 500;
-            background: white;
-        }
-
-        .calendar-day:hover {
-            border-color: var(--primary-particulier);
-            transform: scale(1.05);
-        }
-
-        .calendar-day.selected {
-            background: var(--primary-particulier);
-            color: white;
-            border-color: var(--primary-particulier);
-            transform: scale(1.05);
-        }
-
-        .calendar-day.has-slots::after {
-            content: '';
-            position: absolute;
-            bottom: 8px;
-            width: 8px;
-            height: 8px;
-            background: var(--primary-particulier);
-            border-radius: 50%;
-        }
-
-        .calendar-day.selected.has-slots::after {
-            background: white;
-        }
-
-        .timeslots-container {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 40px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-        }
-
-        .timeslots-container h3 {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-
-        .timeslots-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 16px;
-            margin-top: 30px;
-        }
-
-        .timeslot {
-            padding: 16px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-            font-weight: 500;
-            font-size: 1.05rem;
-            background: white;
-        }
-
-        .timeslot:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .timeslot.active {
-            background: var(--primary-particulier);
-            color: white;
-            border-color: var(--primary-particulier);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-save {
-            margin-top: 30px;
-            padding: 16px 40px;
-            background: var(--primary-particulier);
-            color: white;
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-size: 1.05rem;
-            font-weight: 600;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-save:hover {
-            background: var(--primary-dark-particulier);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        @media (max-width: 768px) {
-
-            .timeslots-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+    .timeslots-grid {
+    grid-template-columns: repeat(2, 1fr);
+    }
+    }
     </style>
 </head>
 
 <body>
-    <div class="beschikbaarheid-page">
+    <div class="dashboard-particulier">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <a href="index.html" class="brand">
-                <span style="color: #d63031; font-weight: 400;">V</span> <span
-                    style="color: #3d3530; font-weight: 400;">I</span><span
-                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            <a href="index.html" class="sidebar-brand">
+                V<span>IMMO</span>
             </a>
 
             <nav class="sidebar-nav">
@@ -272,9 +105,13 @@
                 </a>
                 <a href="agenda-particulier.html" class="nav-item">
                     <i class="ri-calendar-check-line"></i> Aanvragen
+                    <span class="badge"
+                        style="margin-left: auto; background: var(--accent-red); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">3</span>
                 </a>
                 <a href="berichten-particulier.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
+                    <span
+                        style="margin-left: auto; background: var(--primary-particulier); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
                 </a>
 
                 <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
@@ -486,8 +323,7 @@
         renderCalendar();
         renderTimeslots();
     </script>
-    <script src="dashboard-nav.js"></script>`n</body>
+    <script src="dashboard-nav.js"></script>`n
+</body>
 
 </html>
-
-

@@ -7,7 +7,8 @@
     <title>Zoekopdrachten | Vimmo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
     <link rel="stylesheet" href="style.css">
@@ -18,7 +19,7 @@
             --primary-dark-zoeker: #7c3aed;
         }
 
-        .zoekopdrachten-page {
+        .dashboard-zoeker {
             display: flex;
             min-height: 100vh;
             background: var(--bg-light);
@@ -143,38 +144,38 @@
 </head>
 
 <body>
-    <div class="zoekopdrachten-page">
+    <div class="dashboard-zoeker">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <a href="index.html" class="brand">
-                <span style="color: #d63031; font-weight: 400;">V</span> <span
-                    style="color: #3d3530; font-weight: 400;">I</span><span
-                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            <a href="index.html" class="sidebar-brand">
+                V<span>IMMO</span>
             </a>
 
-            <nav class="sidebar-nav">
-                <a href="dashboard-zoeker.html" class="nav-item">
+            <nav class="sidebar-nav-zoeker">
+                <a href="dashboard-zoeker.html" class="nav-item-zoeker">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
-                <a href="opgeslagen-zoeker.html" class="nav-item">
+                <a href="opgeslagen-zoeker.html" class="nav-item-zoeker">
                     <i class="ri-heart-line"></i> Opgeslagen
                 </a>
-                <a href="agenda-zoeker.html" class="nav-item">
+                <a href="agenda-zoeker.html" class="nav-item-zoeker">
                     <i class="ri-calendar-check-line"></i> Bezichtigingen
                 </a>
-                <a href="berichten-zoeker.html" class="nav-item">
+                <a href="berichten-zoeker.html" class="nav-item-zoeker">
                     <i class="ri-message-3-line"></i> Berichten
+                    <span class="badge"
+                        style="margin-left: auto; background: var(--primary-zoeker); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
                 </a>
-                <a href="zoekopdrachten-zoeker.html" class="nav-item active">
+                <a href="zoekopdrachten-zoeker.html" class="nav-item-zoeker active">
                     <i class="ri-search-line"></i> Zoekopdrachten
                 </a>
 
                 <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
 
-                <a href="instellingen-zoeker.html" class="nav-item">
+                <a href="instellingen-zoeker.html" class="nav-item-zoeker">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="index.html" class="nav-item-zoeker">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
             </nav>
@@ -244,8 +245,7 @@
     </div>
 
     <script src="app.js"></script>
-    <script src="dashboard-nav.js"></script>`n</body>
+    <script src="dashboard-nav.js"></script>`n
+</body>
 
 </html>
-
-

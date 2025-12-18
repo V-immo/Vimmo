@@ -7,13 +7,14 @@
     <title>Berichten | Vimmo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
     <link rel="stylesheet" href="style.css">
 
     <style>
-        .messages-page {
+        .dashboard-particulier {
             display: flex;
             min-height: 100vh;
             background: var(--bg-light);
@@ -186,13 +187,11 @@
 </head>
 
 <body>
-    <div class="messages-page">
+    <div class="dashboard-particulier">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <a href="index.html" class="brand">
-                <span style="color: #d63031; font-weight: 400;">V</span> <span
-                    style="color: #3d3530; font-weight: 400;">I</span><span
-                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            <a href="index.html" class="sidebar-brand">
+                V<span>IMMO</span>
             </a>
 
             <nav class="sidebar-nav">
@@ -207,9 +206,13 @@
                 </a>
                 <a href="agenda-particulier.html" class="nav-item">
                     <i class="ri-calendar-check-line"></i> Aanvragen
+                    <span class="badge"
+                        style="margin-left: auto; background: var(--accent-red); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">3</span>
                 </a>
                 <a href="berichten-particulier.html" class="nav-item active">
                     <i class="ri-message-3-line"></i> Berichten
+                    <span
+                        style="margin-left: auto; background: var(--primary-particulier); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
                 </a>
 
                 <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
@@ -309,8 +312,7 @@
     </div>
 
     <script src="app.js"></script>
-    <script src="dashboard-nav.js"></script>`n</body>
+    <script src="dashboard-nav.js"></script>`n
+</body>
 
 </html>
-
-

@@ -43,28 +43,34 @@
         // Use View Transitions if supported
         if (supportsViewTransitions) {
             document.startViewTransition(async () => {
-                // Fetch new page
-                const response = await fetch(href);
-                const html = await response.text();
+                try {
+                    // Fetch new page
+                    const response = await fetch(href);
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    const html = await response.text();
 
-                // Parse new document
-                const parser = new DOMParser();
-                const newDoc = parser.parseFromString(html, 'text/html');
+                    // Parse new document
+                    const parser = new DOMParser();
+                    const newDoc = parser.parseFromString(html, 'text/html');
 
-                // Update title
-                document.title = newDoc.title;
+                    // Update title
+                    document.title = newDoc.title;
 
-                // Replace body content
-                document.body.innerHTML = newDoc.body.innerHTML;
+                    // Replace body content
+                    document.body.innerHTML = newDoc.body.innerHTML;
 
-                // Update URL
-                history.pushState({}, '', href);
+                    // Update URL
+                    history.pushState({}, '', href);
 
-                // Re-attach event listeners
-                initNavigation();
+                    // Re-attach event listeners
+                    initNavigation();
 
-                // Scroll to top
-                window.scrollTo(0, 0);
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                } catch (error) {
+                    console.error('Transition failed, falling back to normal navigation:', error);
+                    window.location.href = href;
+                }
             });
         } else {
             // Fallback: just navigate normally
