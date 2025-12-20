@@ -240,4 +240,38 @@ router.post('/reset-password', async (req, res) => {
     }
 });
 
+/**
+ * POST /api/auth/resend-verification
+ */
+router.post('/resend-verification', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ error: 'Email is verplicht' });
+
+        const { data: user } = await db
+            .from('users')
+            .select('*')
+            .eq('email', email.toLowerCase())
+            .eq('verified', false)
+            .single();
+
+        if (!user) {
+            return res.json({ message: 'Als dit e-mailadres bestaat en ongeverifieerd is, sturen we een nieuwe link.' });
+        }
+
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+        await db
+            .from('users')
+            .update({ verification_token: verificationToken })
+            .eq('id', user.id);
+
+        await sendVerificationEmail(email, user.first_name, verificationToken);
+        res.json({ message: 'Nieuwe verificatie e-mail verzonden!' });
+
+    } catch (error) {
+        console.error('Resend verification error:', error);
+        res.status(500).json({ error: 'Er is iets misgegaan.' });
+    }
+});
+
 module.exports = router;

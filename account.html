@@ -557,7 +557,16 @@
                 console.log('[REGISTER] Status:', response.status, response.statusText);
                 console.log('[REGISTER] Duration:', duration + 'ms');
 
-                const data = await response.json();
+                const responseText = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('[REGISTER] Server returned non-JSON response:', responseText);
+                    showError('Server Fout: ' + responseText.substring(0, 100));
+                    return;
+                }
+
                 console.log('[REGISTER] Response data:', data);
 
                 if (response.ok) {
