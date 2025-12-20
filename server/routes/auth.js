@@ -12,6 +12,10 @@ const router = express.Router();
  */
 router.post('/register', async (req, res) => {
     try {
+        if (!db) {
+            console.error('[AUTH] Supabase client is not initialized!');
+            return res.status(500).json({ error: 'Database verbinding niet geconfigureerd op de server.' });
+        }
         const { email, password, firstName, lastName, role = 'zoeker' } = req.body;
 
         if (!email || !password || !firstName || !lastName) {
