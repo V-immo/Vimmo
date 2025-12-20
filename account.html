@@ -218,8 +218,8 @@
                 <a href="contact.html">Contact</a>
             </div>
             <div class="nav-actions">
-                <a href="dashboard.html" class="btn btn-glass">Inloggen</a>
-                <a href="verkopen.html" class="btn btn-primary">Verkopen</a>
+                <a href="login.html" class="btn btn-glass">Inloggen</a>
+                <a href="account.html" class="btn btn-primary">Registreren</a>
             </div>
             <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
                 <span></span>
@@ -247,8 +247,8 @@
             <a href="contact.html" onclick="toggleMobileMenu()">Contact</a>
         </div>
         <div class="mobile-menu-actions">
-            <a href="dashboard.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
-            <a href="verkopen.html" class="btn btn-primary" style="width: 100%; text-align: center;">Verkopen</a>
+            <a href="login.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
+            <a href="account.html" class="btn btn-primary" style="width: 100%; text-align: center;">Registreren</a>
         </div>
     </div>
 
@@ -258,12 +258,42 @@
                 <div class="register-header">
                     <a href="index.html" class="brand">
                         <span style="color: #d63031; font-weight: 400;">V</span> <span
-                            style="color: #3d3530; font-weight: 400;">I</span><span
-                            style="color: #3d3530; font-weight: 800;">MMO</span>
+                            style="color: #3d3530; font-weight: 800;">IMMO</span>
                     </a>
                     <span class="free-badge"><i class="ri-gift-line"></i> 100% Gratis</span>
                     <h1>Account aanmaken</h1>
                     <p>Vind uw droomwoning sneller met een gratis account</p>
+                </div>
+
+                <!-- Account Type Selection -->
+                <div class="login-type-section" style="margin-bottom: 30px;">
+                    <p class="login-type-title"
+                        style="text-align: center; margin-bottom: 16px; color: var(--text-muted);">Ik wil een account
+                        voor:</p>
+                    <div class="login-types" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                        <button type="button" class="login-type-btn active" data-type="zoeker"
+                            onclick="selectRole(this)"
+                            style="padding: 16px 12px; background: var(--bg-section); border: 2px solid var(--glass-border); border-radius: var(--radius-md); cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <i class="ri-search-line"
+                                style="display: block; font-size: 1.5rem; margin-bottom: 8px; color: var(--primary);"></i>
+                            <span
+                                style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-main);">Woningzoeker</span>
+                        </button>
+                        <button type="button" class="login-type-btn" data-type="particulier" onclick="selectRole(this)"
+                            style="padding: 16px 12px; background: var(--bg-section); border: 2px solid var(--glass-border); border-radius: var(--radius-md); cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <i class="ri-home-heart-line"
+                                style="display: block; font-size: 1.5rem; margin-bottom: 8px; color: var(--primary);"></i>
+                            <span
+                                style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-main);">Particulier</span>
+                        </button>
+                        <button type="button" class="login-type-btn" data-type="makelaar" onclick="selectRole(this)"
+                            style="padding: 16px 12px; background: var(--bg-section); border: 2px solid var(--glass-border); border-radius: var(--radius-md); cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <i class="ri-building-2-line"
+                                style="display: block; font-size: 1.5rem; margin-bottom: 8px; color: var(--primary);"></i>
+                            <span
+                                style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-main);">Makelaar</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- What you get -->
@@ -283,8 +313,7 @@
 
                 <div class="divider">of met email</div>
 
-                <form class="register-form"
-                    onsubmit="event.preventDefault(); window.location.href='dashboard-zoeker.html';">
+                <form class="register-form" id="registerForm" onsubmit="submitRegister(event)">
                     <div class="form-row">
                         <div class="form-group">
                             <label>Voornaam</label>
@@ -303,12 +332,47 @@
 
                     <div class="form-group">
                         <label>Wachtwoord</label>
-                        <input type="password" class="form-input" placeholder="Minimaal 8 karakters" required>
+                        <input type="password" id="regPassword" class="form-input" placeholder="Minimaal 8 karakters"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Wachtwoord bevestigen</label>
+                        <input type="password" id="regPasswordConfirm" class="form-input"
+                            placeholder="Herhaal wachtwoord" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px;">
                         Gratis account aanmaken
                     </button>
+
+                    <p style="text-align: center; margin-top: 15px; font-size: 0.85rem;">
+                        Al een account? <a href="javascript:toggleAuthMode()" id="toggleBtn">Inloggen</a>
+                    </p>
+                </form>
+
+                <form class="login-form" id="loginForm" onsubmit="submitLogin(event)" style="display: none;">
+                    <div class="form-group">
+                        <label>E-mailadres</label>
+                        <input type="email" id="loginEmail" class="form-input" placeholder="uw@email.be" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Wachtwoord</label>
+                        <input type="password" class="form-input" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px;">
+                        Inloggen
+                    </button>
+
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 15px; text-align: center;">
+                        Demo tip: Gebruik 'makelaar@', 'zoeker@' of 'particulier@'
+                    </p>
+
+                    <p style="text-align: center; margin-top: 15px; font-size: 0.85rem;">
+                        Nog geen account? <a href="javascript:toggleAuthMode()">Registreren</a>
+                    </p>
                 </form>
 
                 <p class="terms">
@@ -317,12 +381,9 @@
                 </p>
 
                 <!-- Link to verkopen -->
-                <div class="verkopen-link" style="margin-top: 50px; padding-top: 40px;">
-                    <p style="font-weight: 600; font-size: 1.05rem; margin-bottom: 20px;">Wilt u uw woning verkopen of
-                        verhuren?</p>
-                    <a href="verkopen.html" class="btn"
-                        style="width: 100%; background: #d63031; color: white; font-size: 1.1rem; padding: 18px; font-weight: 600;">WONING
-                        PLAATSEN →</a>
+                <div class="verkopen-link">
+                    <p style="font-weight: 600;">Wilt u uw woning verkopen of verhuren?</p>
+                    <a href="verkopen.html" class="btn btn-secondary" style="width: 100%;">WONING PLAATSEN →</a>
                 </div>
             </div>
         </div>
@@ -336,8 +397,7 @@
                 <div class="footer-brand">
                     <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
                             style="color: #d63031; font-weight: 400;">V</span> <span
-                            style="color: #3d3530; font-weight: 400;">I</span><span
-                            style="color: #3d3530; font-weight: 800;">MMO</span></h3>
+                            style="color: #3d3530; font-weight: 800;">IMMO</span></h3>
                     <p style="color: var(--text-muted); max-width: 280px; font-size: 0.9rem; line-height: 1.6;">Vind een
                         plek die bij je past. Woningen in heel België.</p>
                 </div>
@@ -377,14 +437,241 @@
 
     <script src="app.js"></script>
     <script>
-        function simulateItsme() {
-            alert('Itsme verificatie wordt gestart... (Demo)');
+        const API_URL = 'http://localhost:3000/api';
+        let selectedRole = 'zoeker';
+
+        function selectRole(btn) {
+            document.querySelectorAll('.login-type-btn').forEach(b => {
+                b.style.borderColor = 'var(--glass-border)';
+                b.style.background = 'var(--bg-section)';
+                b.classList.remove('active');
+            });
+
+            btn.classList.add('active');
+            btn.style.borderColor = 'var(--primary)';
+            btn.style.background = 'rgba(168, 134, 42, 0.1)';
+            selectedRole = btn.dataset.type;
         }
 
-        function submitRegister(e) {
+        function toggleAuthMode() {
+            const regForm = document.getElementById('registerForm');
+            const loginForm = document.getElementById('loginForm');
+            const title = document.querySelector('.register-header h1');
+
+            if (regForm.style.display === 'none') {
+                regForm.style.display = 'block';
+                loginForm.style.display = 'none';
+                title.textContent = 'Account aanmaken';
+            } else {
+                regForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                title.textContent = 'Inloggen';
+            }
+        }
+
+        function simulateItsme() {
+            alert('itsme® registratie is nog niet gekoppeld. Gebruik het formulier om te registreren.');
+        }
+
+        async function submitRegister(e) {
             e.preventDefault();
-            alert('Account aangemaakt! U wordt doorgestuurd naar uw dashboard.');
-            window.location.href = 'dashboard.html';
+            const startTime = performance.now();
+
+            console.log('%c[REGISTER] ========================================', 'color: #22c55e; font-weight: bold');
+            console.log('%c[REGISTER] Starting registration process...', 'color: #22c55e');
+
+            const form = e.target;
+            const inputs = form.querySelectorAll('input');
+            const firstName = inputs[0].value;
+            const lastName = inputs[1].value;
+            const email = inputs[2].value;
+            const password = document.getElementById('regPassword').value;
+            const passwordConfirm = document.getElementById('regPasswordConfirm').value;
+            const submitBtn = form.querySelector('button[type="submit"]');
+
+            // Log form data (password redacted)
+            console.log('%c[REGISTER] Form Data:', 'color: #3b82f6; font-weight: bold');
+            console.table({
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: '***' + password.slice(-3) + ` (${password.length} chars)`,
+                role: selectedRole
+            });
+
+            // Validate locally before sending
+            if (!firstName || !lastName || !email || !password) {
+                console.error('[REGISTER] ❌ Validation failed: Missing required fields');
+                console.log({ firstName: !!firstName, lastName: !!lastName, email: !!email, password: !!password });
+                showError('Alle velden zijn verplicht');
+                return;
+            }
+
+            if (password.length < 8) {
+                console.error('[REGISTER] ❌ Validation failed: Password too short');
+                showError('Wachtwoord moet minimaal 8 karakters zijn');
+                return;
+            }
+
+            if (password !== passwordConfirm) {
+                console.error('[REGISTER] ❌ Validation failed: Passwords do not match');
+                showError('Wachtwoorden komen niet overeen');
+                return;
+            }
+
+            console.log('%c[REGISTER] ✓ Local validation passed', 'color: #22c55e');
+
+            // Show loading
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Bezig...';
+            submitBtn.disabled = true;
+
+            const requestBody = {
+                firstName,
+                lastName,
+                email,
+                password,
+                role: selectedRole
+            };
+
+            console.log('%c[REGISTER] Sending API request...', 'color: #f59e0b');
+            console.log('[REGISTER] URL:', `${API_URL}/auth/register`);
+            console.log('[REGISTER] Method: POST');
+            console.log('[REGISTER] Body:', { ...requestBody, password: '[REDACTED]' });
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const endTime = performance.now();
+                const duration = (endTime - startTime).toFixed(2);
+
+                console.log('%c[REGISTER] Response received:', 'color: #8b5cf6; font-weight: bold');
+                console.log('[REGISTER] Status:', response.status, response.statusText);
+                console.log('[REGISTER] Duration:', duration + 'ms');
+
+                const data = await response.json();
+                console.log('[REGISTER] Response data:', data);
+
+                if (response.ok) {
+                    console.log('%c[REGISTER] ✅ SUCCESS - Account created!', 'color: #22c55e; font-weight: bold; font-size: 14px');
+                    console.log('[REGISTER] User ID:', data.userId);
+                    console.log('[REGISTER] Email sent:', data.emailSent);
+                    // Show success message
+                    showSuccess(email);
+                } else {
+                    console.error('%c[REGISTER] ❌ FAILED - Server returned error', 'color: #ef4444; font-weight: bold');
+                    console.error('[REGISTER] Error:', data.error);
+                    showError(data.error);
+                }
+            } catch (error) {
+                const endTime = performance.now();
+                const duration = (endTime - startTime).toFixed(2);
+
+                console.error('%c[REGISTER] ❌ NETWORK ERROR', 'color: #ef4444; font-weight: bold; font-size: 14px');
+                console.error('[REGISTER] Duration before failure:', duration + 'ms');
+                console.error('[REGISTER] Error type:', error.name);
+                console.error('[REGISTER] Error message:', error.message);
+                console.error('[REGISTER] Full error:', error);
+
+                // Check specific error types
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    console.error('[REGISTER] 💡 Hint: Is the backend server running on', API_URL + '?');
+                }
+
+                showError('Kan geen verbinding maken met de server. Probeer het later opnieuw.');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                console.log('%c[REGISTER] ========================================', 'color: #22c55e; font-weight: bold');
+            }
+        }
+
+        function showSuccess(email) {
+            const container = document.querySelector('.register-container');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px 0;">
+                    <div style="width: 80px; height: 80px; background: rgba(34, 197, 94, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+                        <i class="ri-mail-check-line" style="font-size: 2.5rem; color: #22c55e;"></i>
+                    </div>
+                    <h2 style="font-size: 1.5rem; margin-bottom: 12px; color: var(--text-main);">Check je email!</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 24px;">
+                        We hebben een verificatie link gestuurd naar<br>
+                        <strong style="color: var(--text-main);">${email}</strong>
+                    </p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                        Klik op de link in de email om je account te activeren.<br>
+                        Check ook je spam folder.
+                    </p>
+                    <div style="margin-top: 32px;">
+                        <a href="login.html" class="btn btn-primary" style="padding: 14px 32px;">Naar inloggen</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showError(message) {
+            let errorEl = document.querySelector('.register-error');
+            if (!errorEl) {
+                errorEl = document.createElement('div');
+                errorEl.className = 'register-error';
+                errorEl.style.cssText = 'background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem;';
+                const form = document.getElementById('registerForm');
+                form.insertBefore(errorEl, form.firstChild);
+            }
+            errorEl.innerHTML = `<i class="ri-error-warning-line"></i> ${message}`;
+            errorEl.style.display = 'block';
+        }
+
+        async function submitLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.toLowerCase();
+            const password = e.target.querySelectorAll('input')[1].value;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Bezig...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('userRole', data.user.role);
+                    localStorage.setItem('userName', data.user.firstName);
+
+                    switch (data.user.role) {
+                        case 'zoeker':
+                            window.location.href = 'dashboard-zoeker.html';
+                            break;
+                        case 'particulier':
+                            window.location.href = 'dashboard-particulier.html';
+                            break;
+                        case 'makelaar':
+                            window.location.href = 'dashboard-makelaars.html';
+                            break;
+                        default:
+                            window.location.href = 'dashboard-zoeker.html';
+                    }
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {
+                alert('Kan geen verbinding maken met de server.');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
         }
     </script>
 </body>

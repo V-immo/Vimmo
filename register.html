@@ -32,7 +32,7 @@
                 <a href="contact.html">Contact</a>
             </div>
             <div class="nav-actions">
-                <a href="dashboard.html" class="btn btn-glass">Inloggen</a>
+                <a href="login.html" class="btn btn-glass">Inloggen</a>
                 <a href="particulier.html" class="btn btn-primary">Plaats je woning</a>
             </div>
             <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -63,7 +63,7 @@
             <a href="contact.html">Contact</a>
         </div>
         <div class="mobile-menu-actions">
-            <a href="dashboard.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
+            <a href="login.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
             <a href="particulier.html" class="btn btn-primary" style="width: 100%; text-align: center;">Plaats je
                 woning</a>
         </div>
@@ -486,7 +486,7 @@
                         </div>
                     </div>
 
-                    <a href="dashboard.html" class="btn btn-primary btn-next"
+                    <a href="dashboard-makelaars.html" class="btn btn-primary btn-next"
                         style="display: block; text-align: center; text-decoration: none;">
                         Ga naar Dashboard <i class="ri-arrow-right-line"></i>
                     </a>
@@ -521,6 +521,7 @@
                 btn.disabled = true;
 
                 setTimeout(() => {
+                    localStorage.setItem('userRole', 'makelaar');
                     goToStep(3);
                 }, 2000);
             }

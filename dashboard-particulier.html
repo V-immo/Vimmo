@@ -12,7 +12,13 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
     <link rel="stylesheet" href="style.css">
-
+    <style>
+        @media (max-width: 1024px) {
+            .dashboard-grid-multi {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -43,13 +49,18 @@
                     <span
                         style="margin-left: auto; background: var(--primary-particulier); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
                 </a>
+                <a href="pakket-beheer.html" class="nav-item">
+                    <i class="ri-box-3-line"></i> Pakket Beheer
+                    <span id="sidebar-package-usage"
+                        style="margin-left: auto; color: #10b981; font-weight: 700;">2/3</span>
+                </a>
 
                 <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
 
                 <a href="instellingen-particulier.html" class="nav-item">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="javascript:logout()" class="nav-item">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
             </nav>
@@ -57,62 +68,124 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <div style="margin-bottom: 30px;">
-                <h1 style="font-size: 2rem; margin-bottom: 8px; display: flex; align-items: center; gap: 12px;">
-                    <span
-                        style="width: 6px; height: 40px; background: var(--primary-particulier); border-radius: 3px;"></span>
-                    Welkom terug, Thomas!
-                </h1>
-                <p style="color: var(--text-muted); margin-left: 18px;">Hier is een overzicht van uw advertentie en
-                    bezichtigingsaanvragen
-                </p>
-            </div>
+            <!-- Luxury Hero Section -->
+            <div class="luxury-hero" id="propertyHero">
+                <img id="heroImage" src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200&q=80"
+                    alt="Woning">
+                <div class="luxury-hero-overlay">
+                    <span class="luxury-badge"><i class="ri-star-line"></i> Uw Advertentie</span>
+                    <h1 id="heroTitle" style="font-size: 2.5rem; margin-bottom: 8px;">Duurzaam Wonen in 't Groen</h1>
+                    <p id="heroAddress" style="font-size: 1.1rem; opacity: 0.9;"><i class="ri-map-pin-line"></i> Leuven,
+                        Kessel-Lo</p>
 
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label"><i class="ri-eye-line"></i> Totale Views</div>
-                    <div class="stat-value">1,247</div>
-                    <div class="stat-change positive">↑ 18% deze week</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label"><i class="ri-user-add-line"></i> Aanvragen</div>
-                    <div class="stat-value">12</div>
-                    <div class="stat-change positive">↑ 3 nieuwe</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label"><i class="ri-heart-line"></i> Opgeslagen</div>
-                    <div class="stat-value">34</div>
-                    <div class="stat-change">Deze maand</div>
-                </div>
-            </div>
-
-            <!-- Mijn Advertentie -->
-            <div class="card" id="advertentie">
-                <div class="card-header">
-                    <h2 class="card-title">Mijn Advertentie</h2>
-                    <a href="verkopen.html"
-                        style="color: var(--primary-particulier); text-decoration: none; font-size: 0.9rem;">Bewerken</a>
-                </div>
-
-                <div class="property-listing">
-                    <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=300&q=80" alt="Woning">
-                    <div class="property-info">
-                        <h3>Duurzaam Wonen in 't Groen</h3>
-                        <div class="price">€ 550.000</div>
-                        <div class="details">
-                            <span><i class="ri-map-pin-line"></i> Leuven, Kessel-Lo</span>
-                            <span><i class="ri-hotel-bed-line"></i> 4 slaapkamers</span>
-                            <span><i class="ri-ruler-line"></i> 185 m²</span>
+                    <!-- Integrated Stats in Hero -->
+                    <div style="display: flex; gap: 30px; margin-top: 24px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700;">1,247</div>
+                            <div style="font-size: 0.85rem; opacity: 0.8;">Views</div>
                         </div>
-                        <div class="property-actions">
-                            <button class="btn-edit" onclick="window.location.href='advertentie.html'"><i
-                                    class="ri-edit-line"></i> Bewerken</button>
-                            <button class="btn-stats"
-                                onclick="alert('Statistieken:\n\n👁️ 247 Weergaven\n❤️ 18 Opgeslagen\n📅 12 Bezichtigingsaanvragen\n📈 +15% deze week')"><i
-                                    class="ri-bar-chart-line"></i> Statistieken</button>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700;">12</div>
+                            <div style="font-size: 0.85rem; opacity: 0.8;">Aanvragen</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700;">34</div>
+                            <div style="font-size: 0.85rem; opacity: 0.8;">Opgeslagen</div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions Panel (Glassmorphism) -->
+            <div class="glass-panel"
+                style="margin-top: -60px; margin-bottom: 30px; position: relative; z-index: 10; padding: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn" onclick="window.location.href='advertentie-particulier.html'"
+                        style="background: var(--primary-particulier); color: white; display: flex; align-items: center; gap: 8px;">
+                        <i class="ri-image-add-line"></i> Foto's Toevoegen
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.location.href='beschikbaarheid-particulier.html'"
+                        style="display: flex; align-items: center; gap: 8px;">
+                        <i class="ri-calendar-event-line"></i> Agenda Beheren
+                    </button>
+                    <button class="btn" onclick="openBoostModal()"
+                        style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; display: flex; align-items: center; gap: 8px;">
+                        <i class="ri-rocket-line"></i> Boost Advertentie
+                    </button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">Pakket:</span>
+                    <span
+                        style="background: #10b981; color: white; padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 600;">
+                        <i class="ri-vip-crown-line"></i> 60 Dagen Actief
+                    </span>
+                </div>
+            </div>
+
+            <!-- Mijn Advertentie & Pakket -->
+            <div class="dashboard-grid-multi"
+                style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px;">
+                <div class="card glass-panel" id="advertentie" style="margin-bottom: 0;">
+                    <div class="card-header">
+                        <h2 class="card-title" style="color: var(--primary-particulier);">
+                            <i class="ri-home-4-line"></i> Mijn Advertentie
+                        </h2>
+                        <a href="advertentie-particulier.html"
+                            style="color: var(--primary-particulier); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 4px;">
+                            <i class="ri-edit-line"></i> Bewerken
+                        </a>
+                    </div>
+
+                    <div class="property-listing" style="display: flex; gap: 20px; align-items: flex-start;">
+                        <img id="currentPropImage"
+                            src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=300&q=80" alt="Woning"
+                            style="width: 140px; height: 100px; object-fit: cover; border-radius: 12px;">
+                        <div class="property-info" style="flex: 1;">
+                            <h3 id="currentPropName" style="font-size: 1.1rem; margin-bottom: 4px;">Duurzaam Wonen in 't
+                                Groen</h3>
+                            <div class="price" id="currentPropPrice"
+                                style="font-size: 1.3rem; font-weight: 700; color: var(--primary-particulier); margin-bottom: 8px;">
+                                € 550.000</div>
+                            <div class="details"
+                                style="display: flex; gap: 16px; font-size: 0.85rem; color: var(--text-muted);">
+                                <span id="currentPropAddress"><i class="ri-map-pin-line"></i> Leuven, Kessel-Lo</span>
+                                <span><i class="ri-hotel-bed-line"></i> 4 slaapkamers</span>
+                                <span><i class="ri-ruler-line"></i> 185 m²</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card glass-panel" id="pakket-beheer" style="margin-bottom: 0;">
+                    <div class="card-header">
+                        <h2 class="card-title" style="font-size: 1.1rem; color: var(--primary-particulier);">
+                            <i class="ri-box-3-line"></i> Pakket & Beheer
+                        </h2>
+                    </div>
+
+                    <div
+                        style="background: rgba(16, 185, 129, 0.05); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid rgba(16, 185, 129, 0.1);">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px;">
+                            <span style="color: #64748b;">Actieve Panden</span>
+                            <span id="packageUsageCount" style="color: #10b981; font-weight: 700;">2 / 3</span>
+                        </div>
+                        <div
+                            style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; margin-bottom: 15px; overflow: hidden;">
+                            <div id="usageBar"
+                                style="width: 66%; height: 100%; background: linear-gradient(90deg, #10b981, #34d399); border-radius: 3px;">
+                            </div>
+                        </div>
+
+                        <div id="activeListingsList" style="display: flex; flex-direction: column; gap: 8px;">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+
+                    <button class="btn" onclick="window.location.href='pakket-beheer.html'"
+                        style="width: 100%; font-size: 0.8rem; padding: 10px; background: var(--primary-particulier); color: white;">
+                        <i class="ri-settings-3-line"></i> Pakket Beheren
+                    </button>
                 </div>
             </div>
 
@@ -136,13 +209,22 @@
                             Woning in
                             Antwerpen</div>
                         <div class="request-time">Wil graag bezichtigen op: Woensdag 18 dec, 14:00</div>
-                        <div class="request-actions">
+                        <div class="request-actions" style="margin-top: 16px;">
                             <button class="btn-accept"
-                                onclick="acceptRequest('req-1', 'Emma Peeters', 'Woensdag 18 dec', '14:00')">Accepteren</button>
+                                style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;"
+                                onclick="acceptRequest('req-1', 'Emma Peeters', 'Woensdag 18 dec', '14:00')">
+                                <i class="ri-check-line"></i> Accepteren
+                            </button>
                             <button class="btn-decline"
-                                onclick="declineRequest('req-1', 'Emma Peeters')">Afwijzen</button>
-                            <button class="btn-decline" onclick="window.location.href='chat.html?id=1'"><i
-                                    class="ri-message-3-line"></i> Bericht</button>
+                                style="background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;"
+                                onclick="declineRequest('req-1', 'Emma Peeters')">
+                                <i class="ri-close-line"></i> Afwijzen
+                            </button>
+                            <button class="btn-secondary"
+                                style="background: white; border: 1px solid rgba(0,0,0,0.1); padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;"
+                                onclick="window.location.href='chat-particulier.html?id=1'">
+                                <i class="ri-message-3-line"></i> Bericht
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -269,14 +351,22 @@
 
             grid.innerHTML = properties.map(prop => {
                 const stats = propertyContext.getData('stats', prop.id) || { views: 0, saves: 0, requests: 0 };
+                const advData = propertyContext.getData('advertentie', prop.id) || {};
                 const isActive = prop.id === currentId;
+                const isBoosted = advData.isBoosted || false;
+                const transactionType = advData.transactionType || 'koop';
 
                 return `
-                    <div class="property-card ${isActive ? 'active' : ''}" onclick="switchProperty('${prop.id}')">
+                    <div class="property-card ${isActive ? 'active' : ''}" onclick="switchProperty('${prop.id}')" style="position: relative;">
+                        ${isBoosted ? '<div style="position: absolute; top: -10px; right: 20px;"><span class="badge-boost"><i class="ri-flashlight-line"></i> Geboost</span></div>' : ''}
                         <div class="property-card-info">
                             <div class="property-card-emoji">${prop.emoji}</div>
                             <div class="property-card-details">
-                                <h4>${prop.name} ${isActive ? '<span style="font-size: 0.75rem; background: var(--primary-particulier); color: white; padding: 2px 8px; border-radius: 12px; margin-left: 8px;">Actief</span>' : ''}</h4>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <h4 style="margin: 0;">${prop.name}</h4>
+                                    <span class="type-tag ${transactionType}" style="font-size: 0.65rem; padding: 2px 8px;">${transactionType === 'huur' ? 'Te Huur' : 'Te Koop'}</span>
+                                    ${isActive ? '<span style="font-size: 0.65rem; background: var(--primary-particulier); color: white; padding: 2px 8px; border-radius: 12px;">Actief</span>' : ''}
+                                </div>
                                 <p><i class="ri-map-pin-line"></i> ${prop.address}</p>
                             </div>
                         </div>
@@ -295,10 +385,10 @@
                             </div>
                         </div>
                         <div style="display: flex; gap: 8px;">
-                            <button class="btn-edit" onclick="event.stopPropagation(); window.location.href='advertentie-particulier.html?prop=${prop.id}'">
+                            <button class="btn-edit" title="Bewerken" onclick="event.stopPropagation(); window.location.href='advertentie-particulier.html?prop=${prop.id}'">
                                 <i class="ri-edit-line"></i>
                             </button>
-                            <button class="btn-secondary" onclick="event.stopPropagation(); viewPropertyStats('${prop.id}')">
+                            <button class="btn-secondary" title="Statistieken" onclick="event.stopPropagation(); viewPropertyStats('${prop.id}')">
                                 <i class="ri-bar-chart-line"></i>
                             </button>
                         </div>
@@ -310,8 +400,9 @@
         function switchProperty(propertyId) {
             propertyContext.switch(propertyId);
             renderPropertyList();
-            // Update stats display for new property
             updateStatsDisplay();
+            refreshPackageUsageUI();
+            updateCurrentPropDisplay();
         }
 
         function viewPropertyStats(propertyId) {
@@ -322,21 +413,168 @@
 
         function updateStatsDisplay() {
             const stats = propertyContext.getStats();
-            // Update the stats cards if they exist
-            const statCards = document.querySelectorAll('.stat-value');
-            if (statCards.length >= 3) {
-                statCards[0].textContent = stats.views?.toLocaleString() || '0';
-                statCards[1].textContent = stats.requests || '0';
-                statCards[2].textContent = stats.saves || '0';
+            // Update hero stats
+            const heroStats = document.querySelectorAll('#propertyHero [style*="font-weight: 700"]');
+            if (heroStats.length >= 3) {
+                heroStats[0].textContent = (stats.views || 0).toLocaleString();
+                heroStats[1].textContent = stats.requests || 0;
+                heroStats[2].textContent = stats.saves || 0;
             }
         }
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function () {
             renderPropertyList();
+            updateStatsDisplay();
+            refreshPackageUsageUI();
+            updateHeroDisplay();
         });
+
+        function updateHeroDisplay() {
+            const prop = propertyContext.getCurrent();
+            if (!prop) return;
+
+            if (document.getElementById('heroTitle')) document.getElementById('heroTitle').textContent = prop.name;
+            if (document.getElementById('heroAddress')) document.getElementById('heroAddress').innerHTML = `<i class="ri-map-pin-line"></i> ${prop.address}`;
+            if (document.getElementById('heroImage') && prop.image) document.getElementById('heroImage').src = prop.image;
+        }
+
+        function updateCurrentPropDisplay() {
+            const prop = propertyContext.getCurrent();
+            if (!prop) return;
+
+            if (document.getElementById('currentPropName')) document.getElementById('currentPropName').textContent = prop.name;
+            if (document.getElementById('currentPropPrice')) document.getElementById('currentPropPrice').textContent = prop.price ? `€ ${prop.price.toLocaleString()}` : 'Prijs op aanvraag';
+            if (document.getElementById('currentPropAddress')) document.getElementById('currentPropAddress').innerHTML = `<i class="ri-map-pin-line"></i> ${prop.address}`;
+            if (document.getElementById('currentPropImage') && prop.image) document.getElementById('currentPropImage').src = prop.image;
+            updateHeroDisplay();
+        }
+
+        function refreshPackageUsageUI() {
+            const container = document.getElementById('activeListingsList');
+            const countLabel = document.getElementById('packageUsageCount');
+            const usageBar = document.getElementById('usageBar');
+            if (!container || !countLabel) return;
+
+            const allProps = propertyContext.getAll();
+            const activeProps = Object.values(allProps).filter(p => p.status === 'active');
+            const limit = 3;
+
+            countLabel.textContent = `${activeProps.length} / ${limit}`;
+            if (usageBar) usageBar.style.width = `${(activeProps.length / limit) * 100}%`;
+
+            container.innerHTML = activeProps.map(p => `
+                <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px; border-radius: 8px; border: 1px solid #f1f5f9;">
+                    <span style="font-size: 0.8rem; font-weight: 600; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;">${p.name}</span>
+                    <button onclick="switchProperty('${p.id}')" style="background: ${p.id === propertyContext.getCurrentId() ? '#f0fdf4' : 'transparent'}; border: 1px solid ${p.id === propertyContext.getCurrentId() ? '#10b981' : '#e2e8f0'}; color: ${p.id === propertyContext.getCurrentId() ? '#10b981' : '#64748b'}; font-size: 0.65rem; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-weight: 700;">
+                        ${p.id === propertyContext.getCurrentId() ? 'HUIDIG' : 'KIES'}
+                    </button>
+                </div>
+            `).join('');
+
+            // Update sidebar too
+            const sidebarUsage = document.getElementById('sidebar-package-usage');
+            if (sidebarUsage) sidebarUsage.textContent = `${activeProps.length}/${limit}`;
+        }
+
+        // Boost Modal Functions
+        function openBoostModal() {
+            document.getElementById('boostModal').style.display = 'flex';
+        }
+
+        function closeBoostModal() {
+            document.getElementById('boostModal').style.display = 'none';
+        }
+
+        function selectBoost(boostType, price) {
+            const prop = propertyContext.getCurrent();
+            alert(`🚀 ${boostType} geactiveerd voor ${prop.name}!\n\nKosten: €${price}\nDit is een demo - geen echte betaling.`);
+            closeBoostModal();
+        }
     </script>
-    <script src="dashboard-nav.js"></script>`n
+
+    <!-- Boost Modal -->
+    <div id="boostModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div
+            style="background: white; border-radius: 20px; padding: 40px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h2 style="font-size: 1.5rem;"><i class="ri-rocket-line" style="color: #f59e0b;"></i> Boost Uw
+                    Advertentie</h2>
+                <button onclick="closeBoostModal()"
+                    style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+            </div>
+
+            <div style="display: grid; gap: 16px;">
+                <!-- Toppositie -->
+                <div onclick="selectBoost('Toppositie', 29)"
+                    style="border: 2px solid #e2e8f0; border-radius: 16px; padding: 24px; cursor: pointer; transition: all 0.2s;"
+                    onmouseover="this.style.borderColor='#10b981'" onmouseout="this.style.borderColor='#e2e8f0'">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <i class="ri-arrow-up-circle-line" style="font-size: 1.5rem; color: #10b981;"></i>
+                                <span style="font-weight: 700; font-size: 1.1rem;">Toppositie</span>
+                                <span
+                                    style="background: #f0fdf4; color: #10b981; padding: 4px 10px; border-radius: 100px; font-size: 0.75rem; font-weight: 600;">POPULAIR</span>
+                            </div>
+                            <p style="color: #64748b; font-size: 0.9rem;">7 dagen bovenaan in zoekresultaten</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">€29</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">/ 7 dagen</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Virtuele Tour -->
+                <div onclick="selectBoost('Virtuele Video Tour', 79)"
+                    style="border: 2px solid #e2e8f0; border-radius: 16px; padding: 24px; cursor: pointer; transition: all 0.2s;"
+                    onmouseover="this.style.borderColor='#8b5cf6'" onmouseout="this.style.borderColor='#e2e8f0'">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <i class="ri-vidicon-line" style="font-size: 1.5rem; color: #8b5cf6;"></i>
+                                <span style="font-weight: 700; font-size: 1.1rem;">Virtuele Video Tour</span>
+                                <span
+                                    style="background: #faf5ff; color: #8b5cf6; padding: 4px 10px; border-radius: 100px; font-size: 0.75rem; font-weight: 600;">NIEUW</span>
+                            </div>
+                            <p style="color: #64748b; font-size: 0.9rem;">Upload uw eigen video rondleiding</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #8b5cf6;">€79</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">/ 30 dagen</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extra Regio -->
+                <div onclick="selectBoost('Extra Regio', 19)"
+                    style="border: 2px solid #e2e8f0; border-radius: 16px; padding: 24px; cursor: pointer; transition: all 0.2s;"
+                    onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='#e2e8f0'">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <i class="ri-map-2-line" style="font-size: 1.5rem; color: #3b82f6;"></i>
+                                <span style="font-weight: 700; font-size: 1.1rem;">Extra Regio</span>
+                            </div>
+                            <p style="color: #64748b; font-size: 0.9rem;">Toon uw woning ook in aangrenzende regio's</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6;">€19</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">/ 30 dagen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 24px; color: #64748b; font-size: 0.85rem;">
+                <i class="ri-information-line"></i> Boosts zijn per pand. Combineer voor maximale zichtbaarheid.
+            </p>
+        </div>
+    </div>
+
+    <script src="dashboard-nav.js"></script>
 </body>
 
 </html>

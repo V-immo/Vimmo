@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inloggen | Vimmo</title>
+    <meta name="description" content="Log in op je Vimmo account">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-section) 50%, var(--bg-light) 100%);
+        }
+
+        .login-container {
+            max-width: 480px;
+            width: 100%;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            text-align: center;
+        }
+
+        .login-logo {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .login-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            background: var(--bg-section);
+            color: var(--text-main);
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .remember-forgot label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .remember-forgot a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .remember-forgot a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 28px 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--glass-border);
+        }
+
+        .login-type-section {
+            margin-bottom: 24px;
+        }
+
+        .login-type-title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .login-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .login-type-btn {
+            padding: 16px 12px;
+            background: var(--bg-section);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .login-type-btn:hover {
+            border-color: var(--primary);
+            background: rgba(168, 134, 42, 0.05);
+        }
+
+        .login-type-btn.active {
+            border-color: var(--primary);
+            background: rgba(168, 134, 42, 0.1);
+        }
+
+        .login-type-btn i {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .login-type-btn span {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .social-logins {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-section);
+            color: var(--text-main);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-social:hover {
+            background: var(--bg-card);
+            border-color: var(--text-muted);
+        }
+
+        .btn-social i {
+            font-size: 1.2rem;
+        }
+
+        .btn-itsme {
+            background: #FF4612;
+            color: white;
+            border-color: #FF4612;
+        }
+
+        .btn-itsme:hover {
+            background: #e03d0f;
+            border-color: #e03d0f;
+        }
+
+        .register-link {
+            margin-top: 24px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .register-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .login-card {
+                padding: 32px 24px;
+            }
+
+            .login-types {
+                grid-template-columns: 1fr;
+            }
+
+            .login-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cursor-glow"></div>
+
+    <!-- Animated Background Orbs -->
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 800;">IMMO</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="kopen.html">Te koop</a>
+                <a href="huren.html">Te huur</a>
+                <a href="nieuwbouw.html">Nieuwbouw</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-glass active">Inloggen</a>
+                <a href="account.html" class="btn btn-primary">Registreren</a>
+            </div>
+            <!-- Mobile Hamburger -->
+            <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 800;">IMMO</span></a>
+            <button class="close-menu" onclick="toggleMobileMenu()">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html" onclick="toggleMobileMenu()">Home</a>
+            <a href="kopen.html" onclick="toggleMobileMenu()">Te koop</a>
+            <a href="huren.html" onclick="toggleMobileMenu()">Te huur</a>
+            <a href="nieuwbouw.html" onclick="toggleMobileMenu()">Nieuwbouw</a>
+            <a href="contact.html" onclick="toggleMobileMenu()">Contact</a>
+        </div>
+        <div class="mobile-menu-actions">
+            <a href="login.html" class="btn btn-glass" style="width: 100%; text-align: center;">Inloggen</a>
+            <a href="account.html" class="btn btn-primary" style="width: 100%; text-align: center;">Registreren</a>
+        </div>
+    </div>
+
+    <main class="login-page">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-logo">
+                    <span style="color: #d63031; font-weight: 400;">V</span> <span
+                        style="color: #3d3530; font-weight: 800;">IMMO</span>
+                </div>
+                <h1 class="login-title">Welkom terug</h1>
+                <p class="login-subtitle">Log in om door te gaan naar je dashboard</p>
+
+                <!-- Account Type Selection -->
+                <div class="login-type-section">
+                    <p class="login-type-title">Ik log in als:</p>
+                    <div class="login-types">
+                        <button type="button" class="login-type-btn" data-type="zoeker" onclick="selectLoginType(this)">
+                            <i class="ri-search-line"></i>
+                            <span>Woningzoeker</span>
+                        </button>
+                        <button type="button" class="login-type-btn active" data-type="particulier"
+                            onclick="selectLoginType(this)">
+                            <i class="ri-home-heart-line"></i>
+                            <span>Particulier</span>
+                        </button>
+                        <button type="button" class="login-type-btn" data-type="makelaar"
+                            onclick="selectLoginType(this)">
+                            <i class="ri-building-2-line"></i>
+                            <span>Makelaar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <form class="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="email">E-mailadres</label>
+                        <input type="email" id="email" placeholder="naam@voorbeeld.be" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Wachtwoord</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                    <div class="remember-forgot">
+                        <label>
+                            <input type="checkbox" id="remember"> Onthoud mij
+                        </label>
+                        <a href="#">Wachtwoord vergeten?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-login">Inloggen</button>
+                </form>
+
+                <div class="divider">of log in met</div>
+
+                <div class="social-logins">
+                    <button class="btn-social btn-itsme" onclick="handleItsmeLogin()">
+                        <i class="ri-shield-check-line"></i>
+                        Inloggen met itsme®
+                    </button>
+                    <button class="btn-social" onclick="handleGoogleLogin()">
+                        <i class="ri-google-fill"></i>
+                        Inloggen met Google
+                    </button>
+                </div>
+
+                <p class="register-link">
+                    Nog geen account? <a href="account.html">Registreer hier</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content"
+                style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
+                <div class="footer-brand">
+                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
+                            style="color: #d63031; font-weight: 400;">V</span> <span
+                            style="color: #3d3530; font-weight: 800;">IMMO</span></h3>
+                    <p style="color: var(--text-muted); max-width: 280px; font-size: 0.9rem; line-height: 1.6;">Vind een
+                        plek die bij je past. Woningen in heel België.</p>
+                </div>
+                <div class="footer-links" style="display: flex; gap: 60px; text-align: right;">
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">ZOEKEN</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="kopen.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te koop</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="huren.html"
+                                style="color: var(--text-muted); text-decoration: none;">Te huur</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="nieuwbouw.html"
+                                style="color: var(--text-muted); text-decoration: none;">Nieuwbouw</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="prijzen.html"
+                                style="color: var(--text-muted); text-decoration: none;">Prijzen</a></li>
+                    </ul>
+                    <ul>
+                        <li style="list-style: none; margin-bottom: 10px; color: var(--primary);">AANBIEDEN</li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="particulier.html"
+                                style="color: var(--text-muted); text-decoration: none;">Plaats je woning</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="register.html"
+                                style="color: var(--text-muted); text-decoration: none;">Voor makelaars</a></li>
+                        <li style="list-style: none; margin-bottom: 8px;"><a href="contact.html"
+                                style="color: var(--text-muted); text-decoration: none;">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom"
+                style="text-align: left; padding-top: 30px; display: flex; justify-content: space-between;">
+                <p>&copy; 2024 Vimmo.</p>
+                <div style="display: flex; gap: 20px; color: var(--text-muted);">
+                    <a href="https://instagram.com/vimmo" target="_blank" rel="noopener"
+                        style="color: var(--text-muted);"><i class="ri-instagram-line"></i></a>
+                    <a href="https://linkedin.com/company/vimmo" target="_blank" rel="noopener"
+                        style="color: var(--text-muted);"><i class="ri-linkedin-fill"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let selectedLoginType = 'particulier';
+
+        function selectLoginType(btn) {
+            document.querySelectorAll('.login-type-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedLoginType = btn.dataset.type;
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            // Show loading state
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Bezig...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store token and user info
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('userRole', data.user.role);
+                    localStorage.setItem('userName', data.user.firstName);
+
+                    // Redirect based on role
+                    switch (data.user.role) {
+                        case 'zoeker':
+                            window.location.href = 'dashboard-zoeker.html';
+                            break;
+                        case 'particulier':
+                            window.location.href = 'dashboard-particulier.html';
+                            break;
+                        case 'makelaar':
+                            window.location.href = 'dashboard-makelaars.html';
+                            break;
+                        default:
+                            window.location.href = 'dashboard-zoeker.html';
+                    }
+                } else {
+                    // Show error
+                    showError(data.error);
+                    if (data.needsVerification) {
+                        // Offer to resend verification
+                        if (confirm('Wil je een nieuwe verificatie email ontvangen?')) {
+                            resendVerification(email);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Kan geen verbinding maken met de server. Probeer het later opnieuw.');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function resendVerification(email) {
+            try {
+                const response = await fetch(`${API_URL}/auth/resend-verification`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await response.json();
+                alert(data.message);
+            } catch (error) {
+                alert('Kon geen verificatie email versturen.');
+            }
+        }
+
+        function showError(message) {
+            // Check if error element exists, if not create it
+            let errorEl = document.querySelector('.login-error');
+            if (!errorEl) {
+                errorEl = document.createElement('div');
+                errorEl.className = 'login-error';
+                errorEl.style.cssText = 'background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem;';
+                const form = document.querySelector('.login-form');
+                form.insertBefore(errorEl, form.firstChild);
+            }
+            errorEl.innerHTML = `<i class="ri-error-warning-line"></i> ${message}`;
+            errorEl.style.display = 'block';
+        }
+
+        function handleItsmeLogin() {
+            alert('itsme® login is nog niet gekoppeld. Gebruik email/wachtwoord om in te loggen.');
+        }
+
+        function handleGoogleLogin() {
+            alert('Google login is nog niet gekoppeld. Gebruik email/wachtwoord om in te loggen.');
+        }
+    </script>
+</body>
+
+</html>

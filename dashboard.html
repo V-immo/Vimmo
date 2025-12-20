@@ -12,6 +12,15 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
     <link rel="stylesheet" href="style.css">
+    <script>
+        (function () {
+            const role = localStorage.getItem('userRole');
+            if (role === 'particulier') window.location.href = 'dashboard-particulier.html';
+            else if (role === 'makelaar') window.location.href = 'dashboard-makelaars.html';
+            else if (role === 'zoeker') window.location.href = 'dashboard-zoeker.html';
+            else window.location.href = 'account.html';
+        })();
+    </script>
     <style>
         body {
             display: flex;

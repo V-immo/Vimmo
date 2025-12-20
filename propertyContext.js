@@ -38,11 +38,22 @@ class PropertyContext {
     constructor() {
         // Get current property from localStorage or default to first
         this.currentProperty = localStorage.getItem('currentProperty') || 'prop-1';
-        
-        // Initialize properties in localStorage if not exists
-        if (!localStorage.getItem('properties')) {
-            localStorage.setItem('properties', JSON.stringify(PROPERTIES));
+
+        // Initialize properties in localStorage if not exists, otherwise load
+        const stored = localStorage.getItem('properties');
+        if (stored) {
+            this.properties = JSON.parse(stored);
+            // Merge with hardcoded to ensure we don't lose them
+            Object.assign(PROPERTIES, this.properties);
         }
+
+        // Migration/Sanitization: Ensure every property has a status
+        Object.keys(PROPERTIES).forEach(id => {
+            if (!PROPERTIES[id].status) PROPERTIES[id].status = 'active';
+        });
+
+        this.properties = PROPERTIES;
+        localStorage.setItem('properties', JSON.stringify(PROPERTIES));
     }
 
     // Get current property object
@@ -77,7 +88,7 @@ class PropertyContext {
 
         // Trigger global property change event
         window.dispatchEvent(new CustomEvent('propertyChanged', {
-            detail: { 
+            detail: {
                 propertyId: propertyId,
                 property: PROPERTIES[propertyId]
             }
@@ -134,6 +145,63 @@ class PropertyContext {
             delete PROPERTIES[propertyId].archivedDate;
             localStorage.setItem('properties', JSON.stringify(PROPERTIES));
         }
+    }
+
+    // Delete property and all its associated data
+    deleteProperty(propertyId) {
+        if (!PROPERTIES[propertyId]) return false;
+
+        // 1. Remove associated data blocks
+        const dataTypes = ['advertentie', 'stats', 'requests', 'settings'];
+        dataTypes.forEach(type => {
+            const key = `${type}_${propertyId}`;
+            localStorage.removeItem(key);
+        });
+
+        // 2. Remove from PROPERTIES object
+        delete PROPERTIES[propertyId];
+        localStorage.setItem('properties', JSON.stringify(PROPERTIES));
+
+        console.log('Deleted property:', propertyId);
+
+        // 3. If we deleted the current property, switch to another one
+        if (this.currentProperty === propertyId) {
+            const remainingIds = Object.keys(PROPERTIES);
+            if (remainingIds.length > 0) {
+                this.switch(remainingIds[0]);
+            } else {
+                this.currentProperty = null;
+                localStorage.removeItem('currentProperty');
+                window.location.reload();
+            }
+        } else {
+            window.dispatchEvent(new CustomEvent('propertyChanged', {
+                detail: { propertyId: this.currentProperty, property: PROPERTIES[this.currentProperty] }
+            }));
+        }
+
+        return true;
+    }
+
+    // Create new property
+    createProperty(name) {
+        const id = `prop-${Date.now()}`;
+        const newProperty = {
+            id: id,
+            name: name || 'Nieuwe Woning',
+            emoji: '🏠',
+            address: 'Locatie nog toe te voegen',
+            type: 'Huis',
+            status: 'active',
+            created: new Date().toISOString().split('T')[0]
+        };
+
+        PROPERTIES[id] = newProperty;
+        localStorage.setItem('properties', JSON.stringify(PROPERTIES));
+
+        console.log('Created new property:', name);
+        this.switch(id);
+        return id;
     }
 
     // Get stats for current property
@@ -261,7 +329,8 @@ class PropertyContext {
 }
 
 // Create global instance
-const propertyContext = new PropertyContext();
+window.propertyContext = new PropertyContext();
+const propertyContext = window.propertyContext;
 
 // Initialize demo data on first load
 propertyContext.initDemoData();

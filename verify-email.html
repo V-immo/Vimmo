@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verificatie | Vimmo</title>
+    <meta name="description" content="Bevestig je Vimmo account">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .verify-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-section) 50%, var(--bg-light) 100%);
+        }
+
+        .verify-container {
+            max-width: 480px;
+            width: 100%;
+        }
+
+        .verify-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            text-align: center;
+        }
+
+        .verify-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 2.5rem;
+        }
+
+        .verify-icon.loading {
+            background: rgba(168, 134, 42, 0.1);
+            color: var(--primary);
+        }
+
+        .verify-icon.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .verify-icon.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .verify-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .verify-message {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-login {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn-login:hover {
+            background: #a8832f;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cursor-glow"></div>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="brand">
+                <span style="color: #d63031; font-weight: 400;">V</span> <span
+                    style="color: #3d3530; font-weight: 400;">I</span><span
+                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="kopen.html">Te koop</a>
+                <a href="huren.html">Te huur</a>
+                <a href="nieuwbouw.html">Nieuwbouw</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-glass">Inloggen</a>
+                <a href="account.html" class="btn btn-primary">Registreren</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="verify-page">
+        <div class="verify-container">
+            <div class="verify-card">
+                <div class="verify-icon loading" id="verifyIcon">
+                    <i class="ri-loader-4-line spinner" id="iconElement"></i>
+                </div>
+                <h1 class="verify-title" id="verifyTitle">Email wordt geverifieerd...</h1>
+                <p class="verify-message" id="verifyMessage">Even geduld terwijl we je account activeren.</p>
+                <div id="actionArea" style="display: none;">
+                    <a href="login.html" class="btn-login">Ga naar inloggen</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        async function verifyEmail() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+
+            const iconEl = document.getElementById('verifyIcon');
+            const iconInner = document.getElementById('iconElement');
+            const titleEl = document.getElementById('verifyTitle');
+            const messageEl = document.getElementById('verifyMessage');
+            const actionEl = document.getElementById('actionArea');
+
+            if (!token) {
+                showError('Geen verificatie token gevonden', 'Gebruik de link uit je email om je account te verifiëren.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/auth/verify/${token}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    showSuccess(data.user.firstName);
+                } else {
+                    showError('Verificatie mislukt', data.error);
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                showError('Verbindingsfout', 'Kan geen verbinding maken met de server. Probeer het later opnieuw.');
+            }
+        }
+
+        function showSuccess(firstName) {
+            const iconEl = document.getElementById('verifyIcon');
+            const iconInner = document.getElementById('iconElement');
+            const titleEl = document.getElementById('verifyTitle');
+            const messageEl = document.getElementById('verifyMessage');
+            const actionEl = document.getElementById('actionArea');
+
+            iconEl.className = 'verify-icon success';
+            iconInner.className = 'ri-checkbox-circle-line';
+            titleEl.textContent = 'Email geverifieerd! ✓';
+            messageEl.textContent = `Welkom bij Vimmo${firstName ? ', ' + firstName : ''}! Je account is nu actief.`;
+            actionEl.style.display = 'block';
+        }
+
+        function showError(title, message) {
+            const iconEl = document.getElementById('verifyIcon');
+            const iconInner = document.getElementById('iconElement');
+            const titleEl = document.getElementById('verifyTitle');
+            const messageEl = document.getElementById('verifyMessage');
+            const actionEl = document.getElementById('actionArea');
+
+            iconEl.className = 'verify-icon error';
+            iconInner.className = 'ri-close-circle-line';
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            actionEl.innerHTML = '<a href="account.html" class="btn-login">Opnieuw registreren</a>';
+            actionEl.style.display = 'block';
+        }
+
+        // Start verification when page loads
+        verifyEmail();
+    </script>
+</body>
+
+</html>

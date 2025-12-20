@@ -604,9 +604,11 @@
             alert('Account aangemaakt! U wordt doorgestuurd naar uw dashboard.');
             // Redirect based on account type
             if (currentType === 'particulier') {
+                localStorage.setItem('userRole', 'particulier');
                 window.location.href = 'dashboard-particulier.html';
             } else if (currentType === 'makelaar') {
-                window.location.href = 'dashboard.html';
+                localStorage.setItem('userRole', 'makelaar');
+                window.location.href = 'dashboard-makelaars.html';
             }
         }
 

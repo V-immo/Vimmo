@@ -242,4 +242,11 @@ function toggleMobileMenu() {
     }
 }
 
+
+// Global Logout Function
+function logout() {
+    localStorage.removeItem('userRole');
+    window.location.href = 'index.html';
+}
+
 document.addEventListener('DOMContentLoaded', initEffects);

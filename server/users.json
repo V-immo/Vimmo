@@ -1,0 +1,83 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "testuser456@example.com",
+      "password_hash": "$2a$12$Ehzde1MnhU.5Pq1fBPY/T.0Soh.VdgSoK87/ynLkQxYo0aZtoL67e",
+      "first_name": "Test",
+      "last_name": "User",
+      "role": "particulier",
+      "verification_token": null,
+      "verified": 1,
+      "reset_token": null,
+      "reset_token_expires": null,
+      "created_at": "2025-12-19T09:25:14.785Z"
+    },
+    {
+      "id": 2,
+      "email": "zoeker@test.be",
+      "password_hash": "$2a$12$78iXcs37cGkTTP2F9T4qXO6w2hIzCzfyakz3zUU13dfNtS46GZ10G",
+      "first_name": "Jan",
+      "last_name": "Zoeker",
+      "role": "zoeker",
+      "verification_token": null,
+      "verified": 1,
+      "reset_token": null,
+      "reset_token_expires": null,
+      "created_at": "2025-12-19T17:03:00.000Z"
+    },
+    {
+      "id": 3,
+      "email": "particulier@test.be",
+      "password_hash": "$2a$12$78iXcs37cGkTTP2F9T4qXO6w2hIzCzfyakz3zUU13dfNtS46GZ10G",
+      "first_name": "Peter",
+      "last_name": "Particulier",
+      "role": "particulier",
+      "verification_token": null,
+      "verified": 1,
+      "reset_token": null,
+      "reset_token_expires": null,
+      "created_at": "2025-12-19T17:03:00.000Z"
+    },
+    {
+      "id": 4,
+      "email": "makelaar@test.be",
+      "password_hash": "$2a$12$78iXcs37cGkTTP2F9T4qXO6w2hIzCzfyakz3zUU13dfNtS46GZ10G",
+      "first_name": "Marc",
+      "last_name": "Makelaar",
+      "role": "makelaar",
+      "verification_token": null,
+      "verified": 1,
+      "reset_token": null,
+      "reset_token_expires": null,
+      "created_at": "2025-12-19T17:03:00.000Z"
+    },
+    {
+      "id": 5,
+      "email": "jan.modaal@example.be",
+      "password_hash": "$2a$12$k85p3sBqaY46MdqhSeqa7uwSMq97qYtKnH3mxrZKvQwufzyDa.sba",
+      "first_name": "Jan",
+      "last_name": "Modaal",
+      "role": "makelaar",
+      "verification_token": null,
+      "verified": 1,
+      "reset_token": null,
+      "reset_token_expires": null,
+      "created_at": "2025-12-19T18:54:52.771Z"
+    },
+    {
+      "id": 6,
+      "email": "test@vimmo.nl",
+      "password_hash": "$2a$12$bFb92ctdbc3.0IOBtLCSIOWUC8gb10sD4t.I4s60K.4vnczUYe6cW",
+      "first_name": "Test",
+      "last_name": "Vimmo",
+      "role": "particulier",
+      "verification_token": null,
+      "verified": 1,
+      "reset_token": null,
+      "reset_token_expires": null,
+      "created_at": "2025-12-20T07:00:00.000Z"
+    }
+  ],
+  "nextId": 7
+}

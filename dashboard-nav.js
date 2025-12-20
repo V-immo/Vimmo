@@ -19,6 +19,7 @@
         'advertentie-',
         'beschikbaarheid-',
         'opgeslagen-',
+        'pakket-beheer.html',
         'zoekopdrachten-'
     ];
 
