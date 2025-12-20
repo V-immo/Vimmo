@@ -10,7 +10,8 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
@@ -283,8 +284,7 @@
     <nav class="navbar">
         <div class="container nav-content">
             <a href="index.html" class="brand">
-                <span style="color: #d63031; font-weight: 400;">V</span> <span
-                    style="color: #3d3530; font-weight: 800;">IMMO</span>
+                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
             <div class="nav-links">
                 <a href="index.html">Home</a>
@@ -374,6 +374,10 @@
                         </label>
                         <a href="#">Wachtwoord vergeten?</a>
                     </div>
+                    <p id="demoTip"
+                        style="font-size: 0.75rem; color: var(--primary); margin-top: 15px; text-align: center; font-weight: 500;">
+                        Demo: test@vimmo.nl (Wachtwoord: Test1234!)
+                    </p>
                     <button type="submit" class="btn btn-primary btn-login">Inloggen</button>
                 </form>
 
@@ -453,6 +457,16 @@
             document.querySelectorAll('.login-type-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             selectedLoginType = btn.dataset.type;
+
+            // Update demo tip based on selection
+            const demoTip = document.getElementById('demoTip');
+            if (selectedLoginType === 'zoeker') {
+                demoTip.textContent = 'Demo: zoeker@vimmo.nl (Wachtwoord: Test1234!)';
+            } else if (selectedLoginType === 'makelaar') {
+                demoTip.textContent = 'Demo: makelaar@vimmo.nl (Wachtwoord: Test1234!)';
+            } else {
+                demoTip.textContent = 'Demo: test@vimmo.nl (Wachtwoord: Test1234!)';
+            }
         }
 
         async function handleLogin(e) {

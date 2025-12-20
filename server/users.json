@@ -77,7 +77,72 @@
       "reset_token": null,
       "reset_token_expires": null,
       "created_at": "2025-12-20T07:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "email": "zoeker@vimmo.nl",
+      "password_hash": "$2a$12$bFb92ctdbc3.0IOBtLCSIOWUC8gb10sD4t.I4s60K.4vnczUYe6cW",
+      "first_name": "Jan",
+      "last_name": "Zoeker",
+      "role": "zoeker",
+      "verification_token": null,
+      "verified": 1,
+      "reset_token": null,
+      "reset_token_expires": null,
+      "created_at": "2025-12-20T12:00:00.000Z"
+    },
+    {
+      "id": 8,
+      "email": "makelaar@vimmo.nl",
+      "password_hash": "$2a$12$bFb92ctdbc3.0IOBtLCSIOWUC8gb10sD4t.I4s60K.4vnczUYe6cW",
+      "first_name": "Marc",
+      "last_name": "Makelaar",
+      "role": "makelaar",
+      "verification_token": null,
+      "verified": 1,
+      "reset_token": null,
+      "reset_token_expires": null,
+      "created_at": "2025-12-20T12:00:00.000Z"
+    },
+    {
+      "id": 9,
+      "email": "amryandrea+makelaar@gmail.com",
+      "password_hash": "$2a$12$vb//zhLZP5CxlhDUb1gR6.G/PGTNxOvTZriulJcqcVv6c2M9ED.5q",
+      "first_name": "Test",
+      "last_name": "Makelaar",
+      "role": "makelaar",
+      "verification_token": null,
+      "verified": 1,
+      "reset_token": null,
+      "reset_token_expires": null,
+      "created_at": "2025-12-20T20:13:37.278Z"
+    },
+    {
+      "id": 10,
+      "email": "amryandrea+zoeker@gmail.com",
+      "password_hash": "$2a$12$OmVQAOV4LiFhilKt/vLW5enGqHkTGbsjhsdfg31sl.rwP.SIkrivS",
+      "first_name": "Test",
+      "last_name": "Zoeker",
+      "role": "zoeker",
+      "verification_token": null,
+      "verified": 1,
+      "reset_token": null,
+      "reset_token_expires": null,
+      "created_at": "2025-12-20T20:13:44.843Z"
+    },
+    {
+      "id": 11,
+      "email": "amryandrea+particulier@gmail.com",
+      "password_hash": "$2a$12$p0sChA5j2brgH3f7zsBJGuKbjE.dbY8zWtAQmlmqmFP3LjC.p/qxO",
+      "first_name": "Test",
+      "last_name": "Particulier",
+      "role": "particulier",
+      "verification_token": null,
+      "verified": 1,
+      "reset_token": null,
+      "reset_token_expires": null,
+      "created_at": "2025-12-20T20:13:48.479Z"
     }
   ],
-  "nextId": 7
+  "nextId": 12
 }

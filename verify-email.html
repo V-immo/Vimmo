@@ -10,7 +10,9 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
@@ -122,9 +124,7 @@
     <nav class="navbar">
         <div class="container nav-content">
             <a href="index.html" class="brand">
-                <span style="color: #d63031; font-weight: 400;">V</span> <span
-                    style="color: #3d3530; font-weight: 400;">I</span><span
-                    style="color: #3d3530; font-weight: 800;">MMO</span>
+                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
             <div class="nav-links">
                 <a href="index.html">Home</a>
@@ -156,36 +156,65 @@
     </main>
 
     <script>
-        const API_URL = 'http://localhost:3000/api';
+        // Dynamically determine API URL based on current hostname
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? `http://${window.location.hostname}:3000/api`
+            : 'http://localhost:3000/api'; // Fallback
 
         async function verifyEmail() {
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('token');
 
-            const iconEl = document.getElementById('verifyIcon');
-            const iconInner = document.getElementById('iconElement');
-            const titleEl = document.getElementById('verifyTitle');
-            const messageEl = document.getElementById('verifyMessage');
-            const actionEl = document.getElementById('actionArea');
+            console.log('[VERIFY] Starting verification with token:', token);
+            console.log('[VERIFY] Using API URL:', API_URL);
 
             if (!token) {
+                console.error('[VERIFY] No token found in URL');
                 showError('Geen verificatie token gevonden', 'Gebruik de link uit je email om je account te verifiëren.');
                 return;
             }
 
             try {
-                const response = await fetch(`${API_URL}/auth/verify/${token}`);
+                const fetchUrl = `${API_URL}/auth/verify/${token}`;
+                console.log('[VERIFY] Fetching:', fetchUrl);
+
+                const response = await fetch(fetchUrl);
+                console.log('[VERIFY] Response status:', response.status);
+
                 const data = await response.json();
+                console.log('[VERIFY] Response data:', data);
 
                 if (response.ok) {
                     showSuccess(data.user.firstName);
                 } else {
-                    showError('Verificatie mislukt', data.error);
+                    showError('Verificatie mislukt', data.error || 'Onbekende fout van de server');
+                    addDebugInfo(`Server returned ${response.status}: ${JSON.stringify(data)}`);
                 }
             } catch (error) {
-                console.error('Verification error:', error);
-                showError('Verbindingsfout', 'Kan geen verbinding maken met de server. Probeer het later opnieuw.');
+                console.error('[VERIFY] Connection error:', error);
+                showError('Verbindingsfout', 'Kan geen verbinding maken met de server (' + error.message + ').');
+                addDebugInfo(`Fetch failed. Check if server is running at ${API_URL}`);
             }
+        }
+
+        function addDebugInfo(text) {
+            const container = document.querySelector('.verify-card');
+            let debugEl = document.getElementById('debugDetails');
+            if (!debugEl) {
+                debugEl = document.createElement('div');
+                debugEl.id = 'debugDetails';
+                debugEl.style.marginTop = '20px';
+                debugEl.style.padding = '10px';
+                debugEl.style.background = '#f8f9fa';
+                debugEl.style.border = '1px dashed #ccc';
+                debugEl.style.borderRadius = '4px';
+                debugEl.style.fontSize = '12px';
+                debugEl.style.color = '#666';
+                debugEl.style.textAlign = 'left';
+                debugEl.style.wordBreak = 'break-all';
+                container.appendChild(debugEl);
+            }
+            debugEl.innerHTML = `<strong>Debug Info:</strong><br>${text}`;
         }
 
         function showSuccess(firstName) {

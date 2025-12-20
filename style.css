@@ -188,49 +188,34 @@
     background: var(--bg-light);
 }
 
-/* Sidebar Styles */
-.sidebar,
-.sidebar-zoeker,
-.sidebar-particulier {
-    width: 280px;
-    background: var(--bg-card);
-    border-right: 1px solid rgba(0, 0, 0, 0.06);
-    padding: 30px 0;
-    position: fixed;
-    height: 100vh;
-    overflow-y: auto;
-    z-index: 100;
-}
-
-.sidebar .brand,
-.sidebar-brand {
-    padding: 0 30px 30px;
-    font-size: 1.5rem;
-    font-weight: 400;
+/* Logo styling - V is red, I is thin, MMO is bold */
+.brand {
+    font-family: var(--font-heading) !important;
     text-decoration: none;
-    display: block;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    margin-bottom: 20px;
-    color: var(--text-main);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0; /* Control gap via space character or margin */
 }
 
-/* Logo styling - V is red, I is normal, MMO is bold */
-.sidebar-brand .logo-v,
-.sidebar .brand .logo-v {
+.logo-v {
     color: var(--accent-red);
     font-weight: 400;
 }
 
-.sidebar-brand .logo-i,
-.sidebar .brand .logo-i {
-    color: var(--text-main);
-    font-weight: 400;
+.logo-space {
+    width: 0.3em; /* Exact control over the space */
+    display: inline-block;
 }
 
-.sidebar-brand .logo-mmo,
-.sidebar .brand .logo-mmo {
+.logo-i {
     color: var(--text-main);
-    font-weight: 800;
+    font-weight: 100; /* Ultra thin */
+}
+
+.logo-mmo {
+    color: var(--text-main);
+    font-weight: 800; /* Extra bold */
 }
 
 .sidebar-nav {
@@ -565,17 +550,10 @@ h4,
 
 .brand {
     font-size: 1.8rem;
-    font-weight: 300;
-    letter-spacing: 2px;
+    letter-spacing: -0.5px;
     color: var(--text-main);
-    text-decoration: none;
-    text-transform: uppercase;
     white-space: nowrap;
     flex-shrink: 0;
-}
-
-.brand span {
-    font-weight: 700;
 }
 
 .nav-links {

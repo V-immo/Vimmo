@@ -39,8 +39,9 @@ async function sendVerificationEmail(email, firstName, token) {
       <!DOCTYPE html>
       <html>
       <head>
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;800&display=swap" rel="stylesheet">
         <style>
-          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #3d3530; }
+          body { font-family: 'Outfit', 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #3d3530; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .logo { font-size: 32px; margin-bottom: 30px; }
           .logo .v { color: #d63031; }
@@ -51,8 +52,8 @@ async function sendVerificationEmail(email, firstName, token) {
       </head>
       <body>
         <div class="container">
-          <div class="logo" style="text-align: center;">
-            <span style="color: #d63031; font-weight: 400;">V</span> <span style="color: #3d3530; font-weight: 800;">IMMO</span>
+          <div class="logo" style="text-align: center; font-family: 'Outfit', sans-serif; font-size: 32px; letter-spacing: -1px;">
+            <span style="color: #d63031; font-weight: 400;">V</span> <span style="color: #3d3530; font-weight: 100;">I</span><span style="color: #3d3530; font-weight: 800;">MMO</span>
           </div>
           
           <h2>Hallo ${firstName}! 👋</h2>
@@ -133,8 +134,8 @@ async function sendPasswordResetEmail(email, firstName, token) {
       </head>
       <body>
         <div class="container">
-          <div class="logo" style="text-align: center;">
-            <span style="color: #d63031; font-weight: 400;">V</span> <span style="color: #3d3530; font-weight: 800;">IMMO</span>
+          <div class="logo" style="text-align: center; font-family: 'Outfit', sans-serif; font-size: 32px; letter-spacing: -1px;">
+            <span style="color: #d63031; font-weight: 400;">V</span> <span style="color: #3d3530; font-weight: 100;">I</span><span style="color: #3d3530; font-weight: 800;">MMO</span>
           </div>
           
           <h2>Wachtwoord resetten</h2>
