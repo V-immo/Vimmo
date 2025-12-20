@@ -156,10 +156,10 @@
     </main>
 
     <script>
-        // Dynamically determine API URL based on current hostname
+        // Dynamically determine API URL
         const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? `http://${window.location.hostname}:3000/api`
-            : 'http://localhost:3000/api'; // Fallback
+            : `${window.location.origin}/api`;
 
         async function verifyEmail() {
             const urlParams = new URLSearchParams(window.location.search);
