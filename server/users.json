@@ -107,7 +107,7 @@
     {
       "id": 9,
       "email": "amryandrea+makelaar@gmail.com",
-      "password_hash": "$2a$12$vb//zhLZP5CxlhDUb1gR6.G/PGTNxOvTZriulJcqcVv6c2M9ED.5q",
+      "password_hash": "$2a$12$KYTdxUkPLRKayJ94wn3rhueJgdmWpd8Ydf//2GnxvxSxmrF4A3Rbq",
       "first_name": "Test",
       "last_name": "Makelaar",
       "role": "makelaar",
@@ -115,12 +115,12 @@
       "verified": 1,
       "reset_token": null,
       "reset_token_expires": null,
-      "created_at": "2025-12-20T20:13:37.278Z"
+      "created_at": "2025-12-20T20:22:45.454Z"
     },
     {
       "id": 10,
       "email": "amryandrea+zoeker@gmail.com",
-      "password_hash": "$2a$12$OmVQAOV4LiFhilKt/vLW5enGqHkTGbsjhsdfg31sl.rwP.SIkrivS",
+      "password_hash": "$2a$12$dBI0oRibSkiSlfTW/jH.lOkbqfYER1Tm3hy/5W/21ehuIeBki4Ifa",
       "first_name": "Test",
       "last_name": "Zoeker",
       "role": "zoeker",
@@ -128,12 +128,12 @@
       "verified": 1,
       "reset_token": null,
       "reset_token_expires": null,
-      "created_at": "2025-12-20T20:13:44.843Z"
+      "created_at": "2025-12-20T20:22:50.784Z"
     },
     {
       "id": 11,
       "email": "amryandrea+particulier@gmail.com",
-      "password_hash": "$2a$12$p0sChA5j2brgH3f7zsBJGuKbjE.dbY8zWtAQmlmqmFP3LjC.p/qxO",
+      "password_hash": "$2a$12$hYqKAWes3QQG2vgcTfiOBOxSHwV1zIqUVjMrnxOTmOYsjhUucOghy",
       "first_name": "Test",
       "last_name": "Particulier",
       "role": "particulier",
@@ -141,7 +141,7 @@
       "verified": 1,
       "reset_token": null,
       "reset_token_expires": null,
-      "created_at": "2025-12-20T20:13:48.479Z"
+      "created_at": "2025-12-20T20:22:55.408Z"
     }
   ],
   "nextId": 12
