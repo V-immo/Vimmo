@@ -9,14 +9,13 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Verify connection on startup
-transporter.verify((error, success) => {
-  if (error) {
-    console.log('⚠️  Email service not configured:', error.message);
-  } else {
-    console.log('✅ Email service ready');
-  }
-});
+// Verify connection only in production logs if needed, but not blocking startup
+if (process.env.NODE_ENV !== 'production') {
+  transporter.verify((error, success) => {
+    if (error) console.log('⚠️  Email service not configured:', error.message);
+    else console.log('✅ Email service ready');
+  });
+}
 
 /**
  * Send verification email to new user
