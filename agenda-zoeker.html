@@ -4,162 +4,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mijn Bezichtigingen | Woningzoekers | Vimmo</title>
+    <title>Mijn Bezichtigingen | Vimmo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
 
     <style>
-        :root {
-            --primary-zoeker: #8b5cf6;
-            --primary-dark-zoeker: #7c3aed;
-        }
-
-        .dashboard-zoeker {
-            display: flex;
-            min-height: 100vh;
-            background: var(--bg-light);
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--bg-card);
-            border-right: 1px solid rgba(0, 0, 0, 0.06);
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .sidebar .brand {
-            padding: 0 30px 30px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: block;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-nav {
-            padding: 0 15px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 15px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: var(--radius-md);
-            margin-bottom: 4px;
-            transition: all 0.2s;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-light);
-            color: var(--text-main);
-        }
-
-        .nav-item.active {
-            background: var(--primary-zoeker);
-            color: white;
-        }
-
-        .nav-item i {
-            font-size: 1.2rem;
-        }
-
-        .main-content {
-            margin-left: 280px;
-            flex: 1;
-            padding: 40px;
-        }
-
-        .page-header {
-            margin-bottom: 30px;
-        }
-
-        .page-header h1 {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
         .calendar-container {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 30px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid white;
         }
 
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .calendar-header h2 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-main);
         }
 
         .calendar-nav {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .calendar-nav button {
-            padding: 8px 16px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
             background: white;
-            border-radius: var(--radius-md);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
             transition: all 0.2s;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .calendar-nav button i {
+            font-size: 1.2rem;
         }
 
         .calendar-nav button:hover {
-            background: var(--bg-light);
+            border-color: var(--primary-zoeker);
+            color: var(--primary-zoeker);
+            background: rgba(108, 92, 231, 0.02);
         }
 
         .appointments-list {
             display: grid;
-            gap: 16px;
+            gap: 20px;
         }
 
         .appointment-card {
             display: flex;
-            gap: 20px;
-            padding: 24px;
-            background: var(--bg-light);
-            border-radius: var(--radius-md);
-            border-left: 4px solid var(--primary-zoeker);
-            transition: transform 0.2s;
+            gap: 30px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            align-items: center;
         }
 
         .appointment-card:hover {
-            transform: translateX(4px);
+            transform: translateX(10px);
+            border-color: var(--primary-zoeker);
+            background: white;
         }
 
         .appointment-date {
             text-align: center;
-            min-width: 70px;
+            min-width: 90px;
+            padding: 15px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.02);
         }
 
         .appointment-date .day {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary-zoeker);
             line-height: 1;
         }
 
         .appointment-date .month {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
+            margin-top: 5px;
+            letter-spacing: 1px;
         }
 
         .appointment-details {
@@ -167,89 +116,105 @@
         }
 
         .appointment-details .property {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 12px;
         }
 
         .appointment-details .info {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 10px;
             color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         .appointment-details .info div {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+        }
+
+        .appointment-details .info i {
+            color: var(--primary-zoeker);
+            font-size: 1.2rem;
         }
 
         .appointment-actions {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 15px;
             align-items: flex-end;
         }
 
         .status-badge {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .status-confirmed {
-            background: #d4edda;
-            color: #155724;
+            background: #dcfce7;
+            color: #15803d;
         }
 
         .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .btn-small {
-            padding: 8px 16px;
-            font-size: 0.85rem;
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.2s;
+            background: #fef9c3;
+            color: #a16207;
         }
 
         .btn-contact {
-            background: var(--primary-zoeker);
-            color: white;
+            background: white;
+            color: var(--text-main);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
         }
 
         .btn-contact:hover {
-            background: var(--primary-dark-zoeker);
+            background: var(--primary-zoeker);
+            color: white;
+            border-color: var(--primary-zoeker);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.2);
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-
             .main-content {
-                margin-left: 0;
                 padding: 20px;
             }
 
             .appointment-card {
                 flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+            }
+
+            .appointment-actions {
+                align-items: flex-start;
+                width: 100%;
             }
         }
     </style>
 </head>
 
-<body>
+<body class="role-zoeker">
     <div class="dashboard-zoeker">
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
@@ -264,32 +229,42 @@
                 </a>
                 <a href="berichten-zoeker.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
-                    <span class="badge"
-                        style="margin-left: auto; background: var(--primary-zoeker); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                    <span
+                        style="margin-left: auto; background: var(--primary-zoeker); color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">2</span>
                 </a>
                 <a href="zoekopdrachten-zoeker.html" class="nav-item">
                     <i class="ri-search-line"></i> Zoekopdrachten
                 </a>
 
-                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
-                <a href="instellingen-zoeker.html" class="nav-item">
+                <a href="instellingen-zoeker.html" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
+
+                <div class="sidebar-user">
+                    <div class="user-avatar" style="background: rgba(108, 92, 231, 0.1); color: var(--primary-zoeker);">
+                        AK</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Anouk Kerstens</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Woningzoeker</div>
+                    </div>
+                </div>
             </nav>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="page-header">
-                <h1>Mijn Bezichtigingen</h1>
-                <p style="color: var(--text-muted);">Overzicht van al uw geplande en afgeronde bezichtigingen</p>
+            <div style="margin-bottom: 40px; padding: 20px 0;">
+                <h1 style="font-size: 2.8rem; font-weight: 800; color: var(--text-main);">Mijn Bezichtigingen</h1>
+                <p style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">Overzicht van al uw geplande
+                    en afgeronde afspraken.</p>
             </div>
 
-            <div class="calendar-container">
+            <div class="calendar-container glass-panel">
                 <div class="calendar-header">
                     <h2>December 2024</h2>
                     <div class="calendar-nav">
@@ -316,7 +291,7 @@
                         </div>
                         <div class="appointment-actions">
                             <span class="status-badge status-confirmed">Bevestigd</span>
-                            <button class="btn-small btn-contact" onclick="window.location.href='chat.html?id=1'">
+                            <button class="btn-contact" onclick="window.location.href='chat-zoeker.html?id=1'">
                                 <i class="ri-message-3-line"></i> Bericht sturen
                             </button>
                         </div>
@@ -338,7 +313,7 @@
                         </div>
                         <div class="appointment-actions">
                             <span class="status-badge status-pending">In afwachting</span>
-                            <button class="btn-small btn-contact" onclick="window.location.href='chat.html?id=2'">
+                            <button class="btn-contact" onclick="window.location.href='chat-zoeker.html?id=2'">
                                 <i class="ri-message-3-line"></i> Bericht sturen
                             </button>
                         </div>
@@ -360,7 +335,7 @@
                         </div>
                         <div class="appointment-actions">
                             <span class="status-badge status-confirmed">Bevestigd</span>
-                            <button class="btn-small btn-contact" onclick="window.location.href='chat.html?id=3'">
+                            <button class="btn-contact" onclick="window.location.href='chat-zoeker.html?id=3'">
                                 <i class="ri-message-3-line"></i> Bericht sturen
                             </button>
                         </div>
@@ -371,7 +346,7 @@
     </div>
 
     <script src="app.js"></script>
-    <script src="dashboard-nav.js"></script>`n
+    <script src="dashboard-nav.js"></script>
 </body>
 
 </html>

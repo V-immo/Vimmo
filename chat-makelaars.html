@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat | Makelaars Dashboard | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
+    <style>
+        .chat-layout {
+            display: flex;
+            height: 100vh;
+            background: #fdfcfc;
+        }
+
+        .chat-sidebar {
+            width: 320px;
+            background: white;
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 30px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 16px 20px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .message.received {
+            background: #f1f5f9;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.sent {
+            background: var(--primary-makelaars);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 12px rgba(214, 48, 49, 0.2);
+        }
+
+        .chat-input-area {
+            padding: 30px 40px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 25px;
+            border-radius: 100px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary-makelaars);
+            background: white;
+        }
+
+        .btn-send {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-makelaars);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(214, 48, 49, 0.2);
+        }
+
+        .btn-send:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(214, 48, 49, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-layout">
+        <aside class="chat-sidebar">
+            <div class="chat-header">
+                <a href="berichten-makelaars.html" style="color: var(--text-main); font-size: 1.5rem;"><i
+                        class="ri-arrow-left-line"></i></a>
+                <h2 style="font-weight: 800;">Emma Peeters</h2>
+            </div>
+            <div style="padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-makelaars); margin-bottom: 5px;">
+                    BETREFT</div>
+                <div style="font-weight: 700; font-size: 0.9rem;">Penthouse aan de Schelde</div>
+            </div>
+        </aside>
+
+        <main class="chat-main">
+            <div class="chat-messages">
+                <div class="message received">
+                    Beste Jan, ik heb de extra foto's gezien van het terras. Hartelijk dank!
+                </div>
+                <div class="message sent">
+                    Graag gedaan Emma. Zijn er nog andere ruimtes waar u detailfoto's van zou willen ontvangen?
+                </div>
+                <div class="message received">
+                    Nee, dit was voldoende voor nu. Tot morgen bij de bezichtiging!
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" placeholder="Typ uw bericht...">
+                <button class="btn-send"><i class="ri-send-plane-2-line"></i></button>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

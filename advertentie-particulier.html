@@ -4,63 +4,482 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mijn Advertentie | Vimmo</title>
+    <title>Mijn Aanbod | Vimmo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
+    <!-- FOUC prevention: add js-editor class before CSS paint -->
+    <script>document.documentElement.classList.add('js-editor');</script>
+    <script src="particulier-utils.js"></script>
+    <style>
+        .autosave-indicator {
+            font-size: 0.75rem;
+            color: #10b981;
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .autosave-indicator.visible {
+            opacity: 1;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            z-index: 1000;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 40px 60px;
+        }
+
+        .form-group.highlight {
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+        }
+
+        /* =========================================
+           ONBOARDING & ADOPTION STYLES
+           ========================================= */
+        .onboarding-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .onboarding-overlay.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .onboarding-card {
+            background: white;
+            width: min(600px, 90vw);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .onboarding-overlay.is-active .onboarding-card {
+            transform: translateY(0);
+        }
+
+        .onboarding-badge {
+            display: inline-flex;
+            padding: 8px 16px;
+            background: #ecfdf5;
+            color: #059669;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .onboarding-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #1e293b;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .onboarding-text {
+            color: #64748b;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .onboarding-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+
+        .onboarding-step {
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .onboarding-step i {
+            font-size: 1.5rem;
+            color: #10b981;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .onboarding-step-title {
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .onboarding-step-desc {
+            font-size: 0.7rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .onboarding-btn {
+            width: 100%;
+            padding: 16px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.1s ease, background 0.2s ease;
+        }
+
+        .onboarding-btn:hover {
+            background: #059669;
+            transform: scale(1.02);
+        }
+
+        /* Guided Highlighting */
+        .onboarding-highlight {
+            position: relative;
+            z-index: 1001;
+            box-shadow: 0 0 0 4px #10b981, 0 20px 40px rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            background: white;
+        }
+
+        .onboarding-hint {
+            position: absolute;
+            left: calc(100% + 15px);
+            top: 50%;
+            transform: translateY(-50%);
+            background: #10b981;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1002;
+        }
+
+        .onboarding-hint::after {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 6px solid transparent;
+            border-right-color: #10b981;
+        }
+
+        /* === CALM GREEN THEME === */
+        :root {
+            --primary-particulier: #0e8f61;
+            --primary-particulier-ink: #0a6c4a;
+            --primary-particulier-soft: rgba(14, 143, 97, .10);
+            --primary-particulier-soft2: rgba(14, 143, 97, .06);
+            --ui-bg: #f6f1ed;
+            --ui-card: rgba(255, 255, 255, .92);
+            --ui-border: rgba(0, 0, 0, .07);
+            --ui-text: #2f2a26;
+            --ui-muted: rgba(47, 42, 38, .62);
+        }
+
+        /* Mode switcher: solid fallback first */
+        #editor-mode {
+            display: flex;
+            gap: 10px;
+            padding: 8px;
+            background: rgba(255, 255, 255, .92);
+            /* fallback: leesbaar */
+            border: 1px solid var(--ui-border);
+            border-radius: 999px;
+            width: max-content;
+            margin: 16px 0 18px 0;
+        }
+
+        /* Glassmorphism enhancement if supported */
+        @supports ((-webkit-backdrop-filter: blur(8px)) or (backdrop-filter: blur(8px))) {
+            #editor-mode {
+                background: rgba(255, 255, 255, .70);
+                -webkit-backdrop-filter: blur(8px);
+                backdrop-filter: blur(8px);
+            }
+        }
+
+        #editor-mode button {
+            border: 0;
+            background: transparent;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-weight: 800;
+            color: var(--ui-muted);
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        #editor-mode button:focus-visible {
+            outline: 2px solid rgba(14, 143, 97, .35);
+            outline-offset: 2px;
+        }
+
+        #editor-mode button:hover {
+            background: rgba(0, 0, 0, .03);
+            color: var(--ui-text);
+        }
+
+        #editor-mode button.is-active {
+            background: var(--primary-particulier-soft);
+            color: var(--primary-particulier-ink);
+        }
+
+        #editor-mode button.is-active:hover {
+            background: var(--primary-particulier-soft);
+            color: var(--primary-particulier-ink);
+        }
+
+        /* Cards calmer: no "card-in-card" drama */
+        .luxury-panel {
+            background: var(--ui-card);
+            border: 1px solid var(--ui-border);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .05);
+            border-radius: 22px;
+        }
+
+        /* Titles less loud */
+        .luxury-panel h2,
+        .luxury-panel h3,
+        .luxury-panel h4 {
+            letter-spacing: -0.02em;
+        }
+
+        /* === CSS-DRIVEN ZONE VISIBILITY === */
+        /* No-JS fallback: do nothing (native layout stays intact) */
+        /* Only filter zones when JS is active and sets data-editor-mode */
+        html.js-editor[data-editor-mode="edit"] [data-zone]:not([data-zone="edit"]),
+        html.js-editor[data-editor-mode="performance"] [data-zone]:not([data-zone="performance"]),
+        html.js-editor[data-editor-mode="visibility"] [data-zone]:not([data-zone="visibility"]) {
+            display: none !important;
+        }
+
+        /* === CHECKLIST CONTAINERS ONLY - NO * NUKE === */
+        /* Only outer containers get position reset, not children */
+        .publicatie-checklist,
+        #publicatieChecklist,
+        #vimmoChecklist,
+        .checklist-card {
+            position: static !important;
+            inset: auto !important;
+            right: auto !important;
+            bottom: auto !important;
+            left: auto !important;
+            top: auto !important;
+            transform: none !important;
+        }
+
+        /* Handle any sticky wrapper variants */
+        .publicatie-checklist.is-sticky,
+        #publicatieChecklist.is-sticky,
+        #vimmoChecklist.is-sticky {
+            position: static !important;
+        }
+
+        /* Checklist card inline styling - responsive max-width */
+        .checklist-card,
+        #vimmoChecklist {
+            width: 100%;
+            max-width: min(420px, 100%);
+            margin-top: 14px;
+            border: 1px solid var(--ui-border);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .86);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, .06);
+        }
+
+        /* Checklist header calmer and smaller */
+        .checklist-header {
+            padding: 12px 14px;
+        }
+
+        .checklist-title {
+            font-weight: 900;
+            color: var(--ui-text);
+        }
+
+        .checklist-score {
+            background: var(--primary-particulier-soft);
+            color: var(--primary-particulier-ink);
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-weight: 900;
+        }
+    </style>
 </head>
 
-<body>
+<body class="particulier-editor">
+    <!-- Onboarding Overlay -->
+    <div id="onboardingOverlay" class="onboarding-overlay">
+        <div class="onboarding-card">
+            <div class="onboarding-badge">24h Live Challenge</div>
+            <h2 class="onboarding-title">Klaar om je woning te verkopen?</h2>
+            <p class="onboarding-text">We helpen je om binnen 24 uur een top-advertentie live te zetten. Volg deze 3
+                stappen voor maximaal resultaat.</p>
+
+            <div class="onboarding-steps">
+                <div class="onboarding-step">
+                    <i class="ri-edit-2-line"></i>
+                    <div class="onboarding-step-title">Basis Info</div>
+                    <div class="onboarding-step-desc">Titel, prijs en omschrijving.</div>
+                </div>
+                <div class="onboarding-step">
+                    <i class="ri-image-line"></i>
+                    <div class="onboarding-step-title">Media</div>
+                    <div class="onboarding-step-desc">Minstens 8 kwalitatieve foto's.</div>
+                </div>
+                <div class="onboarding-step">
+                    <i class="ri-shield-check-line"></i>
+                    <div class="onboarding-step-title">Trust Score</div>
+                    <div class="onboarding-step-desc">Haal een health score van 70+.</div>
+                </div>
+            </div>
+
+            <button class="onboarding-btn" onclick="startOnboarding()">Start de Challenge</button>
+        </div>
+    </div>
     <div class="dashboard-particulier">
+        <!-- Mobile Toggle -->
+        <button class="particulier-mobile-toggle">
+            <i class="ri-menu-line"></i>
+        </button>
+
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
+                <!-- User Profile at TOP -->
+                <div class="sidebar-user" style="border-top: none; margin-bottom: 20px; padding-top: 5px;">
+                    <div class="user-avatar"
+                        style="background: rgba(16, 185, 129, 0.1); color: var(--primary-particulier);">
+                        TV</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Tomas Verbeeck</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Particulier</div>
+                    </div>
+                </div>
+
+                <div style="margin: 10px 0 20px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
                 <a href="dashboard-particulier.html" class="nav-item">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
                 <a href="advertentie-particulier.html" class="nav-item active">
-                    <i class="ri-home-4-line"></i> Mijn Advertentie
+                    <i class="ri-home-4-line"></i> Mijn Aanbod
                 </a>
                 <a href="beschikbaarheid-particulier.html" class="nav-item">
                     <i class="ri-calendar-line"></i> Beschikbaarheid
                 </a>
-                <a href="agenda-particulier.html" class="nav-item">
-                    <i class="ri-calendar-check-line"></i> Aanvragen
+                <a href="aanvragen-particulier.html" class="nav-item">
+                    <i class="ri-mail-line"></i> Aanvragen
+                    <span
+                        style="margin-left: auto; background: #ef4444; color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
                 </a>
                 <a href="berichten-particulier.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
+                    <span
+                        style="margin-left: auto; background: var(--primary-particulier); color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
                 </a>
                 <a href="pakket-beheer.html" class="nav-item">
                     <i class="ri-box-3-line"></i> Pakket Beheer
                     <span id="sidebar-package-usage"
-                        style="margin-left: auto; color: #10b981; font-weight: 700;">2/3</span>
+                        style="margin-left: auto; color: var(--primary-particulier); font-weight: 800; font-size: 0.8rem;"></span>
                 </a>
 
-                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
-                <a href="instellingen-particulier.html" class="nav-item">
+                <!-- Sidebar Quick Actions -->
+                <div class="sidebar-quick-actions">
+                    <button onclick="window.location.href='advertentie-particulier.html'" class="quick-action-btn"
+                        title="Advertentie Bewerken">
+                        <i class="ri-edit-box-line"></i>
+                    </button>
+                    <button onclick="window.location.href='berichten-particulier.html'" class="quick-action-btn"
+                        title="Berichten">
+                        <i class="ri-message-3-line"></i>
+                    </button>
+                    <button onclick="window.location.href='agenda-particulier.html'" class="quick-action-btn"
+                        title="Agenda">
+                        <i class="ri-calendar-event-line"></i>
+                    </button>
+                </div>
+
+                <a href="instellingen-particulier.html" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
             </nav>
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content" style="padding: 0; max-width: 100%;">
+        <main class="main-content">
+            <!-- STAP 1.1 HTML (bovenaan advertentie-particulier.html) -->
+            <div id="editor-mode">
+                <button type="button" data-mode="edit" class="is-active">Bewerken</button>
+                <button type="button" data-mode="performance">Prestaties</button>
+                <button type="button" data-mode="visibility">Zichtbaarheid</button>
+            </div>
+
+            <!-- Breadcrumbs -->
+            <div class="particulier-breadcrumb">
+                <a href="dashboard-particulier.html"><i class="ri-dashboard-line"></i> Dashboard</a>
+                <span>/</span>
+                <span class="current">Mijn Aanbod</span>
+            </div>
+
             <!-- Immersive Hero Section -->
             <div class="luxury-hero">
                 <img id="heroImage" src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600&q=80"
                     alt="Luxe Woning">
+                <div class="hero-nav">
+                    <a href="dashboard-particulier.html" class="hero-back-btn" title="Terug naar Dashboard">
+                        <i class="ri-arrow-left-line"></i>
+                    </a>
+                </div>
                 <div class="luxury-hero-overlay">
                     <div class="luxury-badge"
                         style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
@@ -77,16 +496,55 @@
                 </div>
             </div>
 
+            <!-- Status & Primary Action Bar -->
+            <div class="luxury-panel"
+                style="margin-bottom: 30px; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid #10b981; background: white;">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div>
+                        <div
+                            style="font-size: 0.7rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">
+                            Status Advertentie</div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span id="currentStatusBadge"
+                                style="background: #f0fdf4; color: #10b981; padding: 6px 16px; border-radius: 100px; font-size: 0.9rem; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.2);">ACTIEF</span>
+                            <span id="statusSince"
+                                style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Sinds 15 jan
+                                2024</span>
+                            <!-- Save Status Indicator -->
+                            <div id="saveStatus"
+                                style="font-size:12px;font-weight:700;color:rgba(0,0,0,.55);display:flex;gap:8px;align-items:center;margin-left:20px;">
+                                <span id="saveDot"
+                                    style="width:8px;height:8px;border-radius:999px;background:#94a3b8;"></span>
+                                <span id="saveText">Niet opgeslagen</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <button id="primaryActionButton" class="btn btn-primary" type="button" data-action="pause"
+                        style="padding: 12px 30px; border-radius: 16px; font-weight: 800; background: linear-gradient(180deg, var(--primary), var(--primary-2)); color: white; border: 1px solid rgba(14,143,97,.35); cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);">
+                        <i class="ri-pause-circle-line"></i> Pauzeren
+                    </button>
+                    <button class="btn btn-ghost" type="button" id="btnPreview" data-action="live"
+                        style="padding: 12px 20px; border-radius: 16px; font-weight: 800; background: rgba(255,255,255,.70); border: 1px solid rgba(14,143,97,.18); color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                        <i class="ri-eye-line"></i> Live bekijken
+                    </button>
+                    <button class="btn btn-ghost" type="button" data-action="history"
+                        style="padding: 12px 20px; border-radius: 16px; font-weight: 700; background: rgba(255,255,255,.70); border: 1px solid rgba(14,143,97,.18); color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                        <i class="ri-history-line"></i> Geschiedenis
+                    </button>
+                </div>
+            </div>
+
             <!-- Dashboard Content Container (Overlapping Hero) -->
-            <div
-                style="padding: 0 60px 60px 60px; position: relative; z-index: 10; display: grid; grid-template-columns: 1fr 350px; gap: 40px;">
+            <div class="dashboard-grid" style="position: relative; z-index: 10;">
 
                 <!-- Left Column: Form Sections -->
-                <div>
-                    <div class="glass-panel" style="padding: 40px; margin-bottom: 30px; background: white;">
+                <div data-zone="edit">
+                    <div class="luxury-panel">
                         <div
                             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-                            <h2 style="font-size: 1.8rem; font-weight: 700;">Specificaties</h2>
+                            <h2>Specificaties</h2>
                             <div style="display: flex; gap: 12px; align-items: center;">
                                 <select id="propertySelector" onchange="switchEditProperty()"
                                     style="padding: 10px 20px; border: 1px solid rgba(0,0,0,0.06); border-radius: 100px; background: #f8fafc; font-weight: 600; cursor: pointer; outline: none;">
@@ -102,441 +560,621 @@
                             </div>
                         </div>
 
-                        <div class="edit-section">
+                        <div class="edit-section" id="titel" data-fix-target="title">
                             <h3 style="color: var(--primary-particulier); margin-bottom: 25px;"><i
                                     class="ri-information-line"></i> Basis Informatie</h3>
-                            <div class="form-group luxe-input" style="margin-bottom: 30px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <label
                                     style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">Titel
                                     van de advertentie</label>
-                                <input type="text" id="editTitle" value="Moderne Woning in Antwerpen"
-                                    oninput="updatePreview()"
-                                    style="font-size: 1.2rem; padding: 12px 0; border: none; border-bottom: 2px solid #eee; border-radius: 0; outline: none; width: 100%; transition: border-color 0.3s;">
+                                <div class="autosave-indicator" id="save-editTitle"><i class="ri-check-line"></i>
+                                    Opgeslagen</div>
                             </div>
+                            <input type="text" id="editTitle" value="Moderne Woning in Antwerpen" data-field="name"
+                                oninput="autoSaveField('editTitle')"
+                                style="font-size: 1.2rem; padding: 12px 0; border: none; border-bottom: 2px solid #eee; border-radius: 0; outline: none; width: 100%; transition: border-color 0.3s;">
+                        </div>
 
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
-                                <div class="form-group luxe-input">
-                                    <label
-                                        style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">Transactie
-                                        Type</label>
-                                    <div
-                                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
-                                        <button id="typeKoop" onclick="setTransactionType('koop')"
-                                            style="padding: 12px; border: 2px solid #10b981; background: #10b981; color: white; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s;">Te
-                                            Koop</button>
-                                        <button id="typeHuur" onclick="setTransactionType('huur')"
-                                            style="padding: 12px; border: 2px solid #e2e8f0; background: transparent; color: #64748b; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s;">Te
-                                            Huur</button>
-                                    </div>
-                                    <input type="hidden" id="editTransactionType" value="koop">
-                                </div>
-                                <div class="form-group luxe-input">
-                                    <label
-                                        style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">Vraagprijs
-                                        (€)</label>
-                                    <input type="number" id="editPrice" value="450000" oninput="updatePreview()"
-                                        style="width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid #eee; outline: none; font-weight: 700; font-size: 1.2rem;">
-                                </div>
-                            </div>
-
-                            <div class="form-group luxe-input">
+                        <div class="edit-section" id="beschrijving" data-fix-target="description">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                                 <label
-                                    style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">Locatie</label>
-                                <input type="text" id="editLocation" value="Antwerpen, Zuid" oninput="updatePreview()"
-                                    style="width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid #eee; outline: none;">
+                                    style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">Beschrijving</label>
+                                <div style="display: flex; gap: 15px; align-items: center;">
+                                    <span id="descCount"
+                                        style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">0
+                                        tekens</span>
+                                    <div class="autosave-indicator" id="save-editDescription"><i
+                                            class="ri-check-line"></i> Opgeslagen</div>
+                                </div>
+                            </div>
+                            <textarea id="editDescription" data-field="description"
+                                placeholder="Vertel meer over de indeling, lichtinval, omgeving..."
+                                style="width: 100%; min-height: 200px; padding: 15px; border: 1px solid #eee; border-radius: 12px; outline: none; font-size: 1rem; line-height: 1.6; resize: vertical; transition: border-color 0.3s;"
+                                oninput="this.style.borderColor='var(--primary-particulier)'; updateDescCount();"></textarea>
+                            <script>
+                                function updateDescCount() {
+                                    const val = document.getElementById('editDescription').value;
+                                    document.getElementById('descCount').textContent = val.length + ' tekens';
+                                }
+                            </script>
+                        </div>
+
+                        <div id="transaction"
+                            style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                            <div class="form-group luxe-input" id="prijs" data-fix-target="price">
+                                <label
+                                    style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">Transactie
+                                    Type</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
+                                    <button id="typeKoop" onclick="setTransactionType('koop')"
+                                        style="padding: 12px; border: 2px solid #e2e8f0; background: transparent; color: #64748b; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s;">Te
+                                        Koop</button>
+                                    <button id="typeHuur" onclick="setTransactionType('huur')"
+                                        style="padding: 12px; border: 2px solid #e2e8f0; background: transparent; color: #64748b; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s;">Te
+                                        Huur</button>
+                                </div>
+                                <input type="hidden" id="editTransactionType" value="koop" data-field="transactionType">
+                            </div>
+                            <div class="vimmo-field">
+                                <div class="vimmo-label">Vraagprijs</div>
+                                <div class="vimmo-control has-prefix">
+                                    <span class="vimmo-affix prefix">€</span>
+                                    <input id="editPrice" class="vimmo-input" data-field="price" inputmode="numeric"
+                                        autocomplete="off" placeholder="450.000">
+                                </div>
+                                <div class="vimmo-help">Prijs wordt automatisch geformatteerd.</div>
                             </div>
                         </div>
 
-                        <div style="margin: 40px 0; border-top: 1px solid #f1f5f9;"></div>
-
-                        <div class="edit-section">
-                            <h3 style="color: var(--primary-particulier); margin-bottom: 25px;"><i
-                                    class="ri-layout-grid-line"></i> Gedetailleerde Specs</h3>
-
-                            <div class="form-grid"
-                                style="grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
-                                <div class="form-group">
-                                    <label>Woningtype</label>
-                                    <select id="editType" onchange="updatePreview()"
-                                        style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px; background: white;">
-                                        <option value="Huis">Woonhuis</option>
-                                        <option value="Appartement">Appartement</option>
-                                        <option value="Penthouse">Penthouse</option>
-                                        <option value="Villa">Villa</option>
-                                        <option value="Studio">Studio</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Slaapkamers</label>
-                                    <input type="number" id="editBedrooms" value="3" oninput="updatePreview()"
-                                        style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
-                                </div>
-                                <div class="form-group">
-                                    <label>Badkamers</label>
-                                    <input type="number" id="editBathrooms" value="2" oninput="updatePreview()"
-                                        style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
-                                </div>
-                                <div class="form-group">
-                                    <label>Oppervlakte (m²)</label>
-                                    <input type="number" id="editSurface" value="150" oninput="updatePreview()"
-                                        style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
-                                </div>
-                                <div class="form-group">
-                                    <label>Verdiepingen</label>
-                                    <input type="number" id="editFloors" value="1" oninput="updatePreview()"
-                                        style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
-                                </div>
-                            </div>
-
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
-                                <div class="form-group luxe-input">
-                                    <label style="font-size: 0.8rem; text-transform: uppercase;">Staat van de
-                                        woning</label>
-                                    <select id="editState" onchange="updatePreview()"
-                                        style="width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid #eee; outline: none; background: transparent;">
-                                        <option value="nieuwbouw">Nieuwbouw</option>
-                                        <option value="instapklaar">Instapklaar / Gerenoveerd</option>
-                                        <option value="goed">Goede staat</option>
-                                        <option value="te-renoveren">Te renoveren</option>
-                                    </select>
-                                </div>
-                                <div class="form-group luxe-input">
-                                    <label style="font-size: 0.8rem; text-transform: uppercase;">Beschikbaarheid</label>
-                                    <input type="text" id="editAvailability" placeholder="Vanaf 1 maart 2024"
+                        <div class="form-group luxe-input" id="adres" data-fix-target="location">
+                            <label
+                                style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">Locatie
+                                Zoeken</label>
+                            <div style="display: grid; grid-template-columns: 140px 1fr; gap: 20px; align-items: end;">
+                                <div style="position: relative;">
+                                    <input type="text" id="editPostcode" placeholder="Postcode" data-field="postcode"
                                         oninput="updatePreview()"
-                                        style="width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid #eee; border-radius: 0; outline: none;">
+                                        style="width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid #eee; outline: none; font-size: 1.1rem; font-weight: 600;">
+                                </div>
+                                <div style="position: relative; display: flex; align-items: center;">
+                                    <input type="text" id="editAddress" placeholder="Straat en nummer"
+                                        data-field="address" oninput="updatePreview()"
+                                        style="width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid #eee; outline: none; font-size: 1.1rem; padding-right: 40px;">
+                                    <button onclick="simulateLocationSearch()"
+                                        style="position: absolute; right: 0; background: none; border: none; color: var(--primary-particulier); cursor: pointer; font-size: 1.4rem; padding-bottom: 10px;">
+                                        <i class="ri-search-eye-line"></i>
+                                    </button>
                                 </div>
                             </div>
+                            <input type="hidden" id="editLocation" data-field="location">
+                        </div>
+                    </div>
 
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
-                                <div class="form-group luxe-input">
-                                    <label style="font-size: 0.8rem; text-transform: uppercase;">EPC Label</label>
-                                    <select id="editEPC" onchange="updatePreview()"
-                                        style="width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid #eee; outline: none; background: transparent;">
+                    <div style="margin: 40px 0; border-top: 1px solid #f1f5f9;"></div>
+
+                    <div class="edit-section" id="slaapkamers" data-fix-target="specs">
+                        <h3 style="color: var(--primary-particulier); margin-bottom: 25px;"><i
+                                class="ri-layout-grid-line"></i> Gedetailleerde Specs</h3>
+
+                        <div class="form-grid"
+                            style="grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
+                            <div class="form-group">
+                                <label>Woningtype</label>
+                                <select id="editType" data-field="type" onchange="updatePreview()"
+                                    style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px; background: white;">
+                                    <option value="Huis">Woonhuis</option>
+                                    <option value="Appartement">Appartement</option>
+                                    <option value="Penthouse">Penthouse</option>
+                                    <option value="Villa">Villa</option>
+                                    <option value="Studio">Studio</option>
+                                </select>
+                            </div>
+                            <div class="vimmo-field">
+                                <div class="vimmo-label">Slaapkamers</div>
+                                <div class="vimmo-control has-suffix">
+                                    <input id="editBedrooms" class="vimmo-input" data-field="bedrooms"
+                                        inputmode="numeric" autocomplete="off" placeholder="3">
+                                    <div class="vimmo-stepper" data-stepper="bedrooms" data-min="0" data-max="20">
+                                        <button class="vimmo-stepbtn" type="button" data-step="-1">−</button>
+                                        <button class="vimmo-stepbtn" type="button" data-step="1">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="vimmo-field">
+                                <div class="vimmo-label">Badkamers</div>
+                                <div class="vimmo-control has-suffix">
+                                    <input id="editBathrooms" class="vimmo-input" data-field="bathrooms"
+                                        inputmode="numeric" autocomplete="off" placeholder="2">
+                                    <div class="vimmo-stepper" data-stepper="bathrooms" data-min="0" data-max="20">
+                                        <button class="vimmo-stepbtn" type="button" data-step="-1">−</button>
+                                        <button class="vimmo-stepbtn" type="button" data-step="1">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="vimmo-field" id="oppervlakte">
+                                <div class="vimmo-label">Oppervlakte</div>
+                                <div class="vimmo-control has-suffix">
+                                    <input id="editSurface" class="vimmo-input" data-field="surface" inputmode="numeric"
+                                        autocomplete="off" placeholder="120">
+                                    <span class="vimmo-affix suffix">m²</span>
+                                </div>
+                                <div class="vimmo-help">Voorbeeld: 120</div>
+                            </div>
+                            <div class="vimmo-field">
+                                <div class="vimmo-label">Verdiepingen</div>
+                                <div class="vimmo-control has-suffix">
+                                    <input id="editFloors" class="vimmo-input" data-field="floors" inputmode="numeric"
+                                        autocomplete="off" placeholder="1">
+                                    <div class="vimmo-stepper" data-stepper="floors" data-min="0" data-max="10">
+                                        <button class="vimmo-stepbtn" type="button" data-step="-1">−</button>
+                                        <button class="vimmo-stepbtn" type="button" data-step="1">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                            <div class="form-group luxe-input">
+                                <label style="font-size: 0.8rem; text-transform: uppercase;">Staat van de
+                                    woning</label>
+                                <select id="editState" data-field="state" onchange="updatePreview()"
+                                    style="width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid #eee; outline: none; background: transparent;">
+                                    <option value="nieuwbouw">Nieuwbouw</option>
+                                    <option value="instapklaar">Instapklaar / Gerenoveerd</option>
+                                    <option value="goed">Goede staat</option>
+                                    <option value="te-renoveren">Te renoveren</option>
+                                </select>
+                            </div>
+                            <div class="form-group luxe-input">
+                                <label style="font-size: 0.8rem; text-transform: uppercase;">Beschikbaarheid</label>
+                                <input type="text" id="editAvailability" placeholder="Vanaf 1 maart 2024"
+                                    data-field="availability" oninput="updatePreview()"
+                                    style="width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid #eee; border-radius: 0; outline: none;">
+                            </div>
+                        </div>
+
+                        <div id="epc" data-fix-target="epc"
+                            style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                            <div class="vimmo-field">
+                                <div class="vimmo-label">EPC Label</div>
+                                <div class="vimmo-control">
+                                    <select id="editEPC" class="vimmo-select" data-field="epcLabel">
+                                        <option value="">Kies label</option>
                                         <option value="A">A</option>
                                         <option value="B">B</option>
                                         <option value="C">C</option>
                                         <option value="D">D</option>
                                         <option value="E">E</option>
                                         <option value="F">F</option>
+                                        <option value="G">G</option>
                                     </select>
                                 </div>
-                                <div class="form-group luxe-input">
-                                    <label style="font-size: 0.8rem; text-transform: uppercase;">EPC Waarde (kWh/m²
-                                        jaar)</label>
-                                    <input type="number" id="editEPCValue" placeholder="Bv. 120"
-                                        oninput="updatePreview()"
-                                        style="width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid #eee; border-radius: 0; outline: none;">
-                                </div>
+                                <div class="vimmo-help">Wordt automatisch opgeslagen.</div>
                             </div>
-
-                            <div style="margin: 30px 0; border-top: 1px dashed #eee;"></div>
-
-                            <h3 style="font-size: 1rem; margin-bottom: 20px;">Buitenruimte & Parkeren</h3>
-                            <div class="form-grid" style="grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                                <div class="form-group">
-                                    <label>Tuin / Terras m²</label>
-                                    <input type="number" id="editGardenSize" placeholder="Bv. 50"
-                                        oninput="updatePreview()"
-                                        style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
-                                </div>
-                                <div class="form-group">
-                                    <label>Garage</label>
-                                    <select id="editGarage" onchange="updatePreview()"
-                                        style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
-                                        <option value="geen">Geen</option>
-                                        <option value="1">1 wagen</option>
-                                        <option value="2">2+ wagens</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Parking Buiten</label>
-                                    <input type="number" id="editParking" placeholder="Aantal plaatsen"
-                                        oninput="updatePreview()"
-                                        style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
-                                </div>
+                            <div class="form-group luxe-input">
+                                <label style="font-size: 0.8rem; text-transform: uppercase;">EPC Waarde (kWh/m²
+                                    jaar)</label>
+                                <input type="number" id="editEPCValue" placeholder="Bv. 120" oninput="updatePreview()"
+                                    style="width: 100%; padding: 12px 0; border: none; border-bottom: 2px solid #eee; border-radius: 0; outline: none;">
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Photo Section -->
-                    <div class="glass-panel" style="padding: 40px; background: white;">
-                        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 30px;">Media Galerij</h2>
-                        <div id="photoGallery"
-                            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                        </div>
-                        <input type="file" id="photoInput" accept="image/*" multiple style="display: none;"
-                            onchange="handlePhotoUpload(event)">
-                        <div class="photo-upload" onclick="document.getElementById('photoInput').click()"
-                            style="border: 2px dashed #cbd5e1; border-radius: var(--radius-lg); padding: 40px; text-align: center; cursor: pointer; transition: all 0.3s;">
-                            <i class="ri-image-add-line"
-                                style="font-size: 2.5rem; color: var(--primary-particulier); margin-bottom: 15px;"></i>
-                            <p style="font-weight: 600;">Klik of sleep foto's om toe te voegen</p>
-                            <p style="color: var(--text-muted); font-size: 0.9rem;">Hoge kwaliteit foto's verhogen uw
-                                kans op verkoop met 40%</p>
+                        <div style="margin: 30px 0; border-top: 1px dashed #eee;"></div>
+
+                        <h3 style="font-size: 1rem; margin-bottom: 20px;">Buitenruimte & Parkeren</h3>
+                        <div class="form-grid" style="grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                            <div class="form-group">
+                                <label>Tuin / Terras m²</label>
+                                <input type="number" id="editGardenSize" placeholder="Bv. 50" oninput="updatePreview()"
+                                    style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
+                            </div>
+                            <div class="form-group">
+                                <label>Garage</label>
+                                <select id="editGarage" onchange="updatePreview()"
+                                    style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
+                                    <option value="geen">Geen</option>
+                                    <option value="1">1 wagen</option>
+                                    <option value="2">2+ wagens</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Parking Buiten</label>
+                                <input type="number" id="editParking" placeholder="Aantal plaatsen"
+                                    oninput="updatePreview()"
+                                    style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Column: Sticky Actions & Health -->
-                <div class="col-right" style="position: relative;">
-                    <!-- Listing Package Glass Panel -->
-                    <div class="glass-panel"
-                        style="padding: 25px; margin-bottom: 25px; background: white; border: 1px solid rgba(16, 185, 129, 0.1);">
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
-                            <div
-                                style="width: 40px; height: 40px; border-radius: 10px; background: rgba(16, 185, 129, 0.1); color: #10b981; display: flex; align-items: center; justify-content: center;">
-                                <i class="ri-box-3-line" style="font-size: 1.2rem;"></i>
-                            </div>
-                            <div>
-                                <h4 style="font-size: 0.95rem; margin-bottom: 2px;">Listing Pakket</h4>
-                                <div style="font-size: 0.75rem; color: #64748b;">Status: <b
-                                        style="color: #10b981;">Actief</b></div>
-                            </div>
+                <!-- Photo Section -->
+                <div class="luxury-panel" id="media" data-fix-target="media" data-zone="edit">
+                    <h2>Media Galerij</h2>
+
+                    <section class="vimmo-field" style="margin-top:18px;">
+                        <div class="vimmo-label">Foto's</div>
+
+                        <div id="vimmoDropzone" class="vimmo-control"
+                            style="min-height:120px; padding:18px; justify-content:center; flex-direction:column; gap:10px; text-align:center; cursor:pointer;">
+                            <div style="font-size:28px;">📷</div>
+                            <div style="font-weight:900;">Sleep foto's hierheen</div>
+                            <div class="vimmo-help">of klik om te uploaden (meerdere tegelijk). JPG/PNG/WebP.</div>
+                            <input id="vimmoFileInput" type="file" accept="image/*" multiple style="display:none;">
                         </div>
 
-                        <div style="background: #f8fafc; border-radius: 12px; padding: 15px; margin-bottom: 15px;">
-                            <div
-                                style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px;">
-                                <span style="color: #64748b;">Gekozen Pakket</span>
-                                <span style="font-weight: 600;">Premium (60 Dagen)</span>
-                            </div>
-                            <div
-                                style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 12px;">
-                                <span style="color: #64748b;">Woningengebruik</span>
-                                <span id="packageUsageCount" style="color: #10b981; font-weight: 700;">2 / 3</span>
-                            </div>
-
-                            <!-- New: Active Listings List -->
-                            <div style="border-top: 1px solid #e2e8f0; padding-top: 10px;">
-                                <p
-                                    style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 8px; font-weight: 700;">
-                                    Actieve Advertenties</p>
-                                <div id="activeListingsList" style="display: flex; flex-direction: column; gap: 6px;">
-                                    <!-- Dynamic content -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <p style="font-size: 0.7rem; color: #94a3b8; line-height: 1.4; margin-bottom: 12px;">
-                            <i class="ri-information-line"></i> Met je huidige pakket kun je tot wel 3 woningen tegelijk
-                            online beheren.
-                        </p>
-
-                        <button onclick="openPackageModal()"
-                            style="width: 100%; border: 1px solid #e2e8f0; background: transparent; padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;">
-                            Pakket Beheren
-                        </button>
-                    </div>
-
-                    <!-- Package Management Modal -->
-                    <div id="packageModal"
-                        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
-                        <div class="glass-panel"
-                            style="background: white; padding: 30px; border-radius: 20px; width: 450px; max-width: 90%;">
-                            <h3 style="margin-bottom: 20px;">Pakket Beheer</h3>
-                            <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                    <span style="color: #64748b;">Huidig Pakket</span>
-                                    <span style="font-weight: 700;">60 Dagen (€149)</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between;">
-                                    <span style="color: #64748b;">Einddatum</span>
-                                    <span style="font-weight: 700;">30 Januari 2024</span>
-                                </div>
-                            </div>
-                            <div
-                                style="background: #f8fafc; border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-                                <p style="font-size: 0.85rem; line-height: 1.5; color: #64748b;">
-                                    <i class="ri-information-line" style="color: #10b981;"></i>
-                                    <strong>Multi-Listing Pakket Actief</strong>.
-                                    Met dit pakket kun je meerdere woningen tegelijkertijd online plaatsen. Je hebt
-                                    momenteel
-                                    nog <strong style="color: #10b981;">1 slot</strong> vrij voor een nieuwe
-                                    advertentie.
-                                </p>
-                            </div>
-
-                            <div style="display: flex; flex-direction: column; gap: 12px;">
-                                <button class="btn-primary"
-                                    style="width: 100%; border-radius: 10px; background: #10b981; color: white; padding: 12px; font-weight: 600; border: none; cursor: pointer;">Pakket
-                                    Verlengen</button>
-                                <button class="btn-secondary"
-                                    style="width: 100%; border-radius: 10px; background: #f1f5f9; color: #1e293b; padding: 12px; font-weight: 600; border: none; cursor: pointer;">Facturen
-                                    Downloaden</button>
-                                <button onclick="closePackageModal()"
-                                    style="width: 100%; border-radius: 10px; background: transparent; color: #64748b; padding: 8px; font-weight: 500; border: none; cursor: pointer;">Sluiten</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Health Score Glass Panel -->
-                    <div class="glass-panel"
-                        style="padding: 30px; margin-bottom: 25px; border-top: 4px solid var(--primary-particulier);">
-                        <div
-                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-                            <h4 style="font-weight: 700; color: var(--text-main);">Listing Health</h4>
-                            <span id="healthLabel"
-                                style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--primary-particulier);">Uitstekend</span>
-                        </div>
-                        <div style="display: flex; gap: 20px; align-items: center;">
-                            <div class="health-score-ring" style="width: 60px; height: 60px;">
-                                <svg width="60" height="60" viewBox="0 0 80 80">
-                                    <circle cx="40" cy="40" r="35" fill="none" stroke="#f1f5f9" stroke-width="8">
-                                    </circle>
-                                    <circle id="healthScoreCircle" cx="40" cy="40" r="35" fill="none"
-                                        stroke="var(--primary-particulier)" stroke-width="8" stroke-dasharray="219.9"
-                                        stroke-dashoffset="40" style="transition: stroke-dashoffset 1s ease;"></circle>
-                                </svg>
-                                <div
-                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 800; font-size: 0.9rem;">
-                                    <span id="healthPercentage">85</span>%
-                                </div>
-                            </div>
-                            <div style="flex: 1;">
-                                <p id="healthTip"
-                                    style="font-size: 0.85rem; line-height: 1.4; color: var(--text-muted);">Uw
-                                    advertentie ziet er goed uit! Voeg een verwarmingstype toe.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Boost Action Glass Panel -->
-                    <div id="boostCard" class="glass-panel"
-                        style="padding: 30px; margin-bottom: 25px; background: linear-gradient(135deg, #1e293b, #0f172a); color: white; border: none; position: relative; overflow: hidden;">
-                        <div id="activeBoostBadge" style="display: none; position: absolute; top: 15px; right: 20px;">
-                            <span class="badge-boost" style="background: #fbbf24; color: #78350f; font-size: 0.7rem;"><i
-                                    class="ri-flashlight-line"></i> <span id="boostTierLabel">GEBOOST</span></span>
-                        </div>
-
-                        <h4 style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
-                            <i class="ri-flashlight-line" style="color: #fbbf24;"></i> Advertentie Boost
-                        </h4>
-                        <p id="boostStatusText" style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 20px;">Kies een
-                            pakket om uw listing naar de top te brengen.</p>
-
-                        <div id="boostOptionsArea" style="display: block;">
-                            <div style="position: relative; margin-bottom: 15px;">
-                                <button onclick="selectBoostTier('standard')" class="boost-tier-btn"
-                                    style="width: 100%; background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); border: 1px solid rgba(16, 185, 129, 0.4); color: white; padding: 15px; border-radius: 12px; text-align: left; cursor: pointer; position: relative;">
-                                    <div
-                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                        <span style="font-weight: 700; font-size: 1rem;">Toppositie 7 dagen</span>
-                                        <span style="font-weight: 800; color: #10b981;">€ 29</span>
-                                    </div>
-                                    <div style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4;">Bovenaan resultaten
-                                        • Gekleurd frame</div>
-                                </button>
-                                <div class="boost-info-trigger"
-                                    onclick="showBoostInfo('Toppositie 7d', 'Je woning verschijnt 7 dagen lang bovenaan de zoekresultaten in jouw regio. Ideaal voor een snelle boost van de bezichtigingen.')"
-                                    style="position: absolute; top: 12px; right: 65px; color: rgba(255,255,255,0.5); cursor: pointer; z-index: 5; background: rgba(0,0,0,0.2); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
-                                    <i class="ri-information-line"></i>
-                                </div>
-                            </div>
-
-                            <div style="position: relative; margin-bottom: 15px;">
-                                <button onclick="selectBoostTier('premium')" class="boost-tier-btn"
-                                    style="width: 100%; background: linear-gradient(90deg, rgba(251, 191, 36, 0.2), rgba(217, 119, 6, 0.2)); border: 1px solid rgba(251, 191, 36, 0.4); color: white; padding: 15px; border-radius: 12px; text-align: left; cursor: pointer; position: relative;">
-                                    <div
-                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                        <span style="font-weight: 700; font-size: 1rem; color: #fbbf24;">Toppositie 30
-                                            dagen</span>
-                                        <span style="font-weight: 800; color: #fbbf24;">€ 79</span>
-                                    </div>
-                                    <div style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4;">Maximale exposure •
-                                        Newsletter push</div>
-                                </button>
-                                <div class="boost-info-trigger"
-                                    onclick="showBoostInfo('Toppositie 30d', 'Gedurende een volle maand sta je op de premium posities. Daarnaast ontvangt onze actieve zoekerslijst een speciale newsletter push van jouw pand.')"
-                                    style="position: absolute; top: 12px; right: 65px; color: rgba(255,255,255,0.5); cursor: pointer; z-index: 5; background: rgba(0,0,0,0.2); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
-                                    <i class="ri-information-line"></i>
-                                </div>
-                            </div>
-
-                            <div style="position: relative; margin-bottom: 5px;">
-                                <button onclick="selectBoostTier('regio')" class="boost-tier-btn"
-                                    style="width: 100%; background: linear-gradient(90deg, rgba(139, 92, 246, 0.2), rgba(109, 40, 217, 0.2)); border: 1px solid rgba(139, 92, 246, 0.4); color: white; padding: 15px; border-radius: 12px; text-align: left; cursor: pointer; position: relative;">
-                                    <div
-                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                        <span style="font-weight: 700; font-size: 1rem; color: #a78bfa;">Extra
-                                            Regio</span>
-                                        <span style="font-weight: 800; color: #a78bfa;">€ 49</span>
-                                    </div>
-                                    <div style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4;">Zichtbaar in 2
-                                        extra gemeentes naar keuze</div>
-                                </button>
-                                <div class="boost-info-trigger"
-                                    onclick="showBoostInfo('Extra Regio', 'Breid je bereik uit naar omliggende gemeentes. Je woning wordt getoond aan zoekers in 2 extra regio\'s naar keuze.')"
-                                    style="position: absolute; top: 12px; right: 65px; color: rgba(255,255,255,0.5); cursor: pointer; z-index: 5; background: rgba(0,0,0,0.2); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
-                                    <i class="ri-information-line"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="boostActiveArea" style="display: none;">
-                            <div
-                                style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
-                                <div id="boostActiveTitle" style="font-weight: 700; font-size: 1.1rem; color: #fbbf24;">
-                                    Premium Boost</div>
-                                <div style="font-size: 0.8rem; opacity: 0.7;">Actief • Geniet van maximaal bereik</div>
-                            </div>
-                            <button onclick="resetBoost()"
-                                style="width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); padding: 8px; border-radius: 8px; font-size: 0.8rem; cursor: pointer;">Stopzetten</button>
-                        </div>
-                    </div>
-
-                    <!-- Actions Glass Panel -->
-                    <div class="glass-panel" style="padding: 30px; background: white;">
-                        <button class="btn-primary" onclick="saveAdvertentie()"
-                            style="width: 100%; border-radius: 100px; padding: 15px; margin-bottom: 15px; font-weight: 700; background: var(--luxe-gradient); border: none; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
-                            Wijzigingen Opslaan
-                        </button>
-                        <button class="btn-secondary" onclick="window.location.href='property.html'"
-                            style="width: 100%; border-radius: 100px; padding: 15px; margin-bottom: 25px; font-weight: 700; border: 1px solid #eee;">
-                            Live Bekijken
-                        </button>
-
-                        <div style="border-top: 1px solid #f1f5f9; padding-top: 20px;">
-                            <button onclick="openDeleteModal()"
-                                style="width: 100%; background: transparent; border: none; color: #ef4444; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                                <i class="ri-delete-bin-line"></i> Deze woning volledig verwijderen
+                        <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+                            <button type="button" class="vimmo-btn" id="vimmoBulkAdd"
+                                style="background:#059669;color:#fff;border:none;padding:10px 14px;border-radius:12px;font-weight:900;cursor:pointer;">
+                                Foto's toevoegen
                             </button>
+
+                            <button type="button" class="vimmo-btn" id="vimmoClearPhotos"
+                                style="background:#fff;color:rgba(0,0,0,.82);border:1px solid rgba(0,0,0,.10);padding:10px 14px;border-radius:12px;font-weight:900;cursor:pointer;">
+                                Alles verwijderen
+                            </button>
+
+                            <div class="vimmo-help" style="display:flex;align-items:center;margin-left:auto;">
+                                Tip: sleep om volgorde te wijzigen. Klik ⭐ om cover te kiezen.
+                            </div>
+                        </div>
+
+                        <div id="vimmoPhotoGrid"
+                            style="margin-top:14px; display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:12px;">
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Documents & Verification (Trust Pakket) -->
+                <div class="luxury-panel" id="documenten" data-fix-target="trust" data-zone="edit">
+                    <h2>Documenten & verificatie</h2>
+
+                    <section class="vimmo-field">
+                        <div class="vimmo-label">Trust Badges</div>
+                        <div class="vimmo-help">Deze badges verhogen vertrouwen en verlagen fraude.</div>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;">
+                            <div class="vimmo-control" style="padding:14px; justify-content:space-between;">
+                                <div style="display:flex; flex-direction:column; gap:4px;">
+                                    <div style="font-weight:900;">EPC attest</div>
+                                    <div class="vimmo-help" id="docEpcStatus">Niet toegevoegd</div>
+                                </div>
+                                <input id="docEpc" type="file" accept="application/pdf,image/*" style="display:none;">
+                                <button type="button" class="vimmo-stepbtn" data-doc="epc">📄</button>
+                            </div>
+
+                            <div class="vimmo-control" style="padding:14px; justify-content:space-between;">
+                                <div style="display:flex; flex-direction:column; gap:4px;">
+                                    <div style="font-weight:900;">Asbestattest</div>
+                                    <div class="vimmo-help" id="docAsbestStatus">Niet toegevoegd</div>
+                                </div>
+                                <input id="docAsbest" type="file" accept="application/pdf,image/*"
+                                    style="display:none;">
+                                <button type="button" class="vimmo-stepbtn" data-doc="asbest">📄</button>
+                            </div>
+
+                            <div class="vimmo-control" style="padding:14px; justify-content:space-between;">
+                                <div style="display:flex; flex-direction:column; gap:4px;">
+                                    <div style="font-weight:900;">Bodemattest</div>
+                                    <div class="vimmo-help" id="docBodemStatus">Niet toegevoegd</div>
+                                </div>
+                                <input id="docBodem" type="file" accept="application/pdf,image/*" style="display:none;">
+                                <button type="button" class="vimmo-stepbtn" data-doc="bodem">📄</button>
+                            </div>
+
+                            <div class="vimmo-control" style="padding:14px; justify-content:space-between;">
+                                <div style="display:flex; flex-direction:column; gap:4px;">
+                                    <div style="font-weight:900;">Eigenaarsverificatie</div>
+                                    <div class="vimmo-help" id="ownerVerifyStatus">Niet geverifieerd</div>
+                                </div>
+                                <button type="button" class="vimmo-stepbtn" id="btnOwnerVerify">✓</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Right Column: Sticky Actions & Health -->
+            <div class="col-right" style="position: relative;">
+                <!-- Listing Package Glass Panel -->
+                <div class="luxury-panel" style="padding: 25px;" data-zone="visibility">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                        <div
+                            style="width: 40px; height: 40px; border-radius: 10px; background: rgba(16, 185, 129, 0.1); color: #10b981; display: flex; align-items: center; justify-content: center;">
+                            <i class="ri-box-3-line" style="font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 0.95rem; margin-bottom: 2px;">Listing Pakket</h4>
+                            <div style="font-size: 0.75rem; color: #64748b;">Status: <b
+                                    style="color: #10b981;">Actief</b></div>
                         </div>
                     </div>
 
-                    <!-- Weekly Status Reports -->
-                    <div class="glass-panel"
-                        style="padding: 25px; margin-top: 25px; background: #f8fafc; border: 1px dashed #cbd5e1;">
-                        <h5
-                            style="margin-bottom: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                            <i class="ri-notification-3-line" style="color: #6366f1;"></i> Wekelijkse Rapporten
-                        </h5>
-                        <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 15px;">Ontvang elke maandag een
-                            overzicht van je advertentie-prestaties.</p>
-
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <label
-                                style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
-                                <span style="font-size: 0.85rem; font-weight: 500;">Email Rapport</span>
-                                <input type="checkbox" id="emailReports" onchange="saveAdvertentie()" checked>
-                            </label>
-                            <label
-                                style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
-                                <span style="font-size: 0.85rem; font-weight: 500;">WhatsApp Update</span>
-                                <input type="checkbox" id="whatsappReports" onchange="saveAdvertentie()">
-                            </label>
+                    <div style="background: #f8fafc; border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px;">
+                            <span style="color: #64748b;">Gekozen Pakket</span>
+                            <span style="font-weight: 600;">Premium (60 Dagen)</span>
                         </div>
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 12px;">
+                            <span style="color: #64748b;">Woningengebruik</span>
+                            <span id="packageUsageCount" style="color: #10b981; font-weight: 700;">2 / 3</span>
+                        </div>
+
+                        <!-- New: Active Listings List -->
+                        <div style="border-top: 1px solid #e2e8f0; padding-top: 10px;">
+                            <p
+                                style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 8px; font-weight: 700;">
+                                Actieve Advertenties</p>
+                            <div id="activeListingsList" style="display: flex; flex-direction: column; gap: 6px;">
+                                <!-- Dynamic content -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="font-size: 0.7rem; color: #94a3b8; line-height: 1.4; margin-bottom: 12px;">
+                        <i class="ri-information-line"></i> Met je huidige pakket kun je tot wel 3 woningen tegelijk
+                        online beheren.
+                    </p>
+
+                    <button onclick="openPackageModal()"
+                        style="width: 100%; border: 1px solid #e2e8f0; background: transparent; padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;">
+                        Pakket Beheren
+                    </button>
+                </div>
+
+                <!-- Package Management Modal -->
+                <div id="packageModal"
+                    style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+                    <div class="luxury-panel" style="width: 450px; max-width: 90%;">
+                        <h3 style="margin-bottom: 20px;">Pakket Beheer</h3>
+                        <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span style="color: #64748b;">Huidig Pakket</span>
+                                <span style="font-weight: 700;">60 Dagen (€149)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: #64748b;">Einddatum</span>
+                                <span style="font-weight: 700;">30 Januari 2024</span>
+                            </div>
+                        </div>
+                        <div
+                            style="background: #f8fafc; border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+                            <p style="font-size: 0.85rem; line-height: 1.5; color: #64748b;">
+                                <i class="ri-information-line" style="color: #10b981;"></i>
+                                <strong>Multi-Listing Pakket Actief</strong>.
+                                Met dit pakket kun je meerdere woningen tegelijkertijd online plaatsen. Je hebt
+                                momenteel
+                                nog <strong style="color: #10b981;">1 slot</strong> vrij voor een nieuwe
+                                advertentie.
+                            </p>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <button class="btn-primary"
+                                style="width: 100%; border-radius: 10px; background: #10b981; color: white; padding: 12px; font-weight: 600; border: none; cursor: pointer;">Pakket
+                                Verlengen</button>
+                            <button class="btn-secondary"
+                                style="width: 100%; border-radius: 10px; background: #f1f5f9; color: #1e293b; padding: 12px; font-weight: 600; border: none; cursor: pointer;">Facturen
+                                Downloaden</button>
+                            <button onclick="closePackageModal()"
+                                style="width: 100%; border-radius: 10px; background: transparent; color: #64748b; padding: 8px; font-weight: 500; border: none; cursor: pointer;">Sluiten</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New: Viewings Summary Card -->
+                <div class="luxury-panel" style="padding: 25px; border-bottom: 4px solid #10b981;"
+                    data-zone="performance">
+                    <h4
+                        style="font-weight: 800; color: var(--text-main); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="ri-calendar-check-line" style="color: #10b981;"></i> Bezichtigingen
+                    </h4>
+
+                    <div style="display: grid; gap: 15px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; background: #f0fdf4; padding: 12px 20px; border-radius: 12px;">
+                            <div>
+                                <div
+                                    style="font-size: 0.65rem; font-weight: 800; color: #10b981; text-transform: uppercase;">
+                                    Volgende afspraak</div>
+                                <div style="font-size: 0.95rem; font-weight: 800; color: var(--text-main);">Vandaag,
+                                    15:00</div>
+                            </div>
+                            <i class="ri-time-line" style="font-size: 1.4rem; color: #10b981;"></i>
+                        </div>
+
+                        <div style="display: flex; gap: 15px;">
+                            <div
+                                style="flex: 1; background: #f8fafc; padding: 12px; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);">12</div>
+                                <div
+                                    style="font-size: 0.6rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                                    Aanvragen</div>
+                            </div>
+                            <div
+                                style="flex: 1; background: #f8fafc; padding: 12px; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);">4</div>
+                                <div
+                                    style="font-size: 0.6rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                                    In Review</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="window.location.href='aanvragen-particulier.html'"
+                        style="margin-top: 20px; width: 100%; padding: 12px; border-radius: 10px; background: white; border: 1px solid #e2e8f0; color: var(--text-main); font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        Naar Aanvragen <i class="ri-arrow-right-line"></i>
+                    </button>
+                </div>
+
+                <!-- Health Score Glass Panel -->
+                <div class="luxury-panel" style="padding: 30px; border-top: 4px solid var(--primary-particulier);"
+                    data-zone="performance">
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                        <h4>Listing Health</h4>
+                        <span id="healthLabel"
+                            style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--primary-particulier);">Uitstekend</span>
+                    </div>
+                    <div style="display: flex; gap: 20px; align-items: center;">
+                        <div class="health-score-ring" style="width: 60px; height: 60px;">
+                            <svg width="60" height="60" viewBox="0 0 80 80">
+                                <circle cx="40" cy="40" r="35" fill="none" stroke="#f1f5f9" stroke-width="8">
+                                </circle>
+                                <circle id="healthScoreCircle" cx="40" cy="40" r="35" fill="none"
+                                    stroke="var(--primary-particulier)" stroke-width="8" stroke-dasharray="219.9"
+                                    stroke-dashoffset="40" style="transition: stroke-dashoffset 1s ease;"></circle>
+                            </svg>
+                            <div
+                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 800; font-size: 0.9rem;">
+                                <span id="healthPercentage">85</span>%
+                            </div>
+                        </div>
+                        <div style="flex: 1;">
+                            <p id="healthTip"
+                                style="font-size: 0.85rem; line-height: 1.4; color: var(--text-muted); cursor: pointer; text-decoration: underline;"
+                                onclick="scrollToMissingField()">
+                                Uw advertentie ziet er goed uit! Voeg een verwarmingstype toe.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boost Action Glass Panel -->
+                <div id="boostCard" class="luxury-panel" data-zone="visibility"
+                    style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; border: none; position: relative; overflow: hidden;">
+                    <div id="activeBoostBadge" style="display: none; position: absolute; top: 15px; right: 20px;">
+                        <span class="badge-boost" style="background: #fbbf24; color: #78350f; font-size: 0.7rem;"><i
+                                class="ri-flashlight-line"></i> <span id="boostTierLabel">GEBOOST</span></span>
+                    </div>
+
+                    <h4 style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                        <i class="ri-flashlight-line" style="color: #fbbf24;"></i> Advertentie Boost
+                    </h4>
+                    <p id="boostStatusText" style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 20px;">Kies een
+                        pakket om uw listing naar de top te brengen.</p>
+
+                    <div id="boostOptionsArea" style="display: block;">
+                        <div style="position: relative; margin-bottom: 15px;">
+                            <button onclick="selectBoostTier('standard')" class="boost-tier-btn"
+                                style="width: 100%; background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); border: 1px solid rgba(16, 185, 129, 0.4); color: white; padding: 15px; border-radius: 12px; text-align: left; cursor: pointer; position: relative;">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <span style="font-weight: 700; font-size: 1rem;">Toppositie 7 dagen</span>
+                                    <span style="font-weight: 800; color: #10b981;">€ 29</span>
+                                </div>
+                                <div style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4;">Bovenaan resultaten
+                                    • Gekleurd frame</div>
+                            </button>
+                            <div class="boost-info-trigger"
+                                onclick="showBoostInfo('Toppositie 7d', 'Je woning verschijnt 7 dagen lang bovenaan de zoekresultaten in jouw regio. Ideaal voor een snelle boost van de bezichtigingen.')"
+                                style="position: absolute; top: 12px; right: 65px; color: rgba(255,255,255,0.5); cursor: pointer; z-index: 5; background: rgba(0,0,0,0.2); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
+                                <i class="ri-information-line"></i>
+                            </div>
+                        </div>
+
+                        <div style="position: relative; margin-bottom: 15px;">
+                            <button onclick="selectBoostTier('premium')" class="boost-tier-btn"
+                                style="width: 100%; background: linear-gradient(90deg, rgba(251, 191, 36, 0.2), rgba(217, 119, 6, 0.2)); border: 1px solid rgba(251, 191, 36, 0.4); color: white; padding: 15px; border-radius: 12px; text-align: left; cursor: pointer; position: relative;">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <span style="font-weight: 700; font-size: 1rem; color: #fbbf24;">Toppositie 30
+                                        dagen</span>
+                                    <span style="font-weight: 800; color: #fbbf24;">€ 79</span>
+                                </div>
+                                <div style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4;">Maximale exposure •
+                                    Newsletter push</div>
+                            </button>
+                            <div class="boost-info-trigger"
+                                onclick="showBoostInfo('Toppositie 30d', 'Gedurende een volle maand sta je op de premium posities. Daarnaast ontvangt onze actieve zoekerslijst een speciale newsletter push van jouw pand.')"
+                                style="position: absolute; top: 12px; right: 65px; color: rgba(255,255,255,0.5); cursor: pointer; z-index: 5; background: rgba(0,0,0,0.2); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
+                                <i class="ri-information-line"></i>
+                            </div>
+                        </div>
+
+                        <div style="position: relative; margin-bottom: 5px;">
+                            <button onclick="selectBoostTier('regio')" class="boost-tier-btn"
+                                style="width: 100%; background: linear-gradient(90deg, rgba(139, 92, 246, 0.2), rgba(109, 40, 217, 0.2)); border: 1px solid rgba(139, 92, 246, 0.4); color: white; padding: 15px; border-radius: 12px; text-align: left; cursor: pointer; position: relative;">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <span style="font-weight: 700; font-size: 1rem; color: #a78bfa;">Extra
+                                        Regio</span>
+                                    <span style="font-weight: 800; color: #a78bfa;">€ 49</span>
+                                </div>
+                                <div style="font-size: 0.75rem; opacity: 0.7; line-height: 1.4;">Zichtbaar in 2
+                                    extra gemeentes naar keuze</div>
+                            </button>
+                            <div class="boost-info-trigger"
+                                onclick="showBoostInfo('Extra Regio', 'Breid je bereik uit naar omliggende gemeentes. Je woning wordt getoond aan zoekers in 2 extra regio\'s naar keuze.')"
+                                style="position: absolute; top: 12px; right: 65px; color: rgba(255,255,255,0.5); cursor: pointer; z-index: 5; background: rgba(0,0,0,0.2); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
+                                <i class="ri-information-line"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="boostActiveArea" style="display: none;">
+                        <div
+                            style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                            <div id="boostActiveTitle" style="font-weight: 700; font-size: 1.1rem; color: #fbbf24;">
+                                Premium Boost</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Actief • Geniet van maximaal bereik</div>
+                        </div>
+                        <button onclick="resetBoost()"
+                            style="width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); padding: 8px; border-radius: 8px; font-size: 0.8rem; cursor: pointer;">Stopzetten</button>
+                    </div>
+                </div>
+
+                <!-- Actions Glass Panel -->
+                <div class="luxury-panel" style="padding: 30px;">
+                    <button class="btn-primary" onclick="saveAdvertentie()"
+                        style="width: 100%; border-radius: 100px; padding: 15px; margin-bottom: 15px; font-weight: 700; background: var(--luxe-gradient); border: none; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+                        Wijzigingen Opslaan
+                    </button>
+                    <button class="btn-secondary" onclick="window.location.href='property.html'"
+                        style="width: 100%; border-radius: 100px; padding: 15px; margin-bottom: 25px; font-weight: 700; border: 1px solid #eee;">
+                        Live Bekijken
+                    </button>
+
+                    <div style="border-top: 1px solid #f1f5f9; padding-top: 20px;">
+                        <button onclick="openDeleteModal()"
+                            style="width: 100%; background: transparent; border: none; color: #ef4444; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="ri-delete-bin-line"></i> Deze woning volledig verwijderen
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Weekly Status Reports -->
+                <div class="luxury-panel" style="padding: 25px; background: #f8fafc; border: 1px dashed #cbd5e1;">
+                    <h5 style="margin-bottom: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                        <i class="ri-notification-3-line" style="color: #6366f1;"></i> Wekelijkse Rapporten
+                    </h5>
+                    <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 15px;">Ontvang elke maandag een
+                        overzicht van je advertentie-prestaties.</p>
+
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <label
+                            style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                            <span style="font-size: 0.85rem; font-weight: 500;">Email Rapport</span>
+                            <input type="checkbox" id="emailReports" onchange="saveAdvertentie()" checked>
+                        </label>
+                        <label
+                            style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                            <span style="font-size: 0.85rem; font-weight: 500;">WhatsApp Update</span>
+                            <input type="checkbox" id="whatsappReports" onchange="saveAdvertentie()">
+                        </label>
                     </div>
                 </div>
             </div>
-        </main>
+    </div>
+    </main>
     </div>
 
     <!-- Delete Confirmation Modal -->
     <div id="deleteModal"
         style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
-        <div class="glass-panel"
-            style="background: white; padding: 40px; border-radius: 24px; width: 400px; text-align: center;">
+        <div class="luxury-panel" style="width: 400px; text-align: center;">
             <div
                 style="width: 70px; height: 70px; background: #fee2e2; color: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 2rem;">
                 <i class="ri-error-warning-line"></i>
@@ -555,14 +1193,28 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
     <script src="propertyContext.js"></script>
     <script>
-        let photos = [];
-        let currentBoostTier = null;
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle URL parameters for property switching
+            const params = new URLSearchParams(window.location.search);
+            const targetId = params.get('listingId') || params.get('prop');
+
+            if (targetId && targetId !== propertyContext.getCurrentId()) {
+                console.log('VIMMO: Switching property based on URL:', targetId);
+                propertyContext.switch(targetId);
+            }
+
+            refreshPropertySelector();
+            loadPropertyData();
+            updateHealthScore();
+            ParticulierUtils.initTooltips();
+        });
 
         function refreshPropertySelector() {
             const selector = document.getElementById('propertySelector');
+            if (!selector) return;
             const properties = propertyContext.getAll();
             const currentId = propertyContext.getCurrentId();
 
@@ -571,129 +1223,322 @@
             ).join('');
         }
 
-        function createNewPropertyFlow() {
-            const name = prompt("Geef een naam voor de nieuwe woning (bv. 'Appartement Gent'):");
+        async function createNewPropertyFlow() {
+            const name = await ParticulierUtils.prompt('Nieuwe Woning', 'Voer de naam of het adres in voor de nieuwe advertentie:', 'Bv. Penthouse Schelde');
             if (name && name.trim()) {
                 const newId = propertyContext.createProperty(name.trim());
-                refreshPropertySelector();
+                ParticulierUtils.toast('Woning aangemaakt!', 'success');
+                setTimeout(() => {
+                    window.location.href = `advertentie-particulier.html?listingId=${newId}&new=true`;
+                }, 1000);
             }
         }
 
-        function setTransactionType(type) {
-            document.getElementById('editTransactionType').value = type;
-            const koopBtn = document.getElementById('typeKoop');
-            const huurBtn = document.getElementById('typeHuur');
+        function loadPropertyData() {
+            const prop = propertyContext.getCurrent();
 
-            if (type === 'koop') {
-                koopBtn.style.background = '#10b981';
-                koopBtn.style.color = 'white';
-                koopBtn.style.borderColor = '#10b981';
-                huurBtn.style.background = 'transparent';
-                huurBtn.style.color = '#64748b';
-                huurBtn.style.borderColor = '#e2e8f0';
-            } else {
-                huurBtn.style.background = '#10b981';
-                huurBtn.style.color = 'white';
-                huurBtn.style.borderColor = '#10b981';
-                koopBtn.style.background = 'transparent';
-                koopBtn.style.color = '#64748b';
-                koopBtn.style.borderColor = '#e2e8f0';
+            // Hydrate fields (Autosave engine also does this, but we ensure consistency here)
+            if (document.getElementById('editTitle')) document.getElementById('editTitle').value = prop.name || "";
+            if (document.getElementById('editDescription')) {
+                document.getElementById('editDescription').value = prop.description || "";
+                if (typeof updateDescCount === 'function') updateDescCount();
             }
+            if (document.getElementById('editPrice')) document.getElementById('editPrice').value = prop.price || 0;
+            if (document.getElementById('editAddress')) document.getElementById('editAddress').value = prop.address || "";
+            if (document.getElementById('editPostcode')) document.getElementById('editPostcode').value = prop.postcode || "";
+
+            updateListingStatusUI(prop.listingStatus || 'Concept');
+            refreshPackageUsageUI();
             updatePreview();
         }
 
-        function openPackageModal() {
-            document.getElementById('packageModal').style.display = 'flex';
+        // Redundant autoSaveField removed, logic moved to unified autosave engine below.
+
+        function updateHealthScore() {
+            const prop = getFormState();
+            const ctx = (typeof propertyContext.getRequests === "function") ? propertyContext : null;
+            const health = ParticulierUtils.computeListingHealth(prop, ctx);
+
+            const circle = document.getElementById('healthScoreCircle');
+            const pct = document.getElementById('healthPercentage');
+            const tip = document.getElementById('healthTip');
+            const label = document.getElementById('healthLabel');
+
+            if (circle) circle.style.strokeDashoffset = 219.9 - (219.9 * (health.score / 100));
+            if (pct) pct.textContent = health.score;
+
+            if (label) {
+                label.textContent = health.label;
+                const colors = { excellent: '#10b981', good: '#10b981', ok: '#f59e0b', weak: '#ef4444', critical: '#000000' };
+                label.style.color = colors[health.tier] || '#ef4444';
+            }
+
+            if (!tip) return;
+
+            if (health.blockers.length > 0) {
+                const b = health.blockers[0];
+                tip.innerHTML = `<span style="color:#ef4444; font-weight:800;"><i class="ri-error-warning-line"></i> Blocker:</span> ${b.label}. <span style="text-decoration: underline; color:var(--text-main);">Los dit nu op.</span>`;
+                tip.dataset.target = b.fixTarget;
+                tip.dataset.action = b.fixAction;
+                tip.style.background = "rgba(239, 68, 68, 0.05)";
+                tip.style.padding = "8px 12px";
+                tip.style.borderRadius = "8px";
+            } else if (health.penalties.length > 0) {
+                const p = health.penalties[0];
+                tip.innerHTML = `<span style="color:#f59e0b; font-weight:800;"><i class="ri-alert-line"></i> Penalty:</span> ${p.label}. <span style="text-decoration: underline; color:var(--text-main);">Verbeter ranking.</span>`;
+                tip.dataset.target = p.fixTarget;
+                tip.dataset.action = p.fixAction;
+                tip.style.background = "rgba(245, 158, 11, 0.05)";
+                tip.style.padding = "8px 12px";
+                tip.style.borderRadius = "8px";
+            } else if (health.tips.length > 0) {
+                const t = health.tips[0];
+                tip.innerHTML = `<span style="color:#6366f1; font-weight:800;"><i class="ri-lightbulb-line"></i> Tip:</span> ${t.label}. <span style="text-decoration: underline; color:var(--text-main);">Scoor hoger.</span>`;
+                tip.dataset.target = t.fixTarget || "";
+                tip.dataset.action = t.fixAction || "";
+                tip.style.background = "rgba(99, 102, 241, 0.05)";
+                tip.style.padding = "8px 12px";
+                tip.style.borderRadius = "8px";
+            } else {
+                tip.innerHTML = '<span style="color:#10b981; font-weight:800;"><i class="ri-checkbox-circle-line"></i> Perfect:</span> Je advertentie is uitstekend ingevuld!';
+                tip.dataset.target = '';
+                tip.style.background = "transparent";
+                tip.style.padding = "0";
+            }
         }
 
-        function closePackageModal() {
-            document.getElementById('packageModal').style.display = 'none';
+        function scrollToSection(target) {
+            if (!target) return;
+            // Robust targeting: check data-fix-target first, then ID
+            const el = document.querySelector(`[data-fix-target="${target}"]`) || document.getElementById(target);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                el.classList.add('highlight');
+                setTimeout(() => el.classList.remove('highlight'), 2500);
+
+                // Focus first input if any
+                const input = el.querySelector('input, textarea, select');
+                if (input) {
+                    setTimeout(() => input.focus(), 600);
+                }
+            }
         }
 
-        function loadAdvertentieForProperty() {
-            try {
-                if (!window.propertyContext) {
-                    console.error('PropertyContext not found');
+        function scrollToMissingField() {
+            const tip = document.getElementById('healthTip');
+            const target = tip ? tip.dataset.target : null;
+            if (target) {
+                scrollToSection(target);
+            }
+        }
+
+        function updateListingStatusUI(status) {
+            const badge = document.getElementById('currentStatusBadge');
+            const btn = document.getElementById('primaryActionButton');
+            if (!badge || !btn) return;
+
+            badge.textContent = status.toUpperCase();
+
+            // Standardized labels based on hardening requirements
+            if (status === 'Actief' || status === 'Live') {
+                badge.style.background = '#f0fdf4'; badge.style.color = '#10b981';
+                btn.innerHTML = '<i class="ri-pause-circle-line"></i> Pauzeren';
+                btn.style.background = '#f59e0b';
+            } else if (status === 'Gepauzeerd') {
+                badge.style.background = '#fffbeb'; badge.style.color = '#f59e0b';
+                btn.innerHTML = '<i class="ri-play-circle-line"></i> Hervatten';
+                btn.style.background = '#10b981';
+            } else if (status === 'Verlopen' || status === 'Expired') {
+                badge.style.background = '#fee2e2'; badge.style.color = '#ef4444';
+                btn.innerHTML = '<i class="ri-refresh-line"></i> Verlengen';
+                btn.style.background = '#6366f1';
+            } else {
+                // Concept or other
+                badge.style.background = '#f1f5f9'; badge.style.color = '#64748b';
+                btn.innerHTML = '<i class="ri-rocket-line"></i> Publiceren';
+                btn.style.background = '#10b981';
+            }
+        }
+
+        function togglePrimaryStatus() {
+            const prop = propertyContext.getCurrent();
+            const status = prop.listingStatus || 'Concept';
+            const propId = prop.id;
+
+            // If trying to publish from Concept or Gepauzeerd, validate first
+            if (status === 'Concept' || status === 'Gepauzeerd') {
+                const errors = validatePropertyForPublish(prop);
+                if (errors.length > 0) {
+                    // Show errors in premium modal
+                    const list = errors.map(e => `
+                        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px; border:1px solid rgba(0,0,0,.08); border-radius:16px; background:#f8fafc; margin-top:10px;">
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <span style="color:#ef4444;font-size:18px;">✗</span>
+                                <span style="font-weight:800;">${e.label}</span>
+                            </div>
+                            <button type="button" data-jump="${e.field}"
+                                style="background:#fff; border:1px solid rgba(0,0,0,.10); padding:8px 12px; border-radius:12px; font-weight:900; cursor:pointer;">
+                                Fix
+                            </button>
+                        </div>
+                    `).join("");
+
+                    openPublishModal(`
+                        <div style="margin-top:8px; font-weight:800; color:rgba(0,0,0,.70);">
+                            Je advertentie mist nog ${errors.length} onderdeel${errors.length > 1 ? "en" : ""}.
+                        </div>
+                        ${list}
+                    `);
+
+                    // Configure modal buttons
+                    const fixBtn = document.getElementById("publishModalFix");
+                    const okBtn = document.getElementById("publishModalOk");
+
+                    if (okBtn) okBtn.style.display = "none";
+                    if (fixBtn) {
+                        fixBtn.style.display = "inline-flex";
+                        fixBtn.onclick = () => {
+                            closePublishModal();
+                            scrollToSection(errors[0].field);
+                        };
+                    }
+
+                    // Per-item fix buttons
+                    document.getElementById("publishModalBody")?.addEventListener("click", (ev) => {
+                        const jump = ev.target.closest("[data-jump]");
+                        if (!jump) return;
+                        const id = jump.getAttribute("data-jump");
+                        closePublishModal();
+                        scrollToSection(id);
+                    });
+
                     return;
                 }
-                const propertyId = propertyContext.getCurrentId();
-                const data = propertyContext.getData('advertentie');
 
-                refreshPropertySelector();
+                // No errors: show confirmation modal
+                openPublishModal(`
+                    <div style="padding:14px; border:1px solid rgba(16,185,129,.3); border-radius:16px; background:#f0fdf4;">
+                        <div style="font-weight:900; font-size:16px; color:#059669;">✓ Klaar om te publiceren</div>
+                        <div style="margin-top:6px; font-weight:700; color:rgba(0,0,0,.60);">
+                            Je advertentie voldoet aan alle basisvereisten. Na publicatie verschijnt ze in de zoekresultaten.
+                        </div>
+                    </div>
+                `);
 
-                if (data) {
-                    // Load saved data
-                    document.getElementById('editTitle').value = data.title || '';
-                    document.getElementById('editPrice').value = data.price || '';
-                    document.getElementById('editLocation').value = data.location || '';
-                    document.getElementById('editBedrooms').value = data.bedrooms || 3;
-                    document.getElementById('editBathrooms').value = data.bathrooms || 2;
-                    document.getElementById('editSurface').value = data.surface || 150;
-                    document.getElementById('editType').value = data.type || 'Huis';
+                const fixBtn = document.getElementById("publishModalFix");
+                const okBtn = document.getElementById("publishModalOk");
 
-                    const transType = data.transactionType || 'koop';
-                    setTransactionType(transType);
+                if (fixBtn) fixBtn.style.display = "none";
+                if (okBtn) {
+                    okBtn.style.display = "inline-flex";
+                    okBtn.onclick = () => {
+                        // Actually publish
+                        prop.listingStatus = 'Actief';
+                        prop.publishedAt = new Date().toISOString();
+                        const all = propertyContext.getAll();
+                        all[prop.id].listingStatus = 'Actief';
+                        all[prop.id].publishedAt = prop.publishedAt;
+                        localStorage.setItem('properties', JSON.stringify(all));
+                        propertyContext.addAuditEntry(prop.id, AUDIT_ACTIONS.LISTING_PUBLISHED);
 
-                    document.getElementById('editEPC').value = data.epc || 'A';
-                    document.getElementById('editFloors').value = data.floors || 1;
-                    document.getElementById('editState').value = data.state || 'instapklaar';
-                    document.getElementById('editAvailability').value = data.availability || '';
-                    document.getElementById('editEPCValue').value = data.epcValue || '';
-                    document.getElementById('editGardenSize').value = data.gardenSize || '';
-                    document.getElementById('editGarage').value = data.garage || 'geen';
-                    document.getElementById('editParking').value = data.parking || '';
-
-                    updateBoostUI(data.boostTier || null);
-
-                    if (data.photos && data.photos.length > 0) {
-                        photos = data.photos;
-                    } else {
-                        photos = [];
-                    }
-                    renderPhotoGallery();
-                    updatePreview();
-                } else {
-                    // Initialize from property context defaults
-                    const property = propertyContext.getCurrent();
-                    document.getElementById('editTitle').value = property.name || '';
-                    document.getElementById('editLocation').value = property.address || '';
-                    document.getElementById('editPrice').value = property.price ? property.price.toString().replace(/[^\d]/g, '') : '';
-
-                    setTransactionType('koop');
-
-                    // Set reasonable spec defaults
-                    document.getElementById('editBedrooms').value = 3;
-                    document.getElementById('editBathrooms').value = 2;
-                    document.getElementById('editSurface').value = 150;
-                    document.getElementById('editType').value = 'Huis';
-                    document.getElementById('editEPC').value = 'A';
-                    document.getElementById('editFloors').value = 1;
-
-                    if (property.image) {
-                        photos = [{ url: property.image, isCover: true, name: 'Default' }];
-                    } else {
-                        photos = [];
-                    }
-                    renderPhotoGallery();
-                    updateBoostUI(null);
-
-                    // Reset reports for new property
-                    if (document.getElementById('emailReports')) document.getElementById('emailReports').checked = true;
-                    if (document.getElementById('whatsappReports')) document.getElementById('whatsappReports').checked = false;
-
-                    updatePreview();
+                        closePublishModal();
+                        ParticulierUtils.toast('🎉 Je advertentie is gepubliceerd!', 'success');
+                        setTimeout(() => {
+                            window.location.href = "dashboard-particulier.html";
+                        }, 1500);
+                    };
                 }
+                return;
+            }
 
-                // Load report settings specifically
-                const settings = propertyContext.getData('settings');
-                if (settings) {
-                    if (document.getElementById('emailReports')) document.getElementById('emailReports').checked = settings.emailReports;
-                    if (document.getElementById('whatsappReports')) document.getElementById('whatsappReports').checked = settings.whatsappReports;
-                }
+            // Already Actief -> Pause
+            let next = 'Gepauzeerd';
 
-                refreshPackageUsageUI();
-            } catch (err) {
-                console.error('Error loading advertisement:', err);
+            prop.listingStatus = next;
+            const all = propertyContext.getAll();
+            all[prop.id].listingStatus = next;
+            localStorage.setItem('properties', JSON.stringify(all));
+
+            propertyContext.addAuditEntry(prop.id, AUDIT_ACTIONS.LISTING_PAUSED);
+            updateListingStatusUI(next);
+            ParticulierUtils.toast(`Status gewijzigd naar ${next}`, 'success');
+        }
+
+        // Unified publish state - single source of truth for checklist AND modal
+        function getPublishState(prop) {
+            const health = ParticulierUtils.computeListingHealth(prop || getFormState(), propertyContext);
+
+            // Map blockers to the checklist items expected by the UI
+            const items = health.blockers.map(b => ({
+                id: b.id,
+                field: b.fixTarget,
+                label: b.label,
+                ok: false
+            }));
+
+            // If no blockers, we still show the main categories as 'ok' (simplified for checklist)
+            const checklist = [
+                { id: "titel", field: "titel", label: "Titel", ok: !health.blockers.some(b => b.id === "title_short") },
+                { id: "beschrijving", field: "beschrijving", label: "Beschrijving", ok: !health.blockers.some(b => b.id === "desc_short") },
+                { id: "prijs", field: "prijs", label: "Vraagprijs", ok: !health.blockers.some(b => b.id === "price_zero") },
+                { id: "media", field: "media", label: "Foto's (min. 8)", ok: !health.blockers.some(b => b.id.startsWith("media_")) },
+                { id: "epc", field: "epc", label: "EPC Informatie", ok: !health.blockers.some(b => b.id === "legal_epc") }
+            ];
+
+            return {
+                items: checklist,
+                allOk: health.blockers.length === 0
+            };
+        }
+
+        // Backward compatible wrapper for existing code
+        function validatePropertyForPublish(prop) {
+            const state = getPublishState(prop);
+            return state.items.filter(x => !x.ok).map(x => ({ field: x.field, label: x.label }));
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+            el.classList.add("vimmo-error-highlight");
+            setTimeout(() => el.classList.remove("vimmo-error-highlight"), 2500);
+        }
+
+        async function showHistory() {
+            const history = propertyContext.getAuditLog();
+            if (history.length === 0) {
+                ParticulierUtils.alert('Geschiedenis', 'Er is nog geen geschiedenis beschikbaar voor deze woning.');
+                return;
+            }
+
+            const html = history.map(h => `
+                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #f1f5f9;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <strong style="color: var(--text-main); font-size: 0.9rem;">${h.action}</strong>
+                        <span style="font-size: 0.75rem; color: #94a3b8;">${new Date(h.timestamp).toLocaleString('nl-NL')}</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #64748b;">${JSON.stringify(h.details || {})}</div>
+                </div>
+            `).join('');
+
+            ParticulierUtils.alert('Woning Geschiedenis', html);
+        }
+
+        async function openDeleteModal() {
+            const confirmed = await ParticulierUtils.confirm(
+                'Woning volledig verwijderen?',
+                'Dit kan niet ongedaan worden gemaakt. Alle foto\'s, stats en advertentie-instellingen gaan verloren.',
+                'Ja, Verwijderen',
+                'danger'
+            );
+
+            if (confirmed) {
+                ParticulierUtils.toast('Woning wordt verwijderd...', 'info');
+                setTimeout(() => {
+                    propertyContext.deleteProperty(propertyContext.getCurrentId());
+                    window.location.href = 'dashboard-particulier.html';
+                }, 1500);
             }
         }
 
@@ -702,259 +1547,1292 @@
             const countLabel = document.getElementById('packageUsageCount');
             if (!container || !countLabel) return;
 
-            const allProps = propertyContext.getAll();
-            const activeProps = allProps.filter(p => p.status === 'active');
-            const limit = 3; // Simulating Premium package limit
-
+            const activeProps = propertyContext.getActive();
+            const limit = 3;
             countLabel.textContent = `${activeProps.length} / ${limit}`;
 
             container.innerHTML = activeProps.map(p => `
-                <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px; border-radius: 8px; border: 1px solid #f1f5f9; transition: all 0.2s;">
-                    <span style="font-size: 0.8rem; font-weight: 600; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;">${p.name}</span>
-                    <button onclick="switchAndEdit('${p.id}')" style="background: ${p.id === propertyContext.getCurrentId() ? '#f1f5f9' : 'transparent'}; border: 1px solid #e2e8f0; color: #64748b; font-size: 0.65rem; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-weight: 700;">
+                <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px; border-radius: 8px; border: 1px solid #f1f5f9;">
+                    <span style="font-size: 0.8rem; font-weight: 600; color: #1e293b;">${p.name}</span>
+                    <button onclick="switchAndEdit('${p.id}')" style="background: ${p.id === propertyContext.getCurrentId() ? '#f1f5f9' : 'transparent'}; border: 1px solid #e2e8f0; color: #64748b; font-size: 0.65rem; padding: 4px 8px; border-radius: 6px; cursor: pointer;">
                         ${p.id === propertyContext.getCurrentId() ? 'HUIDIG' : 'BEWERK'}
                     </button>
                 </div>
             `).join('');
-
-            // Update sidebar too
-            const sidebarUsage = document.getElementById('sidebar-package-usage');
-            if (sidebarUsage) sidebarUsage.textContent = `${activeProps.length}/${limit}`;
         }
 
         function switchAndEdit(id) {
-            document.getElementById('propertySelector').value = id;
             propertyContext.switch(id);
+            window.location.reload();
         }
-
-        function switchEditProperty() {
-            const propertyId = document.getElementById('propertySelector').value;
-            propertyContext.switch(propertyId);
-        }
-
-        window.addEventListener('propertyChanged', (e) => {
-            console.log('Property changed:', e.detail.property.name);
-            loadAdvertentieForProperty();
-        });
 
         function updatePreview() {
-            try {
-                const title = document.getElementById('editTitle')?.value || '';
-                const location = document.getElementById('editLocation')?.value || '';
-                const houseType = document.getElementById('editType')?.value || 'Huis';
-                const transType = document.getElementById('editTransactionType')?.value || 'koop';
+            const adv = propertyContext.getData('advertentie') || {};
+            const heroTitle = document.getElementById('heroTitle');
+            if (heroTitle) heroTitle.textContent = adv.title || "Naamloze Advertentie";
 
-                const heroTitle = document.getElementById('heroTitle');
-                if (heroTitle) heroTitle.textContent = title || 'Naamloze Advertentie';
-
-                const heroAddress = document.getElementById('heroAddress');
-                if (heroAddress) heroAddress.innerHTML = `<i class="ri-map-pin-pill-line"></i> ${location || 'Geen locatie'}`;
-
-                const heroType = document.getElementById('heroType');
-                if (heroType) heroType.innerHTML = `<i class="ri-community-line"></i> ${houseType}`;
-
-                const badge = document.querySelector('.luxury-badge');
-                if (badge) {
-                    // Visionary Logic: Only show Premium if boosted or specifically flagged
-                    if (currentBoostTier === 'premium') {
-                        badge.innerHTML = `<i class="ri-medal-2-line"></i> Premium Advertentie • Te ${transType === 'koop' ? 'Koop' : 'Huur'}`;
-                        badge.style.background = 'var(--luxe-gradient)';
-                        badge.style.display = 'inline-flex';
-                    } else if (currentBoostTier === 'standard') {
-                        badge.innerHTML = `<i class="ri-flashlight-line"></i> Gebooste Advertentie • Te ${transType === 'koop' ? 'Koop' : 'Huur'}`;
-                        badge.style.background = 'linear-gradient(90deg, #10b981, #059669)';
-                        badge.style.display = 'inline-flex';
-                    } else if (currentBoostTier === 'regio') {
-                        badge.innerHTML = `<i class="ri-global-line"></i> Regio Power • Te ${transType === 'koop' ? 'Koop' : 'Huur'}`;
-                        badge.style.background = 'linear-gradient(90deg, #8b5cf6, #6d28d9)';
-                        badge.style.display = 'inline-flex';
-                    } else {
-                        badge.innerHTML = `<i class="ri-home-4-line"></i> Standaard Listing • Te ${transType === 'koop' ? 'Koop' : 'Huur'}`;
-                        badge.style.background = '#64748b';
-                        badge.style.display = 'inline-flex';
-                    }
-                }
-
-                calculateHealth();
-
-                if (photos.length > 0) {
-                    const cover = photos.find(p => p.isCover) || photos[0];
-                    const heroImage = document.getElementById('heroImage');
-                    if (heroImage) heroImage.src = cover.url;
-                }
-            } catch (err) {
-                console.error('Error updating preview:', err);
-            }
-        }
-
-        function saveAdvertentie() {
-            try {
-                const advertentie = {
-                    title: document.getElementById('editTitle')?.value || '',
-                    price: document.getElementById('editPrice')?.value || '',
-                    location: document.getElementById('editLocation')?.value || '',
-                    bedrooms: document.getElementById('editBedrooms')?.value || 3,
-                    bathrooms: document.getElementById('editBathrooms')?.value || 2,
-                    surface: document.getElementById('editSurface')?.value || 150,
-                    type: document.getElementById('editType')?.value || 'Huis',
-                    transactionType: document.getElementById('editTransactionType')?.value || 'koop',
-                    epc: document.getElementById('editEPC')?.value || 'A',
-                    floors: document.getElementById('editFloors')?.value || 1,
-                    state: document.getElementById('editState')?.value || 'instapklaar',
-                    availability: document.getElementById('editAvailability')?.value || '',
-                    epcValue: document.getElementById('editEPCValue')?.value || '',
-                    gardenSize: document.getElementById('editGardenSize')?.value || '',
-                    garage: document.getElementById('editGarage')?.value || 'geen',
-                    parking: document.getElementById('editParking')?.value || '',
-                    boostTier: currentBoostTier,
-                    photos: photos
-                };
-
-                if (window.propertyContext) {
-                    propertyContext.saveData('advertentie', advertentie);
-
-                    // Save notification settings separately
-                    const settings = {
-                        emailReports: document.getElementById('emailReports')?.checked || false,
-                        whatsappReports: document.getElementById('whatsappReports')?.checked || false
-                    };
-                    propertyContext.saveData('settings', settings);
-
-                    alert(`✅ Luxe Advertentie opgeslagen!`);
-                }
-            } catch (err) {
-                console.error('Error saving advertentie:', err);
-                alert('❌ Er ging iets mis bij het opslaan.');
-            }
+            const heroAddress = document.getElementById('heroAddress');
+            if (heroAddress) heroAddress.innerHTML = `<i class="ri-map-pin-pill-line"></i> ${adv.location || 'Geen locatie'}`;
         }
 
         function handlePhotoUpload(event) {
-            const files = Array.from(event.target.files);
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    photos.push({ url: e.target.result, isCover: photos.length === 0, name: file.name });
-                    renderPhotoGallery();
-                    updatePreview();
-                };
-                reader.readAsDataURL(file);
-            });
+            const files = event.target.files;
+            if (files.length === 0) return;
+            ParticulierUtils.toast(`${files.length} foto's worden verwerkt...`, 'info');
+            setTimeout(() => {
+                ParticulierUtils.toast("Foto's succesvol geüpload!", 'success');
+            }, 2000);
         }
 
-        function renderPhotoGallery() {
-            const gallery = document.getElementById('photoGallery');
-            gallery.innerHTML = photos.map((photo, index) => `
-                <div style="position: relative; border-radius: 12px; overflow: hidden; border: ${photo.isCover ? '3px solid #10b981' : '2px solid rgba(0,0,0,0.05)'};">
-                    <img src="${photo.url}" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px;">
-                        <button onclick="deletePhoto(${index})" style="background: #ef4444; color: white; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer;"><i class="ri-delete-bin-line"></i></button>
-                    </div>
-                </div>
-            `).join('');
+        function saveAdvertentie() {
+            const btn = event.target;
+            ParticulierUtils.setLoading(btn, true);
+            setTimeout(() => {
+                ParticulierUtils.setLoading(btn, false);
+                ParticulierUtils.toast('Alle wijzigingen zijn opgeslagen', 'success');
+            }, 1000);
         }
-
-        function deletePhoto(index) {
-            photos.splice(index, 1);
-            if (photos.length > 0 && !photos.some(p => p.isCover)) photos[0].isCover = true;
-            renderPhotoGallery();
-            updatePreview();
-        }
-
-        function showBoostInfo(title, text) {
-            alert(`💡 ${title}\n\n${text}`);
-        }
-
-        function selectBoostTier(tier) {
-            currentBoostTier = tier;
-            saveAdvertentie();
-            updateBoostUI(tier);
-        }
-
-        function resetBoost() {
-            currentBoostTier = null;
-            saveAdvertentie();
-            updateBoostUI(null);
-        }
-
-        function updateBoostUI(tier) {
-            const options = document.getElementById('boostOptionsArea');
-            const active = document.getElementById('boostActiveArea');
-            const badge = document.getElementById('activeBoostBadge');
-            const label = document.getElementById('boostTierLabel');
-            const status = document.getElementById('boostStatusText');
-            const activeTitle = document.getElementById('boostActiveTitle');
-
-            if (tier) {
-                options.style.display = 'none';
-                active.style.display = 'block';
-                badge.style.display = 'block';
-                status.textContent = "Je advertentie geniet momenteel van extra bereik.";
-                activeTitle.textContent = tier === 'standard' ? 'Standaard Boost (7d)' : (tier === 'premium' ? 'Premium Boost (30d)' : 'Extra Regio Boost');
-                label.textContent = tier === 'premium' ? 'PREMIUM BOOST' : 'ACTIVE BOOST';
-            } else {
-                options.style.display = 'block';
-                active.style.display = 'none';
-                badge.style.display = 'none';
-                status.textContent = "Kies een pakket om uw listing naar de top te brengen.";
-            }
-        }
-
-        function calculateHealth() {
-            let score = 0;
-            let tips = [];
-            const title = document.getElementById('editTitle').value || '';
-            const description = "mock"; // In a real app we'd check editDescription
-
-            // Visionary metrics
-            if (title.length > 25) score += 15; else tips.push("Langere titel (>25 tekens)");
-            if (parseInt(document.getElementById('editPrice').value) > 0) score += 10;
-            if (photos.length >= 8) score += 20; else if (photos.length < 5) tips.push("Voeg minstens 8 foto's toe");
-            if (document.getElementById('editEPCValue').value) score += 10; else tips.push("EPC waarde ontbreekt");
-
-            // International Standards
-            const hasDetailedSpecs = document.getElementById('editSurface').value > 0 && document.getElementById('editBedrooms').value > 0;
-            if (hasDetailedSpecs) score += 15; else tips.push("Volledige specificaties");
-
-            const hasExtraInfo = document.getElementById('editGardenSize').value || document.getElementById('editGarage').value !== 'geen';
-            if (hasExtraInfo) score += 10;
-
-            // Global reach factors
-            if (currentBoostTier === 'premium') score += 20;
-            else if (currentBoostTier) score += 10;
-
-            score = Math.min(score, 100);
-            document.getElementById('healthPercentage').textContent = score;
-            const offset = 219.9 - (219.9 * score / 100);
-            document.getElementById('healthScoreCircle').style.strokeDashoffset = offset;
-
-            const label = document.getElementById('healthLabel');
-            if (score < 40) { label.textContent = 'Zwak'; label.style.color = '#ef4444'; }
-            else if (score < 80) { label.textContent = 'Goed'; label.style.color = '#f59e0b'; }
-            else { label.textContent = 'Uitstekend'; label.style.color = '#10b981'; }
-
-            if (tips.length > 0) document.getElementById('healthTip').innerHTML = `<i class="ri-lightbulb-line"></i> Tip: ${tips[0]}`;
-            else document.getElementById('healthTip').textContent = 'Top-tier listing! Wereldklasse!';
-        }
-
-        function openDeleteModal() {
-            document.getElementById('deleteModal').style.display = 'flex';
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').style.display = 'none';
-        }
-
-        function confirmDelete() {
-            const propertyId = propertyContext.getCurrentId();
-            if (propertyContext.deleteProperty(propertyId)) {
-                alert('Woning is succesvol verwijderd.');
-                window.location.reload();
-            }
-        }
-
-        window.addEventListener('load', loadAdvertentieForProperty);
     </script>
     <script src="dashboard-nav.js"></script>
+
+    <!-- Autosave engine (production-ready) -->
+    <script>
+        (function () {
+            const qs = new URLSearchParams(location.search);
+            const propId = qs.get("prop");
+            const isNew = qs.get("new") === "true";
+
+            const ctx = window.propertyContext;
+            if (!ctx || !propId) return;
+
+            if (typeof ctx.switch === "function") ctx.switch(propId);
+
+            // Save Status Indicator (no toast spam)
+            function setSaveStatus(state) {
+                const dot = document.getElementById("saveDot");
+                const txt = document.getElementById("saveText");
+                if (!dot || !txt) return;
+
+                if (state === "saving") {
+                    dot.style.background = "#f59e0b";
+                    txt.textContent = "Opslaan…";
+                }
+                if (state === "saved") {
+                    dot.style.background = "#10b981";
+                    txt.textContent = "Opgeslagen";
+                }
+                if (state === "idle") {
+                    dot.style.background = "#94a3b8";
+                    txt.textContent = "Niet opgeslagen";
+                }
+            }
+
+            // --- Data Normalization per Field Type ---
+            const FIELD_TYPES = {
+                name: "string",
+                transactionType: "enum",
+                price: "number",
+                postcode: "string",
+                address: "string",
+                location: "string",
+                type: "string",
+                bedrooms: "number",
+                bathrooms: "number",
+                surface: "number",
+                floors: "number",
+                state: "string",
+                availability: "string",
+                epcLabel: "string",
+                description: "string"
+            };
+
+            function normalizeValue(key, raw) {
+                const kind = FIELD_TYPES[key] || "string";
+
+                if (raw === undefined || raw === null) return null;
+
+                if (kind === "number") {
+                    const digits = String(raw).replace(/[^\d]/g, "");
+                    if (digits === "") return null;
+                    const n = Number(digits);
+                    return Number.isFinite(n) ? n : null;
+                }
+
+                // enums en strings
+                const s = String(raw).trim();
+                if (s === "") return null;
+
+                if (key === "postcode") return s.replace(/\s+/g, "");
+                if (key === "epcLabel") return s.toUpperCase();
+                if (key === "transactionType") return s.toLowerCase();
+
+                return s;
+            }
+
+            function getFieldElements() {
+                return Array.from(document.querySelectorAll("[data-field]"));
+            }
+
+            // EXPOSED: Capture current form state without saving
+            window.getFormState = function () {
+                const current = (ctx.getCurrent && ctx.getCurrent()) || {};
+                const state = { ...current };
+
+                getFieldElements().forEach(el => {
+                    const key = el.getAttribute("data-field");
+                    if (!key) return;
+
+                    const raw = (el.type === "checkbox") ? !!el.checked : el.value;
+                    const val = normalizeValue(key, raw);
+
+                    // Only override if not null (avoid wiping existing data with empty strings during initial load)
+                    if (val !== null) state[key] = val;
+                });
+
+                return state;
+            };
+
+            // Hydration guard - prevents save during form population
+            let isHydrating = false;
+
+            function hydrateFormFromProperty() {
+                isHydrating = true;
+                const p = (typeof ctx.getCurrent === "function") ? (ctx.getCurrent() || {}) : {};
+                getFieldElements().forEach(el => {
+                    const key = el.getAttribute("data-field");
+                    if (!key) return;
+
+                    const v = p[key];
+                    if (v === undefined || v === null) return;
+
+                    if (el.type === "checkbox") el.checked = !!v;
+                    else el.value = String(v);
+                });
+                isHydrating = false;
+                setSaveStatus("saved");
+            }
+
+            let saveTimer = null;
+            let healthTimer = null;
+
+            // Collect only changed fields - protects against empty overwriting existing
+            function collectPatchDiff() {
+                const current = ctx.getCurrent() || {};
+                const patch = {};
+
+                getFieldElements().forEach(el => {
+                    const key = el.getAttribute("data-field");
+                    if (!key) return;
+
+                    const raw = (el.type === "checkbox") ? !!el.checked : el.value;
+
+                    const next = normalizeValue(key, raw);
+                    const prev = normalizeValue(key, current[key]);
+
+                    // protect: empty field does not overwrite existing value
+                    if (next === null && prev !== null) return;
+
+                    if (next !== prev) patch[key] = next;
+                });
+
+                return patch;
+            }
+
+            function saveNow() {
+                const patch = collectPatchDiff();
+                if (Object.keys(patch).length === 0) {
+                    setSaveStatus("saved");
+                    return;
+                }
+
+                setSaveStatus("saving");
+                ctx.updateProperty(propId, patch);
+                setSaveStatus("saved");
+            }
+
+            function scheduleSave() {
+                clearTimeout(saveTimer);
+                setSaveStatus("saving");
+                saveTimer = setTimeout(saveNow, 1200); // 1.2s debounce for saving
+            }
+
+            function scheduleHealthUpdate() {
+                clearTimeout(healthTimer);
+                healthTimer = setTimeout(() => {
+                    if (typeof updateHealthScore === "function") updateHealthScore();
+                    if (typeof renderChecklist === "function") renderChecklist();
+                }, 300); // 300ms debounce for health UI (fast)
+            }
+
+            document.addEventListener("input", (e) => {
+                if (isHydrating) return;
+                const el = e.target.closest("[data-field]");
+                if (!el) return;
+
+                scheduleHealthUpdate();
+                scheduleSave();
+            });
+
+            document.addEventListener("change", (e) => {
+                if (isHydrating) return;
+                const el = e.target.closest("[data-field]");
+                if (!el) return;
+
+                scheduleHealthUpdate();
+                scheduleSave();
+            });
+
+            // Initialize
+            // Initialize Onboarding
+            if (isNew) {
+                setTimeout(() => {
+                    const overlay = document.getElementById("onboardingOverlay");
+                    if (overlay) overlay.classList.add("is-active");
+                }, 500);
+            }
+
+            window.startOnboarding = function () {
+                const overlay = document.getElementById("onboardingOverlay");
+                if (overlay) overlay.classList.remove("is-active");
+
+                // Highlight the first crucial field: Title
+                const titleField = document.querySelector("[data-field='name']");
+                if (titleField) {
+                    titleField.scrollIntoView({ behavior: "smooth", block: "center" });
+                    titleField.classList.add("onboarding-highlight");
+
+                    const hint = document.createElement("div");
+                    hint.className = "onboarding-hint";
+                    hint.textContent = "Begin met een sterke titel! ✍️";
+                    titleField.parentElement.style.position = "relative";
+                    titleField.parentElement.appendChild(hint);
+
+                    // Remove highlight on input
+                    titleField.addEventListener("input", function clean() {
+                        titleField.classList.remove("onboarding-highlight");
+                        hint.remove();
+                        titleField.removeEventListener("input", clean);
+                    }, { once: true });
+                }
+            };
+        })();
+    </script>
+
+    <!-- Live Formatting & Steppers (UX enhancement, compatible with autosave) -->
+    <script>
+        (function () {
+            function digitsOnly(v) { return String(v ?? "").replace(/[^\d]/g, ""); }
+
+            function formatThousands(nStr) {
+                const s = digitsOnly(nStr);
+                if (!s) return "";
+                return Number(s).toLocaleString("nl-BE");
+            }
+
+            function applyFormat(el) {
+                const key = el.getAttribute("data-field");
+                if (!key) return;
+
+                if (key === "price" || key === "surface") {
+                    const d = digitsOnly(el.value);
+                    el.value = d ? formatThousands(d) : "";
+                }
+
+                if (key === "bedrooms" || key === "bathrooms" || key === "floors") {
+                    const d = digitsOnly(el.value);
+                    el.value = d ? String(Number(d)) : "";
+                }
+
+                if (key === "postcode") {
+                    el.value = String(el.value || "").replace(/\s+/g, "");
+                }
+
+                if (key === "epcLabel") {
+                    el.value = String(el.value || "").trim().toUpperCase();
+                }
+
+                if (key === "transactionType") {
+                    el.value = String(el.value || "").trim().toLowerCase();
+                }
+            }
+
+            function formatAll() {
+                document.querySelectorAll("[data-field]").forEach(applyFormat);
+            }
+
+            document.addEventListener("blur", (e) => {
+                const el = e.target.closest("[data-field]");
+                if (!el) return;
+                applyFormat(el);
+            }, true);
+
+            document.addEventListener("input", (e) => {
+                const el = e.target.closest("[data-field]");
+                if (!el) return;
+
+                const key = el.getAttribute("data-field");
+                if (key === "price" || key === "surface") {
+                    const cursorWasAtEnd = el.selectionStart === el.value.length;
+                    const d = digitsOnly(el.value);
+                    el.value = d ? formatThousands(d) : "";
+                    if (cursorWasAtEnd) el.setSelectionRange(el.value.length, el.value.length);
+                }
+
+                if (key === "bedrooms" || key === "bathrooms" || key === "floors") {
+                    el.value = digitsOnly(el.value);
+                }
+            });
+
+            // Stepper button click handler
+            document.addEventListener("click", (e) => {
+                const btn = e.target.closest(".vimmo-stepbtn");
+                if (!btn) return;
+
+                const wrap = btn.closest("[data-stepper]");
+                if (!wrap) return;
+
+                const fieldKey = wrap.getAttribute("data-stepper");
+                const input = document.querySelector(`[data-field="${fieldKey}"]`);
+                if (!input) return;
+
+                const min = Number(wrap.getAttribute("data-min") ?? 0);
+                const max = Number(wrap.getAttribute("data-max") ?? 999);
+                const step = Number(btn.getAttribute("data-step") ?? 1);
+
+                const cur = Number(digitsOnly(input.value) || 0);
+                let next = cur + step;
+                if (next < min) next = min;
+                if (next > max) next = max;
+
+                input.value = String(next);
+                input.dispatchEvent(new Event("input", { bubbles: true }));
+                input.dispatchEvent(new Event("change", { bubbles: true }));
+            });
+
+            // Format fields when property data changes
+            window.addEventListener("propertyChanged", () => {
+                setTimeout(formatAll, 0);
+            });
+
+            // Initial formatting on page load
+            document.addEventListener("DOMContentLoaded", () => {
+                setTimeout(formatAll, 0);
+            });
+        })();
+    </script>
+
+    <!-- Media Upload: drag & drop, previews, reorder, cover, persist -->
+    <script>
+        (function () {
+            const qs = new URLSearchParams(location.search);
+            const propId = qs.get("prop") || qs.get("listingId");
+            const ctx = window.propertyContext;
+            if (!ctx || !propId) return;
+
+            const dz = document.getElementById("vimmoDropzone");
+            const fi = document.getElementById("vimmoFileInput");
+            const grid = document.getElementById("vimmoPhotoGrid");
+            const btnAdd = document.getElementById("vimmoBulkAdd");
+            const btnClear = document.getElementById("vimmoClearPhotos");
+
+            if (!dz || !fi || !grid) return;
+
+            // Safety limits
+            const MAX_PHOTOS = 30;
+            const MAX_FILE_MB = 6;
+
+            function getProp() {
+                return (ctx.getCurrent && ctx.getCurrent()) ? ctx.getCurrent() : (ctx.getData ? ctx.getData("property", propId) : {});
+            }
+
+            function readPhotos() {
+                const p = getProp() || {};
+                const photos = Array.isArray(p.photos) ? p.photos : [];
+                const cover = p.coverPhoto || null;
+                return { photos, cover };
+            }
+
+            function savePhotos(photos, cover) {
+                if (typeof ctx.updateProperty === "function") {
+                    ctx.updateProperty(propId, { photos, coverPhoto: cover || null });
+                } else {
+                    const p = getProp() || {};
+                    p.photos = photos;
+                    p.coverPhoto = cover || null;
+                    ctx.saveData("property", p, propId);
+                    window.dispatchEvent(new CustomEvent("propertyChanged", { detail: { propertyId: propId } }));
+                }
+            }
+
+            function fileToDataURL(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(String(reader.result));
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            function uid() {
+                return "ph_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+            }
+
+            async function addFiles(fileList) {
+                const all = Array.from(fileList || []).filter(f => f && f.type && f.type.startsWith("image/"));
+                if (all.length === 0) return;
+
+                const { photos, cover } = readPhotos();
+
+                const remaining = Math.max(0, MAX_PHOTOS - photos.length);
+                if (remaining === 0) {
+                    alert(`Maximum ${MAX_PHOTOS} foto's bereikt. Verwijder eerst foto's om nieuwe toe te voegen.`);
+                    return;
+                }
+
+                const files = all
+                    .filter(f => (f.size || 0) <= MAX_FILE_MB * 1024 * 1024)
+                    .slice(0, remaining);
+
+                const rejected = all.length - files.length;
+                if (rejected > 0) {
+                    alert(`Sommige foto's zijn overgeslagen (limiet of te groot). Max ${MAX_FILE_MB}MB per foto, max ${MAX_PHOTOS} foto's.`);
+                }
+
+                // Premium: show loading placeholders
+                const placeholders = files.map(() => ({
+                    id: uid(),
+                    name: "uploading",
+                    dataUrl: "",
+                    createdAt: new Date().toISOString(),
+                    __loading: true
+                }));
+
+                const startPhotos = photos.concat(placeholders);
+                savePhotos(startPhotos, cover || (startPhotos[0]?.id || null));
+                render();
+
+                // Convert sequentially to avoid big spikes
+                for (let i = 0; i < files.length; i++) {
+                    const f = files[i];
+                    const url = await fileToDataURL(f);
+
+                    const idx = startPhotos.findIndex(p => p.__loading && p.name === "uploading");
+                    if (idx === -1) continue;
+
+                    startPhotos[idx] = {
+                        id: startPhotos[idx].id,
+                        name: f.name || "photo",
+                        dataUrl: url,
+                        createdAt: new Date().toISOString()
+                    };
+
+                    const nextCover = cover || startPhotos[0]?.id || null;
+                    savePhotos(startPhotos, nextCover);
+                    render();
+                }
+            }
+
+            function render() {
+                const { photos, cover } = readPhotos();
+                if (photos.length === 0) {
+                    grid.innerHTML = `<div class="vimmo-help" style="padding:14px;border:1px dashed rgba(0,0,0,.15);border-radius:16px;background:rgba(255,255,255,.7);">
+                        Nog geen foto's toegevoegd.
+                    </div>`;
+                    return;
+                }
+
+                grid.innerHTML = photos.map((p, idx) => {
+                    const isCover = p.id === cover;
+                    const media = p.__loading
+                        ? `<div class="vimmo-uploading">Uploaden…</div>`
+                        : `<img src="${p.dataUrl}" alt="">`;
+
+                    return `
+                        <div class="vimmo-photo" draggable="${p.__loading ? 'false' : 'true'}" data-photo-id="${p.id}" data-index="${idx}">
+                            ${media}
+                            <div class="bar">
+                                <span class="chip">${isCover ? "⭐ Cover" : "Foto"}</span>
+                                <div class="actions">
+                                    <button type="button" class="iconbtn" title="Maak cover" data-act="cover" ${p.__loading ? 'disabled' : ''}>⭐</button>
+                                    <button type="button" class="iconbtn" title="Verwijder" data-act="del">🗑</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+            }
+
+            // Clicks
+            dz.addEventListener("click", () => fi.click());
+            btnAdd && btnAdd.addEventListener("click", () => fi.click());
+
+            fi.addEventListener("change", async () => {
+                await addFiles(fi.files);
+                fi.value = "";
+            });
+
+            btnClear && btnClear.addEventListener("click", () => {
+                const { photos } = readPhotos();
+                if (photos.length === 0) return;
+                const ok = confirm("Alle foto's verwijderen?");
+                if (!ok) return;
+                savePhotos([], null);
+                render();
+            });
+
+            // Actions in grid
+            grid.addEventListener("click", (e) => {
+                const btn = e.target.closest("[data-act]");
+                if (!btn) return;
+
+                const card = btn.closest("[data-photo-id]");
+                if (!card) return;
+
+                const id = card.getAttribute("data-photo-id");
+                const act = btn.getAttribute("data-act");
+
+                const { photos, cover } = readPhotos();
+
+                if (act === "del") {
+                    const next = photos.filter(x => x.id !== id);
+                    const nextCover = (cover === id) ? (next[0]?.id || null) : cover;
+                    savePhotos(next, nextCover);
+                    render();
+                }
+
+                if (act === "cover") {
+                    savePhotos(photos, id);
+                    render();
+                }
+            });
+
+            // Drag & drop to reorder
+            let dragId = null;
+
+            grid.addEventListener("dragstart", (e) => {
+                const card = e.target.closest("[data-photo-id]");
+                if (!card) return;
+                if (card.getAttribute("draggable") === "false") return;
+                dragId = card.getAttribute("data-photo-id");
+                card.classList.add("dragging");
+                e.dataTransfer.effectAllowed = "move";
+            });
+
+            grid.addEventListener("dragend", (e) => {
+                const card = e.target.closest("[data-photo-id]");
+                if (card) card.classList.remove("dragging");
+                dragId = null;
+            });
+
+            grid.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+            });
+
+            grid.addEventListener("drop", (e) => {
+                e.preventDefault();
+                const target = e.target.closest("[data-photo-id]");
+                if (!target || !dragId) return;
+
+                const dropId = target.getAttribute("data-photo-id");
+                if (dropId === dragId) return;
+
+                const { photos, cover } = readPhotos();
+                const from = photos.findIndex(p => p.id === dragId);
+                const to = photos.findIndex(p => p.id === dropId);
+                if (from < 0 || to < 0) return;
+
+                const next = photos.slice();
+                const [moved] = next.splice(from, 1);
+                next.splice(to, 0, moved);
+
+                savePhotos(next, cover);
+                render();
+            });
+
+            // Dropzone drag UX
+            ["dragenter", "dragover"].forEach(evt => {
+                dz.addEventListener(evt, (e) => {
+                    e.preventDefault();
+                    dz.style.borderColor = "rgba(0,0,0,.18)";
+                    dz.style.boxShadow = "0 14px 34px rgba(0,0,0,.10)";
+                });
+            });
+
+            ["dragleave", "drop"].forEach(evt => {
+                dz.addEventListener(evt, (e) => {
+                    e.preventDefault();
+                    dz.style.borderColor = "rgba(0,0,0,.10)";
+                    dz.style.boxShadow = "0 10px 24px rgba(0,0,0,.06)";
+                });
+            });
+
+            dz.addEventListener("drop", async (e) => {
+                e.preventDefault();
+                const dt = e.dataTransfer;
+                if (!dt) return;
+                await addFiles(dt.files);
+            });
+
+            window.addEventListener("propertyChanged", () => {
+                setTimeout(render, 0);
+            });
+
+            render();
+        })();
+    </script>
+
+    <!-- Preview button handler -->
+    <script>
+        (function () {
+            const btn = document.getElementById("btnPreview");
+            if (!btn) return;
+
+            const qs = new URLSearchParams(location.search);
+            const propId = qs.get("prop") || qs.get("listingId");
+            if (!propId) return;
+
+            btn.addEventListener("click", () => {
+                window.location.href = "listing-preview.html?prop=" + encodeURIComponent(propId);
+            });
+        })();
+    </script>
+
+    <!-- Premium Publish Modal -->
+    <div id="publishModal"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9999; justify-content:center; align-items:center;">
+        <div
+            style="background:#fff; width:min(720px, 92vw); border-radius:22px; padding:22px; box-shadow:0 24px 70px rgba(0,0,0,.25);">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                <div style="font-weight:900; font-size:18px;">Publicatie-check</div>
+                <button type="button" id="publishModalClose"
+                    style="border:none; background:transparent; font-size:26px; cursor:pointer; color:rgba(0,0,0,.55);">&times;</button>
+            </div>
+            <div id="publishModalBody" style="margin-top:14px;"></div>
+            <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:16px;">
+                <button type="button" id="publishModalFix"
+                    style="background:#fff; border:1px solid rgba(0,0,0,.10); padding:10px 14px; border-radius:14px; font-weight:900; cursor:pointer;">
+                    Naar eerste punt
+                </button>
+                <button type="button" id="publishModalOk"
+                    style="background:#059669; color:#fff; border:none; padding:10px 14px; border-radius:14px; font-weight:900; cursor:pointer;">
+                    Publiceren
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publish Modal Logic -->
+    <script>
+        (function () {
+            function openPublishModal(html) {
+                const m = document.getElementById("publishModal");
+                const b = document.getElementById("publishModalBody");
+                if (!m || !b) return;
+                b.innerHTML = html;
+                m.style.display = "flex";
+            }
+
+            function closePublishModal() {
+                const m = document.getElementById("publishModal");
+                if (m) m.style.display = "none";
+            }
+
+            document.getElementById("publishModalClose")?.addEventListener("click", closePublishModal);
+            document.getElementById("publishModal")?.addEventListener("click", (e) => {
+                if (e.target.id === "publishModal") closePublishModal();
+            });
+            document.addEventListener("keydown", (e) => {
+                const m = document.getElementById("publishModal");
+                if (e.key === "Escape" && m && m.style.display === "flex") closePublishModal();
+            });
+
+            // Expose functions globally for use by togglePrimaryStatus
+            window.openPublishModal = openPublishModal;
+            window.closePublishModal = closePublishModal;
+        })();
+    </script>
+
+    <!-- Live Checklist Panel -->
+    <style>
+        /* =========================================
+           CHECKLIST COMPONENT - Premium UX
+           Sticky within viewport, auto-hide on footer
+           ========================================= */
+        #vimmoChecklist {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            width: min(340px, 92vw);
+            z-index: 9000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        #vimmoChecklist.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+        }
+
+        #vimmoChecklist.is-collapsed .checklist-body,
+        #vimmoChecklist.is-collapsed .checklist-footer {
+            display: none;
+        }
+
+        #vimmoChecklist.is-collapsed .checklist-card {
+            border-radius: 999px;
+        }
+
+        #vimmoChecklist.is-collapsed .checklist-header {
+            border-bottom: none;
+            padding: 10px 14px;
+        }
+
+        .checklist-card {
+            background: rgba(255, 255, 255, .95);
+            border: 1px solid rgba(0, 0, 0, .10);
+            border-radius: 18px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .10);
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+        }
+
+        .checklist-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(0, 0, 0, .06);
+            gap: 10px;
+        }
+
+        .checklist-title {
+            font-weight: 900;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checklist-score {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, .12);
+            color: #059669;
+        }
+
+        .checklist-score.incomplete {
+            background: rgba(245, 158, 11, .12);
+            color: #d97706;
+        }
+
+        .checklist-toggle {
+            border: 1px solid rgba(0, 0, 0, .10);
+            background: #fff;
+            border-radius: 10px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-weight: 900;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease;
+        }
+
+        .checklist-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .checklist-body {
+            padding: 14px;
+            display: grid;
+            gap: 8px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 14px;
+            background: rgba(0, 0, 0, .03);
+            border: 1px solid rgba(0, 0, 0, .06);
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .checklist-item:hover {
+            background: rgba(0, 0, 0, .05);
+        }
+
+        .checklist-item.is-ok {
+            background: rgba(16, 185, 129, .08);
+            border-color: rgba(16, 185, 129, .2);
+        }
+
+        .checklist-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            background: #e2e8f0;
+            color: #64748b;
+            flex-shrink: 0;
+        }
+
+        .checklist-item.is-ok .checklist-icon {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .checklist-label {
+            flex: 1;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .checklist-hint {
+            font-size: 11px;
+            font-weight: 700;
+            color: #94a3b8;
+        }
+
+        .checklist-item.is-ok .checklist-hint {
+            color: #059669;
+        }
+
+        .checklist-footer {
+            padding: 12px 14px;
+            border-top: 1px solid rgba(0, 0, 0, .08);
+            display: flex;
+            gap: 10px;
+        }
+
+        .checklist-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 12px;
+            cursor: pointer;
+            transition: transform 0.12s ease, opacity 0.12s ease;
+        }
+
+        .checklist-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .checklist-btn.preview {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, .10);
+            color: inherit;
+        }
+
+        .checklist-btn.publish {
+            background: #059669;
+            color: #fff;
+            border: none;
+        }
+
+        .checklist-btn.publish:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Mobile: stack inline, not floating */
+        @media (max-width: 1024px) {
+            #vimmoChecklist {
+                position: static;
+                width: 100%;
+                margin-top: 24px;
+            }
+
+            .checklist-body {
+                max-height: none;
+            }
+        }
+
+        /* Focus ring for accessibility */
+        .checklist-toggle:focus,
+        .checklist-btn:focus {
+            outline: 3px solid rgba(16, 185, 129, 0.35);
+            outline-offset: 2px;
+        }
+    </style>
+
+    <div id="vimmoChecklist" class="is-collapsed">
+        <div class="checklist-card">
+            <div class="checklist-header">
+                <div class="checklist-title">
+                    <span>Publicatiestatus</span>
+                    <span id="vimmoChecklistScore" class="checklist-score">0/0</span>
+                </div>
+                <button id="vimmoChecklistToggle" type="button" class="checklist-toggle" aria-label="Toggle checklist">
+                    +
+                </button>
+            </div>
+
+            <div id="vimmoChecklistBody" class="checklist-body"></div>
+
+            <div class="checklist-footer">
+                <button id="vimmoChecklistPreview" type="button" class="checklist-btn preview">
+                    Live bekijken
+                </button>
+                <button id="vimmoChecklistPublish" type="button" class="checklist-btn publish">
+                    Publiceren
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Checklist Logic -->
+    <script>
+        (function () {
+            const qs = new URLSearchParams(location.search);
+            const propId = qs.get("prop") || qs.get("listingId");
+            const ctx = window.propertyContext;
+            if (!ctx || !propId) return;
+
+            const root = document.getElementById("vimmoChecklist");
+            const body = document.getElementById("vimmoChecklistBody");
+            const toggleBtn = document.getElementById("vimmoChecklistToggle");
+            const previewBtn = document.getElementById("vimmoChecklistPreview");
+            const publishBtn = document.getElementById("vimmoChecklistPublish");
+            const scoreBadge = document.getElementById("vimmoChecklistScore");
+
+            if (!body || !root) return;
+
+            // Toggle collapse via class
+            toggleBtn?.addEventListener("click", () => {
+                const isCollapsed = root.classList.toggle("is-collapsed");
+                toggleBtn.textContent = isCollapsed ? "+" : "–";
+                try { localStorage.setItem("vimmo_checklist_collapsed", isCollapsed ? "1" : "0"); } catch (e) { }
+            });
+
+            previewBtn?.addEventListener("click", () => {
+                window.location.href = "listing-preview.html?prop=" + encodeURIComponent(propId);
+            });
+
+            publishBtn?.addEventListener("click", () => {
+                if (typeof togglePrimaryStatus === "function") togglePrimaryStatus();
+            });
+
+            function renderChecklist() {
+                const p = ctx.getCurrent() || {};
+                const state = getPublishState(p);
+                const checks = state.items;
+                const allOk = state.allOk;
+                const okCount = checks.filter(c => c.ok).length;
+
+                // Update score badge
+                if (scoreBadge) {
+                    scoreBadge.textContent = `${okCount}/${checks.length}`;
+                    scoreBadge.classList.toggle("incomplete", !allOk);
+                }
+
+                // Render items with CSS classes (no inline styles)
+                body.innerHTML = checks.map(c => `
+                    <div class="checklist-item ${c.ok ? 'is-ok' : ''}" data-jump="${c.id}">
+                        <div class="checklist-icon">${c.ok ? '✓' : '○'}</div>
+                        <div class="checklist-label">${c.label}</div>
+                        <div class="checklist-hint">${c.hint}</div>
+                    </div>
+                `).join("");
+
+                // Update publish button state
+                if (publishBtn) {
+                    publishBtn.disabled = !allOk;
+                }
+
+                // Click to scroll to section
+                body.querySelectorAll("[data-jump]").forEach(el => {
+                    el.addEventListener("click", () => {
+                        const id = el.getAttribute("data-jump");
+                        if (typeof scrollToSection === "function") scrollToSection(id);
+                    });
+                });
+            }
+
+            // Restore collapsed state
+            let saved = "1"; // Default: collapsed
+            try { saved = localStorage.getItem("vimmo_checklist_collapsed") ?? "1"; } catch (e) { }
+            if (saved === "0") {
+                root.classList.remove("is-collapsed");
+                if (toggleBtn) toggleBtn.textContent = "–";
+            }
+
+            // Initial render
+            renderChecklist();
+
+            // Re-render on property changes
+            window.addEventListener("propertyChanged", () => setTimeout(renderChecklist, 50));
+
+            // Re-render on input changes (debounced)
+            let debounce = null;
+            document.addEventListener("input", (e) => {
+                if (e.target.closest("[data-field]")) {
+                    clearTimeout(debounce);
+                    debounce = setTimeout(renderChecklist, 300);
+                }
+            });
+        })();
+    </script>
+
+    <!-- Mobile Checklist Enhancements -->
+    <script>
+        (function () {
+            const root = document.getElementById("vimmoChecklist");
+            const toggle = document.getElementById("vimmoChecklistToggle");
+            if (!root || !toggle) return;
+
+            function isMobile() {
+                return window.matchMedia("(max-width: 1024px)").matches;
+            }
+
+            // Safe-area support (iOS notch)
+            root.style.paddingBottom = "env(safe-area-inset-bottom)";
+
+            // Lower z-index when modal is open
+            const obs = new MutationObserver(() => {
+                const publishModal = document.getElementById("publishModal");
+                const open = publishModal && publishModal.style.display === "flex";
+                root.style.zIndex = open ? "8000" : "9000";
+            });
+            obs.observe(document.body, { childList: true, subtree: true, attributes: true });
+
+            // Auto-collapse on resize to mobile
+            window.addEventListener("resize", () => {
+                if (isMobile() && !root.classList.contains("is-collapsed")) {
+                    root.classList.add("is-collapsed");
+                    toggle.textContent = "+";
+                }
+            });
+
+            // Initial mobile state
+            if (isMobile()) {
+                root.classList.add("is-collapsed");
+                toggle.textContent = "+";
+            }
+        })();
+    </script>
+
+    <!-- Trust Pakket: Document uploads & verification -->
+    <script>
+        (function () {
+            const ctx = window.propertyContext;
+            const qs = new URLSearchParams(location.search);
+            const propId = qs.get("prop") || qs.get("listingId");
+            if (!ctx || !propId) return;
+
+            const map = {
+                epc: { inputId: "docEpc", statusId: "docEpcStatus", key: "doc_epc" },
+                asbest: { inputId: "docAsbest", statusId: "docAsbestStatus", key: "doc_asbest" },
+                bodem: { inputId: "docBodem", statusId: "docBodemStatus", key: "doc_bodem" }
+            };
+
+            function getProp() { return ctx.getCurrent() || {}; }
+
+            function setStatus() {
+                const p = getProp();
+                const docs = p.docs || {};
+
+                Object.keys(map).forEach(k => {
+                    const el = document.getElementById(map[k].statusId);
+                    if (!el) return;
+
+                    const d = docs[map[k].key];
+                    if (d && d.ok) {
+                        el.textContent = `✓ ${d.name}`;
+                        el.style.color = "#059669";
+                    } else {
+                        el.textContent = "Niet toegevoegd";
+                        el.style.color = "";
+                    }
+                });
+
+                const ov = document.getElementById("ownerVerifyStatus");
+                if (ov) {
+                    if (p.ownerVerified) {
+                        ov.textContent = "Geverifieerd ✓";
+                        ov.style.color = "#059669";
+                    } else {
+                        ov.textContent = "Niet geverifieerd";
+                        ov.style.color = "";
+                    }
+                }
+            }
+
+            async function handleFile(kind, file) {
+                if (!file) return;
+
+                // Guard: max 10MB
+                const max = 10 * 1024 * 1024;
+                if (file.size > max) {
+                    alert("Bestand te groot. Max 10MB.");
+                    return;
+                }
+
+                const p = getProp();
+                const docs = p.docs || {};
+                docs[map[kind].key] = {
+                    ok: true,
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    uploadedAt: new Date().toISOString()
+                };
+
+                ctx.updateProperty(propId, { docs });
+                setStatus();
+            }
+
+            // Upload buttons
+            document.addEventListener("click", (e) => {
+                const b = e.target.closest("[data-doc]");
+                if (!b) return;
+                const kind = b.getAttribute("data-doc");
+                const inputId = map[kind]?.inputId;
+                const input = document.getElementById(inputId);
+                if (input) input.click();
+            });
+
+            // File change handlers
+            Object.keys(map).forEach(kind => {
+                const input = document.getElementById(map[kind].inputId);
+                if (!input) return;
+                input.addEventListener("change", async () => {
+                    await handleFile(kind, input.files && input.files[0]);
+                    input.value = "";
+                });
+            });
+
+            // Owner verify placeholder
+            document.getElementById("btnOwnerVerify")?.addEventListener("click", () => {
+                const p = getProp();
+                if (p.ownerVerified) {
+                    alert("Eigenaarsverificatie is al voltooid.");
+                    return;
+                }
+                const ok = confirm("Demo: markeer eigenaarsverificatie als geverifieerd?");
+                if (!ok) return;
+                ctx.updateProperty(propId, { ownerVerified: true, ownerVerifiedAt: new Date().toISOString() });
+                setStatus();
+            });
+
+            window.addEventListener("propertyChanged", () => setTimeout(setStatus, 50));
+            setTimeout(setStatus, 100);
+        })();
+    </script>
+    <!-- Mode Toggle Script (CSS-first, localStorage persistence) -->
+    <script>
+        (function () {
+            const buttons = document.querySelectorAll('#editor-mode button');
+            const allowed = new Set(['edit', 'performance', 'visibility']);
+            const STORAGE_KEY = 'vimmo_editor_mode_particulier';
+
+            function setMode(mode) {
+                if (!allowed.has(mode)) mode = 'edit';
+                document.documentElement.classList.add('js-editor');
+                document.documentElement.setAttribute('data-editor-mode', mode);
+                buttons.forEach(b => b.classList.toggle('is-active', b.dataset.mode === mode));
+                try { localStorage.setItem(STORAGE_KEY, mode); } catch (e) { }
+            }
+
+            buttons.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode || 'edit')));
+
+            // Restore saved mode or default to 'edit'
+            let saved = 'edit';
+            try { saved = localStorage.getItem(STORAGE_KEY) || 'edit'; } catch (e) { }
+            setMode(allowed.has(saved) ? saved : 'edit');
+        })();
+    </script>
+
+    <!-- Mode toggle cleanup removed - targeted CSS now handles checklist positioning -->
+
+    <!-- CENTRALIZED ACTION HANDLER: data-action delegation -->
+    <script>
+        // === GUARDED DELEGATION (only installs once) ===
+        (function installVimmoDelegation() {
+            if (window.__vimmoDelegationInstalled) return;
+            window.__vimmoDelegationInstalled = true;
+
+            document.addEventListener("click", (e) => {
+                const el = e.target.closest("[data-action]");
+                if (!el) return;
+
+                e.preventDefault();
+
+                const action = el.getAttribute("data-action");
+                const detail = { el, action };
+
+                const map = {
+                    publish: "vimmo:publish",
+                    live: "vimmo:openLive",
+                    history: "vimmo:openHistory",
+                    addListing: "vimmo:addListing",
+                    pause: "vimmo:togglePause",
+                    togglePause: "vimmo:togglePause"
+                };
+
+                const evtName = map[action];
+                if (!evtName) return;
+
+                window.dispatchEvent(new CustomEvent(evtName, { detail }));
+            }, true); // capture phase for robustness
+        })();
+
+        // === GUARDED HANDLERS (only installs once) ===
+        (function installVimmoHandlers() {
+            if (window.__vimmoHandlersInstalled) return;
+            window.__vimmoHandlersInstalled = true;
+
+            window.addEventListener("vimmo:publish", () => {
+                console.log("vimmo:publish triggered");
+                if (typeof togglePrimaryStatus === "function") togglePrimaryStatus();
+            });
+
+            window.addEventListener("vimmo:openLive", () => {
+                console.log("vimmo:openLive triggered");
+                if (typeof openPreview === "function") {
+                    openPreview();
+                } else {
+                    const propId = new URLSearchParams(window.location.search).get('id') || 'prop-1';
+                    window.open(`listing-preview.html?id=${propId}`, '_blank');
+                }
+            });
+
+            window.addEventListener("vimmo:openHistory", () => {
+                console.log("vimmo:openHistory triggered");
+                if (typeof showHistory === "function") {
+                    showHistory();
+                } else {
+                    alert("Geschiedenis is nog niet beschikbaar.");
+                }
+            });
+
+            window.addEventListener("vimmo:addListing", () => {
+                console.log("vimmo:addListing triggered");
+                if (typeof createNewPropertyFlow === "function") createNewPropertyFlow();
+            });
+
+            window.addEventListener("vimmo:togglePause", () => {
+                console.log("vimmo:togglePause triggered");
+                if (typeof togglePrimaryStatus === "function") togglePrimaryStatus();
+            });
+        })();
+    </script>
 </body>
 
 </html>

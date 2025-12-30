@@ -18,7 +18,7 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
 </head>
 
 <body>
@@ -31,7 +31,7 @@
     <nav class="navbar">
         <div class="container nav-content">
             <a href="index.html" class="brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
             <div class="nav-links">
                 <a href="index.html" class="active">Home</a>
@@ -56,7 +56,7 @@
     <!-- Mobile Menu Overlay -->
     <div id="mobileMenu" class="mobile-menu">
         <div class="mobile-menu-header">
-            <a href="index.html" class="brand"><span class="logo-v">V</span> <span class="logo-i">I</span><span
+            <a href="index.html" class="brand"><span class="logo-v">V</span><span class="logo-i">I</span><span
                     class="logo-mmo">MMO</span></a>
             <button class="close-menu" onclick="toggleMobileMenu()">
                 <i class="ri-close-line"></i>
@@ -89,61 +89,59 @@
                 <p class="hero-subtitle">Of je nu koopt, huurt, of gewoon rondkijkt — hier vind je woningen met
                     duidelijke prijzen en direct contact. Zonder gedoe.</p>
 
-                <!-- Search Container -->
-                <div class="search-container">
-                    <div class="search-main">
-                        <div class="search-input-group">
-                            <i class="ri-search-line"></i>
-                            <input type="text" placeholder="Waar wil je wonen?">
+                <!-- Master Search Component -->
+                <div class="master-search" style="margin-top: 40px;">
+                    <div class="master-search-tabs">
+                        <div class="search-tab active" onclick="setSearchType('kopen', this)">Kopen</div>
+                        <div class="search-tab" onclick="setSearchType('huren', this)">Huren</div>
+                        <div class="search-tab" onclick="setSearchType('nieuwbouw', this)">Nieuwbouw</div>
+                    </div>
+                    <div class="master-search-bar">
+                        <div class="search-segment">
+                            <span class="segment-label">Locatie</span>
+                            <div class="segment-content">
+                                <i class="ri-map-pin-2-line"></i>
+                                <input type="text" placeholder="Stad of postcode...">
+                            </div>
                         </div>
-                        <button class="btn btn-primary btn-search-main">Zoeken</button>
+                        <div class="search-segment">
+                            <span class="segment-label">Woningtype</span>
+                            <div class="segment-content">
+                                <i class="ri-home-4-line"></i>
+                                <select>
+                                    <option>Alle types</option>
+                                    <option>Appartement</option>
+                                    <option>Huis</option>
+                                    <option>Villa</option>
+                                    <option>Grond</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="search-segment">
+                            <span class="segment-label">Budget</span>
+                            <div class="segment-content">
+                                <i class="ri-money-euro-circle-line"></i>
+                                <select id="priceSelect">
+                                    <option>Alle prijzen</option>
+                                    <option>Tot € 250.000</option>
+                                    <option>Tot € 500.000</option>
+                                    <option>Tot € 750.000</option>
+                                    <option>€ 1.000.000+</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn-master-search">
+                            Zoeken <i class="ri-arrow-right-line"></i>
+                        </button>
                     </div>
 
-                    <!-- Quick Filters -->
-                    <div class="quick-filters">
-                        <div class="filter-group">
-                            <label>Type</label>
-                            <select>
-                                <option>Alle types</option>
-                                <option>Appartement</option>
-                                <option>Huis</option>
-                                <option>Villa</option>
-                                <option>Penthouse</option>
-                                <option>Grond</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label>Prijs tot</label>
-                            <select>
-                                <option>Geen max</option>
-                                <option>€ 300.000</option>
-                                <option>€ 500.000</option>
-                                <option>€ 750.000</option>
-                                <option>€ 1.000.000</option>
-                                <option>€ 2.000.000+</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label>Slaapkamers</label>
-                            <select>
-                                <option>Alle</option>
-                                <option>1+</option>
-                                <option>2+</option>
-                                <option>3+</option>
-                                <option>4+</option>
-                                <option>5+</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Popular Cities -->
-                    <div class="popular-cities">
+                    <!-- Popular Cities (Integrated below) -->
+                    <div class="popular-cities" style="margin-top: 20px; padding-left: 10px;">
                         <span class="cities-label">Populair:</span>
                         <a href="kopen.html" class="city-tag">Antwerpen</a>
                         <a href="kopen.html" class="city-tag">Brussel</a>
                         <a href="kopen.html" class="city-tag">Gent</a>
                         <a href="kopen.html" class="city-tag">Knokke</a>
-                        <a href="kopen.html" class="city-tag">Leuven</a>
                     </div>
                 </div>
             </div>
@@ -244,7 +242,7 @@
                 style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
                 <div class="footer-brand">
                     <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;">
-                        <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                        <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
                     </h3>
                     <p style="color: var(--text-muted); max-width: 280px; font-size: 0.9rem; line-height: 1.6;">Vind een
                         plek die bij je past. Woningen in heel België.</p>
@@ -286,6 +284,31 @@
     </footer>
 
     <script src="app.js"></script>
+    <script>
+        function setSearchType(type, element) {
+            document.querySelectorAll('.search-tab').forEach(tab => tab.classList.remove('active'));
+            element.classList.add('active');
+
+            // Adjust budget options based on type (Huren vs Kopen)
+            const priceSelect = document.getElementById('priceSelect');
+            if (type === 'huren') {
+                priceSelect.innerHTML = `
+                    <option>Alle prijzen</option>
+                    <option>Tot € 1.000</option>
+                    <option>Tot € 2.000</option>
+                    <option>Tot € 3.000</option>
+                `;
+            } else {
+                priceSelect.innerHTML = `
+                    <option>Alle prijzen</option>
+                    <option>Tot € 250.000</option>
+                    <option>Tot € 500.000</option>
+                    <option>Tot € 750.000</option>
+                    <option>€ 1.000.000+</option>
+                `;
+            }
+        }
+    </script>
 </body>
 
 </html>

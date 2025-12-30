@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
 
     <style>
         .account-page {
@@ -208,9 +208,8 @@
 <body>
     <nav class="navbar scrolled">
         <div class="container nav-content">
-            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
-                    style="color: #3d3530; font-weight: 400;">I</span><span
-                    style="color: #3d3530; font-weight: 800;">MMO</span></a>
+            <a href="index.html" class="brand"><span class="logo-v">V</span><span class="logo-i">I</span><span
+                    class="logo-mmo">MMO</span></a>
             <div class="nav-links">
                 <a href="index.html">Home</a>
                 <a href="kopen.html">Te koop</a>
@@ -233,9 +232,8 @@
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="mobile-menu">
         <div class="mobile-menu-header">
-            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
-                    style="color: #3d3530; font-weight: 400;">I</span><span
-                    style="color: #3d3530; font-weight: 800;">MMO</span></a>
+            <a href="index.html" class="brand"><span class="logo-v">V</span> <span class="logo-i">I</span><span
+                    class="logo-mmo">MMO</span></a>
             <button class="close-menu" onclick="toggleMobileMenu()">
                 <i class="ri-close-line"></i>
             </button>
@@ -258,8 +256,7 @@
             <div class="register-container">
                 <div class="register-header">
                     <a href="index.html" class="brand">
-                        <span style="color: #d63031; font-weight: 400;">V</span> <span
-                            style="color: #3d3530; font-weight: 800;">IMMO</span>
+                        <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
                     </a>
                     <span class="free-badge"><i class="ri-gift-line"></i> 100% Gratis</span>
                     <h1>Account aanmaken</h1>
@@ -396,9 +393,8 @@
             <div class="footer-content"
                 style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
                 <div class="footer-brand">
-                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
-                            style="color: #d63031; font-weight: 400;">V</span> <span
-                            style="color: #3d3530; font-weight: 800;">IMMO</span></h3>
+                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span class="logo-v">V</span> <span
+                            class="logo-i">I</span><span class="logo-mmo">MMO</span></h3>
                     <p style="color: var(--text-muted); max-width: 280px; font-size: 0.9rem; line-height: 1.6;">Vind een
                         plek die bij je past. Woningen in heel België.</p>
                 </div>
@@ -439,9 +435,19 @@
     <script src="app.js"></script>
     <script>
         // Dynamically determine API URL
-        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? `http://${window.location.hostname}:3000/api`
-            : `${window.location.origin}/api`;
+        const API_URL = '/api';
+
+        // Auto-redirect if already logged in
+        const userRole = localStorage.getItem('userRole');
+        if (userRole) {
+            console.log('User already logged in as:', userRole);
+            switch (userRole) {
+                case 'particulier': window.location.href = 'dashboard-particulier.html'; break;
+                case 'makelaar': window.location.href = 'dashboard-makelaars.html'; break;
+                case 'zoeker': window.location.href = 'dashboard-zoeker.html'; break;
+            }
+        }
+
         let selectedRole = 'zoeker';
 
         function selectRole(btn) {

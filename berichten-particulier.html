@@ -11,308 +11,728 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.0">
 
     <style>
-        .dashboard-particulier {
+        /* Page-specific styles only - layout handled by global style.css */
+
+        /* Messaging Layout Wrap */
+        .messaging-layout {
+            flex: 1;
             display: flex;
-            min-height: 100vh;
-            background: var(--bg-light);
+            background: white;
+            border-radius: 24px;
+            box-shadow: var(--luxe-shadow);
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            min-height: calc(100vh - 80px);
         }
 
-        .sidebar {
-            width: 280px;
-            background: var(--bg-card);
-            border-right: 1px solid rgba(0, 0, 0, 0.06);
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .sidebar .brand {
-            padding: 0 30px 30px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: block;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-nav {
-            padding: 0 15px;
-        }
-
-        .nav-item {
+        /* Left Column: Conversation List */
+        .conversation-column {
+            width: 360px;
+            border-right: 1px solid #f1f5f9;
             display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 15px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: var(--radius-md);
-            margin-bottom: 4px;
-            transition: all 0.2s;
+            flex-direction: column;
+            background: #fafcfb;
         }
 
-        .nav-item:hover {
-            background: var(--bg-light);
+        .column-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #f1f5f9;
+            background: white;
+        }
+
+        .column-header h1 {
+            font-size: 1.3rem;
+            font-weight: 800;
             color: var(--text-main);
         }
 
-        .nav-item.active {
-            background: #10b981;
-            color: white;
-        }
-
-        .nav-item i {
-            font-size: 1.2rem;
-        }
-
-        .main-content {
-            margin-left: 280px;
+        .conversation-list {
             flex: 1;
-            padding: 40px;
+            overflow-y: auto;
         }
 
-        .messages-container {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            overflow: hidden;
-            max-width: 1200px;
-        }
-
-        .messages-header {
-            padding: 24px 30px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-        }
-
-        .messages-header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 4px;
-        }
-
-        .conversation-item {
-            display: flex;
-            gap: 16px;
-            padding: 20px 30px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        .conv-card {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f1f5f9;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            gap: 12px;
+            position: relative;
         }
 
-        .conversation-item:hover {
-            background: var(--bg-light);
+        .conv-card:hover {
+            background: white;
+            padding-left: 24px;
         }
 
-        .conversation-item.unread {
-            background: #f0f7ff;
+        .conv-card.active {
+            background: white;
+            box-shadow: inset 4px 0 0 var(--primary-particulier), 0 4px 15px rgba(0, 0, 0, 0.02);
+            z-index: 1;
         }
 
-        .conversation-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--primary);
+        .conv-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--primary-particulier);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
+            font-weight: 800;
+            font-size: 0.9rem;
             flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);
         }
 
-        .conversation-content {
+        .conv-info {
             flex: 1;
             min-width: 0;
+            padding-top: 2px;
         }
 
-        .conversation-header {
+        .conv-meta {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
+            align-items: baseline;
+            margin-bottom: 2px;
         }
 
-        .conversation-name {
+        .conv-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .conv-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
             font-weight: 600;
-            font-size: 1.05rem;
         }
 
-        .conversation-time {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .conversation-property {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .conversation-preview {
-            color: var(--text-muted);
+        .conv-property {
+            font-size: 0.75rem;
+            color: var(--primary-particulier);
+            font-weight: 700;
+            margin-bottom: 2px;
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .conv-preview {
+            font-size: 0.8rem;
+            color: #64748b;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            opacity: 0.8;
         }
 
-        .conversation-item.unread .conversation-preview {
+        /* Right Column: Active Chat */
+        .chat-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .chat-header {
+            padding: 12px 25px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+        }
+
+        .chat-user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-user-details .name {
+            font-weight: 800;
+            font-size: 1rem;
             color: var(--text-main);
-            font-weight: 500;
         }
 
-        .unread-badge {
-            width: 10px;
-            height: 10px;
-            background: var(--accent-red);
+        .chat-user-details .status {
+            font-size: 0.7rem;
+            color: var(--primary-particulier);
+            font-weight: 700;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background: #fcfdfc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .msg-bubble {
+            max-width: 65%;
+            padding: 10px 16px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .msg-received {
+            background: white;
+            border: 1px solid #f1f5f9;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .msg-sent {
+            background: var(--primary-particulier);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .msg-time {
+            font-size: 0.65rem;
+            opacity: 0.7;
+            margin-top: 4px;
+            display: block;
+            text-align: right;
+            width: 100%;
+        }
+
+        .chat-input-area {
+            padding: 15px 25px;
+            border-top: 1px solid #f1f5f9;
+            background: white;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 6px 6px 6px 18px;
+            border-radius: 100px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .input-group:focus-within {
+            background: white;
+            border-color: var(--primary-particulier);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.08);
+        }
+
+        .input-group input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .send-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-particulier);
+            color: white;
+            border: none;
             border-radius: 50%;
-            margin-left: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.3s;
         }
 
-        @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
+        .send-btn:hover {
+            transform: scale(1.08) rotate(-10deg);
+        }
 
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
+        .btn-action-mini {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid #f1f5f9;
+            background: white;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .btn-action-mini:hover {
+            border-color: var(--primary-particulier);
+            color: var(--primary-particulier);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        /* System Message Card */
+        .system-msg-container {
+            align-self: center;
+            width: 100%;
+            max-width: 450px;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .system-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            text-align: center;
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        .system-card-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-particulier);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 15px;
+        }
+
+        .system-card-title {
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+
+        .system-card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .system-card-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary-particulier);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .system-card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        @media (max-width: 1200px) {
+            .conversation-column {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .messaging-layout {
+                margin-left: 15px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .conversation-column {
+                display: none;
             }
         }
     </style>
 </head>
 
-<body>
+<body class="role-particulier">
     <div class="dashboard-particulier">
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
+                <!-- User Profile at TOP -->
+                <div class="sidebar-user" style="border-top: none; margin-bottom: 20px; padding-top: 5px;">
+                    <div class="user-avatar"
+                        style="background: rgba(16, 185, 129, 0.1); color: var(--primary-particulier);">
+                        TV</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Tomas Verbeeck</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Particulier</div>
+                    </div>
+                </div>
+
+                <div style="margin: 10px 0 20px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
                 <a href="dashboard-particulier.html" class="nav-item">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
                 <a href="advertentie-particulier.html" class="nav-item">
-                    <i class="ri-home-4-line"></i> Mijn Advertentie
+                    <i class="ri-home-4-line"></i> Mijn Aanbod
                 </a>
                 <a href="beschikbaarheid-particulier.html" class="nav-item">
                     <i class="ri-calendar-line"></i> Beschikbaarheid
                 </a>
-                <a href="agenda-particulier.html" class="nav-item">
-                    <i class="ri-calendar-check-line"></i> Aanvragen
-                    <span class="badge"
-                        style="margin-left: auto; background: var(--accent-red); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">3</span>
+                <a href="aanvragen-particulier.html" class="nav-item">
+                    <i class="ri-mail-line"></i> Aanvragen
+                    <span
+                        style="margin-left: auto; background: #ef4444; color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
                 </a>
                 <a href="berichten-particulier.html" class="nav-item active">
                     <i class="ri-message-3-line"></i> Berichten
                     <span
-                        style="margin-left: auto; background: var(--primary-particulier); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                        style="margin-left: auto; background: var(--primary-particulier); color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
+                </a>
+                <a href="pakket-beheer.html" class="nav-item">
+                    <i class="ri-box-3-line"></i> Pakket Beheer
+                    <span id="sidebar-package-usage"
+                        style="margin-left: auto; color: var(--primary-particulier); font-weight: 800; font-size: 0.8rem;"></span>
                 </a>
 
-                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
-                <a href="instellingen-particulier.html" class="nav-item">
+                <a href="instellingen-particulier.html" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
             </nav>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <div class="messages-container">
-                <div class="messages-header">
-                    <h1>Berichten</h1>
-                    <p style="color: var(--text-muted);">Al uw conversaties met makelaars en verkopers</p>
+            <div class="messaging-layout glass-panel"
+                style="border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.4); backdrop-filter: blur(20px);">
+                <!-- Left: Conversation List -->
+                <div class="conversation-column" style="background: rgba(255,255,255,0.2);">
+                    <div class="column-header"
+                        style="background: rgba(255,255,255,0.4); padding: 25px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);">Berichten</h1>
+                    </div>
+                    <div class="conversation-list" style="padding: 10px;">
+                        <!-- Conversations are rendered dynamically by JS -->
+                    </div>
                 </div>
 
-                <!-- Conversation 1 - Unread -->
-                <div class="conversation-item unread" onclick="window.location.href='chat.html?id=1'">
-                    <div class="conversation-avatar">MV</div>
-                    <div class="conversation-content">
-                        <div class="conversation-header">
-                            <div class="conversation-name">
-                                Makelaar Vastgoed
-                                <span class="unread-badge"></span>
+                <!-- Right: Active Chat -->
+                <div class="chat-column" style="background: rgba(255,255,255,0.6);">
+                    <div class="chat-header"
+                        style="padding: 18px 30px; background: rgba(255,255,255,0.4); border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div class="chat-user-info">
+                            <div class="chat-user-details">
+                                <div class="name" style="font-size: 1.1rem; font-weight: 800;">Selecteer een gesprek
+                                </div>
+                                <div class="trust-badge-container" style="display: flex; gap: 6px; margin-top: 4px;">
+                                </div>
                             </div>
-                            <div class="conversation-time">2u geleden</div>
                         </div>
-                        <div class="conversation-property">
-                            <i class="ri-home-4-line"></i> Penthouse aan de Schelde
+                        <div id="safetyBanner"
+                            style="display: none; background: #fffbeb; border: 1px solid #fef3c7; padding: 8px 15px; border-radius: 10px; font-size: 0.75rem; color: #92400e; font-weight: 600; margin: 0 15px; flex: 1; text-align: center;">
+                            <i class="ri-shield-user-line"></i> Contactgegevens gereserveerd tot wederzijds vertrouwen.
                         </div>
-                        <div class="conversation-preview">
-                            De bezichtiging voor morgen is bevestigd. Tot dan!
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Conversation 2 - Unread -->
-                <div class="conversation-item unread" onclick="window.location.href='chat.html?id=2'">
-                    <div class="conversation-avatar">JD</div>
-                    <div class="conversation-content">
-                        <div class="conversation-header">
-                            <div class="conversation-name">
-                                Jan De Vries
-                                <span class="unread-badge"></span>
-                            </div>
-                            <div class="conversation-time">1d geleden</div>
-                        </div>
-                        <div class="conversation-property">
-                            <i class="ri-home-4-line"></i> Stadsloft in historisch pand
-                        </div>
-                        <div class="conversation-preview">
-                            Bedankt voor uw interesse. Wanneer schikt het u?
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Conversation 3 - Read -->
-                <div class="conversation-item" onclick="window.location.href='chat.html?id=3'">
-                    <div class="conversation-avatar">PH</div>
-                    <div class="conversation-content">
-                        <div class="conversation-header">
-                            <div class="conversation-name">Premium Homes</div>
-                            <div class="conversation-time">3d geleden</div>
-                        </div>
-                        <div class="conversation-property">
-                            <i class="ri-home-4-line"></i> Duurzaam Wonen in 't Groen
-                        </div>
-                        <div class="conversation-preview">
-                            De documenten zijn beschikbaar in het portaal
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Conversation 4 - Read -->
-                <div class="conversation-item" onclick="window.location.href='chat.html?id=4'">
-                    <div class="conversation-avatar">EV</div>
-                    <div class="conversation-content">
-                        <div class="conversation-header">
-                            <div class="conversation-name">Elite Vastgoed</div>
-                            <div class="conversation-time">1w geleden</div>
-                        </div>
-                        <div class="conversation-property">
-                            <i class="ri-home-4-line"></i> Modern Villa met Zwembad
-                        </div>
-                        <div class="conversation-preview">
-                            Hartelijk dank voor uw bezoek. Heeft u nog vragen?
-                        </div>
+                        <button class="btn glass-panel" title="Blokkeren" onclick="blockLead()"
+                            style="width: 40px; height: 40px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.2); background: #fef2f2; color: #ef4444;"><i
+                                class="ri-user-unfollow-line"></i></button>
+                        <button class="btn glass-panel" title="Rapporteren" onclick="reportLead()"
+                            style="width: 40px; height: 40px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.05); background: white;"><i
+                                class="ri-flag-line"></i></button>
+                        <button class="btn glass-panel" title="Contactgegevens inzien" onclick="showContactInfo()"
+                            style="width: 40px; height: 40px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.05); background: white;"><i
+                                class="ri-phone-line"></i></button>
+                        <button class="btn glass-panel"
+                            style="width: 40px; height: 40px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.05); background: white;"><i
+                                class="ri-more-2-line"></i></button>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
 
-    <script src="app.js"></script>
-    <script src="dashboard-nav.js"></script>`n
+            <div class="chat-messages" id="chatDisplay"
+                style="padding: 30px; background: transparent; display: flex; flex-direction: column; gap: 15px;">
+                <!-- Messages are rendered dynamically by JS -->
+            </div>
+
+            <div class="chat-input-area"
+                style="padding: 25px; background: rgba(255,255,255,0.4); border-top: 1px solid rgba(0,0,0,0.05);">
+                <div class="input-group glass-panel"
+                    style="background: white; border: 1px solid rgba(0,0,0,0.1); padding: 8px 8px 8px 25px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.04);">
+                    <input type="text" placeholder="Schrijf je bericht..." id="msgInput" style="font-weight: 600;">
+                    <button class="send-btn"
+                        style="width: 45px; height: 45px; border-radius: 15px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);"><i
+                            class="ri-send-plane-fill"></i></button>
+                </div>
+            </div>
+    </div>
+    </div> <!-- Closing messaging-layout -->
+    </main>
+    </div> <!-- Closing dashboard-particulier -->
+
+    <script src="propertyContext.js"></script>
+    <script src="particulier-utils.js"></script>
+    <script src="dashboard-nav.js"></script>
+    <script>
+        let currentChatId = null;
+
+        const MOCK_HISTORIES = {
+            'default': [
+                { type: 'received', text: 'Beste Tomas, ik heb interesse in uw woning. Is het mogelijk om deze week nog te kijken?', time: '09:15' },
+                { type: 'sent', text: 'Beste Emma, dat kan zeker! Ik heb de agenda bijgewerkt.', time: '09:42' },
+                { type: 'received', text: 'Perfect, ik heb zojuist gekeken. Ik zou graag vrijdag om 14:00 uur komen.', time: '10:05' }
+            ],
+            'new': [
+                { type: 'received', text: 'Hallo, ik zou graag wat meer informatie ontvangen over de parkeermogelijkheden.', time: '11:20' }
+            ],
+            'dossier': [
+                { type: 'received', text: 'Ik heb mijn werkgeversverklaring zojuist geüpload in het dossier.', time: '08:45' },
+                { type: 'sent', text: 'Bedankt! Ik ga er direct naar kijken.', time: '09:00' }
+            ]
+        };
+
+        function initChat() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const chatId = urlParams.get('id');
+
+            loadConversations(chatId);
+        }
+
+        function loadConversations(activeId = null) {
+            if (!window.propertyContext) return;
+            const property = propertyContext.getCurrent();
+            const requests = propertyContext.getRequests(property.id) || [];
+
+            const listContainer = document.querySelector('.conversation-list');
+            listContainer.innerHTML = '';
+
+            if (requests.length === 0) {
+                listContainer.innerHTML = '<p style="padding: 20px; color: var(--text-muted); font-size: 0.85rem; text-align: center;">Geen actieve gesprekken voor deze woning.</p>';
+                return;
+            }
+
+            // Filter requests that should have messages (usually based on status or recent activity)
+            // For demo, we'll show all requests as potential conversations
+            requests.forEach(app => {
+                const isActive = activeId === app.id || (!activeId && !currentChatId && requests[0].id === app.id);
+                if (isActive) currentChatId = app.id;
+
+                const card = document.createElement('div');
+                card.className = `conv-card glass-panel ${isActive ? 'active' : ''}`;
+                card.style.cssText = isActive ?
+                    'margin-bottom: 10px; border-radius: 18px; border: 1px solid var(--primary-particulier); background: white; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.1);' :
+                    'margin-bottom: 10px; border-radius: 18px; border: 1px solid transparent; background: rgba(255,255,255,0.4);';
+
+                card.innerHTML = `
+                    <div class="conv-avatar" style="border-radius: 14px; background: ${isActive ? 'var(--primary-particulier)' : '#6366f1'};">${app.name.substring(0, 2).toUpperCase()}</div>
+                    <div class="conv-info">
+                        <div class="conv-meta">
+                            <span class="conv-name" style="font-size: 0.95rem; font-weight: ${isActive ? '800' : '700'};">${app.name}</span>
+                            <span class="conv-time">Vandaag</span>
+                        </div>
+                        <div class="conv-property" style="font-size: 0.7rem; color: ${isActive ? 'var(--primary-particulier)' : '#6366f1'}; font-weight: 700;">
+                            <i class="ri-home-4-line"></i> ${property.name}
+                        </div>
+                        <div class="conv-preview" style="${isActive ? 'font-weight: 600; color: var(--text-main);' : ''}">Klik om bericht te bekijken...</div>
+                    </div>
+                `;
+
+                card.onclick = () => {
+                    window.history.pushState({}, '', `?id=${app.id}`);
+                    loadConversations(app.id);
+                    renderMessages(app);
+                };
+
+                listContainer.appendChild(card);
+                if (isActive) renderMessages(app);
+            });
+        }
+
+        function renderMessages(app) {
+            const display = document.getElementById('chatDisplay');
+            const headerName = document.querySelector('.chat-user-info .name');
+            const trustContainer = document.querySelector('.trust-badge-container');
+            const safetyBanner = document.getElementById('safetyBanner');
+
+            headerName.textContent = app.name;
+
+            // Render Trust Badges & Safety Banner
+            const trustLevel = propertyContext.getTrustLevel(app.id);
+            const unmasked = ParticulierUtils.unmaskLeadData(app);
+
+            trustContainer.innerHTML = '';
+            if (app.verification === 'ITSME') {
+                trustContainer.innerHTML += `<span style="background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 800;"><i class="ri-shield-check-line"></i> ITSME® Geverifieerd</span>`;
+            }
+            if (app.snapshot?.documents?.some(d => d.verified)) {
+                trustContainer.innerHTML += `<span style="background: #f0fdf4; color: #166534; padding: 2px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 800;"><i class="ri-file-list-3-line"></i> Dossier OK</span>`;
+            }
+
+            safetyBanner.style.display = unmasked.isRevealed ? 'none' : 'block';
+
+            // Load real messages
+            const messages = propertyContext.getMessages(app.id);
+
+            if (messages.length === 0) {
+                display.innerHTML = `<div style="text-align: center; padding: 40px; color: #94a3b8; font-size: 0.85rem;">Nog geen berichten in dit gesprek.</div>`;
+            } else {
+                display.innerHTML = messages.map(m => {
+                    const isSent = m.type === 'sent';
+                    const time = new Date(m.timestamp).toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' });
+
+                    return `
+                        <div class="msg-bubble ${isSent ? 'msg-sent' : 'msg-received'} glass-panel"
+                            style="${isSent ? 'background: var(--primary-particulier); color: white; border: none; padding: 15px 20px; border-radius: 20px 20px 4px 20px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.25); max-width: 70%; align-self: flex-end;' : 'background: white; border: 1px solid rgba(0,0,0,0.05); padding: 15px 20px; border-radius: 20px 20px 20px 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); max-width: 70%;'}">
+                            ${m.text}
+                            <span class="msg-time" style="margin-top: 8px; font-weight: 700; color: ${isSent ? 'rgba(255,255,255,0.8)' : '#94a3b8'}; text-align: right; display: block;">${time}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            display.scrollTop = display.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('msgInput');
+            if (!input.value.trim() || !currentChatId) return;
+
+            // 0. Rate Limit Check
+            if (propertyContext.checkRateLimit && !propertyContext.checkRateLimit(currentChatId)) {
+                ParticulierUtils.toast('Even geduld... maximaal 1 bericht per 2 seconden.', 'info');
+                return;
+            }
+
+            const property = propertyContext.getCurrent();
+            const text = input.value;
+
+            // 1. Persist message
+            propertyContext.addMessage(currentChatId, {
+                type: 'sent',
+                text: text
+            });
+
+            // 2. Clear input
+            input.value = '';
+
+            // 3. UI Update (renderMessages will handle it via event or direct call)
+            const app = propertyContext.getRequests().find(r => r.id === currentChatId);
+            renderMessages(app);
+
+            // 4. SLA Update
+            if (window.markLeadReplied) {
+                markLeadReplied(property.id, currentChatId, propertyContext, { auto: false, message: text });
+            }
+        }
+
+        // Initialize - robust initialization
+        function initPage() {
+            if (!window.propertyContext) {
+                setTimeout(initPage, 50);
+                return;
+            }
+
+            initChat();
+
+            document.getElementById('msgInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+
+            document.querySelector('.send-btn').onclick = sendMessage;
+
+            if (window.ParticulierUtils && ParticulierUtils.initTooltips) {
+                ParticulierUtils.initTooltips();
+            }
+        }
+
+        // Start as soon as possible
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPage);
+        } else {
+            initPage();
+        }
+
+        async function showContactInfo() {
+            const app = propertyContext.getRequests().find(r => r.id === currentChatId);
+            if (!app) return;
+
+            const unmasked = ParticulierUtils.unmaskLeadData(app);
+
+            if (unmasked.isRevealed) {
+                // Audit unmask event
+                if (propertyContext.addAuditEntry) {
+                    propertyContext.addAuditEntry(app.propertyId, 'UNMASK_CONTACT', { requestId: app.id, type: 'Manual View' });
+                }
+
+                ParticulierUtils.alert(
+                    `${app.name} Contactgegevens`,
+                    `<strong>Telefoon:</strong> ${unmasked.phone}<br><strong>Email:</strong> ${unmasked.email}<br><br><small>Deze gegevens zijn zichtbaar vanwege de vertrouwensband (Status/Verificatie).</small>`
+                );
+            } else {
+                ParticulierUtils.alert(
+                    `${app.name} Contactgegevens (Gemarkeerd)`,
+                    `<strong>Telefoon:</strong> ${unmasked.phone}<br><strong>Email:</strong> ${unmasked.email}<br><br><small style="color: #6366f1;">Contactgegevens worden volledig onthuld zodra er een bezichtiging is bevestigd of de koper gerespecteerde verificaties deelt.</small>`
+                );
+            }
+        }
+
+        function blockLead() {
+            if (!currentChatId) return;
+            const app = propertyContext.getRequests().find(r => r.id === currentChatId);
+            if (!app) return;
+
+            if (confirm(`Weet je zeker dat je ${app.name} wilt blokkeren? Je kunt dan geen berichten meer sturen.`)) {
+                propertyContext.blockRequest(currentChatId);
+                ParticulierUtils.toast(`${app.name} is geblokkeerd`, 'success');
+                renderMessages(app);
+            }
+        }
+
+        function reportLead() {
+            if (!currentChatId) return;
+            const app = propertyContext.getRequests().find(r => r.id === currentChatId);
+            if (!app) return;
+
+            const reason = prompt("Wat is de reden van rapporteren? (Spam, Ongepast, Vals profiel)", "Spam");
+            if (reason) {
+                propertyContext.reportRequest(currentChatId, reason);
+                ParticulierUtils.toast('Rapportage verzonden aan Vimmo Support', 'success');
+            }
+        }
+
+        window.addEventListener('propertyChanged', () => {
+            currentChatId = null;
+            loadConversations();
+        });
+    </script>
 </body>
 
 </html>

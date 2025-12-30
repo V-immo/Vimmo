@@ -11,144 +11,123 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
 
     <style>
-        :root {
-            --primary-zoeker: #8b5cf6;
-            --primary-dark-zoeker: #7c3aed;
-        }
-
-        .dashboard-zoeker {
-            display: flex;
-            min-height: 100vh;
-            background: var(--bg-light);
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--bg-card);
-            border-right: 1px solid rgba(0, 0, 0, 0.06);
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .sidebar .brand {
-            padding: 0 30px 30px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: block;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-nav {
-            padding: 0 15px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 15px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: var(--radius-md);
-            margin-bottom: 4px;
-            transition: all 0.2s;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-light);
-            color: var(--text-main);
-        }
-
-        .nav-item.active {
-            background: var(--primary-zoeker);
-            color: white;
-        }
-
-        .main-content {
-            margin-left: 280px;
-            flex: 1;
-            padding: 40px;
-        }
-
         .search-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border-radius: 30px;
+            padding: 35px;
+            margin-bottom: 30px;
+            border: 1px solid white;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .search-card:hover {
+            transform: translateY(-8px);
+            background: white;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-zoeker);
         }
 
         .search-info h3 {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 12px;
         }
 
         .search-details {
             display: flex;
-            gap: 16px;
+            gap: 25px;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .search-details span {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-details i {
+            color: var(--primary-zoeker);
+            font-size: 1.1rem;
         }
 
         .search-actions {
             display: flex;
-            gap: 12px;
-        }
-
-        .btn-small {
-            padding: 8px 16px;
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
+            gap: 15px;
         }
 
         .btn-view {
             background: var(--primary-zoeker);
             color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 800;
             border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.2);
+        }
+
+        .btn-view:hover {
+            box-shadow: 0 12px 25px rgba(108, 92, 231, 0.3);
+            transform: translateY(-2px);
         }
 
         .btn-delete {
             background: white;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-muted);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 800;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-delete:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+            background: #fff5f5;
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-
             .main-content {
-                margin-left: 0;
                 padding: 20px;
             }
 
             .search-card {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 16px;
+                gap: 25px;
+                padding: 30px;
+            }
+
+            .search-actions {
+                width: 100%;
+            }
+
+            .btn-view,
+            .btn-delete {
+                flex: 1;
+                text-align: center;
             }
         }
     </style>
 </head>
 
-<body>
+<body class="role-zoeker">
     <div class="dashboard-zoeker">
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
@@ -163,35 +142,44 @@
                 </a>
                 <a href="berichten-zoeker.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
-                    <span class="badge"
-                        style="margin-left: auto; background: var(--primary-zoeker); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                    <span
+                        style="margin-left: auto; background: var(--primary-zoeker); color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">2</span>
                 </a>
                 <a href="zoekopdrachten-zoeker.html" class="nav-item active">
                     <i class="ri-search-line"></i> Zoekopdrachten
                 </a>
 
-                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
-                <a href="instellingen-zoeker.html" class="nav-item">
+                <a href="instellingen-zoeker.html" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
+
+                <div class="sidebar-user">
+                    <div class="user-avatar" style="background: rgba(108, 92, 231, 0.1); color: var(--primary-zoeker);">
+                        AK</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Anouk Kerstens</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Woningzoeker</div>
+                    </div>
+                </div>
             </nav>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <div>
-                <h1 style="font-size: 2rem; margin-bottom: 8px;">Mijn Zoekopdrachten</h1>
-                <p style="color: var(--text-muted);">Ontvang notificaties wanneer nieuwe woningen aan uw criteria
-                    voldoen</p>
+            <div style="margin-bottom: 40px; padding: 20px 0;">
+                <h1 style="font-size: 2.8rem; font-weight: 800; color: var(--text-main);">Zoekopdrachten</h1>
+                <p style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">Ontvang direct bericht bij
+                    nieuw aanbod dat bij u past.</p>
             </div>
 
-            <div style="margin-top: 30px;">
+            <div style="margin-top: 20px;">
                 <!-- Search 1 -->
-                <div class="search-card">
+                <div class="search-card glass-panel">
                     <div class="search-info">
                         <h3>Appartement in Antwerpen</h3>
                         <div class="search-details">
@@ -201,14 +189,13 @@
                         </div>
                     </div>
                     <div class="search-actions">
-                        <button class="btn-small btn-view" onclick="window.location.href='kopen.html'">Bekijk
-                            resultaten</button>
-                        <button class="btn-small btn-delete">Verwijderen</button>
+                        <button class="btn-view" onclick="window.location.href='kopen.html'">Resultaten</button>
+                        <button class="btn-delete">Verwijderen</button>
                     </div>
                 </div>
 
                 <!-- Search 2 -->
-                <div class="search-card">
+                <div class="search-card glass-panel">
                     <div class="search-info">
                         <h3>Huis in Gent</h3>
                         <div class="search-details">
@@ -218,14 +205,13 @@
                         </div>
                     </div>
                     <div class="search-actions">
-                        <button class="btn-small btn-view" onclick="window.location.href='kopen.html'">Bekijk
-                            resultaten</button>
-                        <button class="btn-small btn-delete">Verwijderen</button>
+                        <button class="btn-view" onclick="window.location.href='kopen.html'">Resultaten</button>
+                        <button class="btn-delete">Verwijderen</button>
                     </div>
                 </div>
 
                 <!-- Search 3 -->
-                <div class="search-card">
+                <div class="search-card glass-panel">
                     <div class="search-info">
                         <h3>Nieuwbouw in Leuven</h3>
                         <div class="search-details">
@@ -235,17 +221,31 @@
                         </div>
                     </div>
                     <div class="search-actions">
-                        <button class="btn-small btn-view" onclick="window.location.href='nieuwbouw.html'">Bekijk
-                            resultaten</button>
-                        <button class="btn-small btn-delete">Verwijderen</button>
+                        <button class="btn-view" onclick="window.location.href='nieuwbouw.html'">Resultaten</button>
+                        <button class="btn-delete">Verwijderen</button>
                     </div>
+                </div>
+
+                <!-- Empty State Example (Hidden) -->
+                <div id="emptySearch"
+                    style="display: none; text-align: center; padding: 100px 20px; background: white; border-radius: 30px; border: 1px dashed rgba(0,0,0,0.1);">
+                    <i class="ri-search-line"
+                        style="font-size: 5rem; opacity: 0.2; margin-bottom: 25px; display: block;"></i>
+                    <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 10px;">Geen
+                        actieve zoekopdrachten</h3>
+                    <p style="font-weight: 500; margin-bottom: 30px;">Sla uw zoekopdrachten op om meldingen te ontvangen
+                        bij nieuw aanbod.</p>
+                    <a href="kopen.html"
+                        style="display: inline-block; padding: 15px 35px; background: var(--primary-zoeker); color: white; text-decoration: none; border-radius: 15px; font-weight: 800; box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);">
+                        Woning zoeken
+                    </a>
                 </div>
             </div>
         </main>
     </div>
 
     <script src="app.js"></script>
-    <script src="dashboard-nav.js"></script>`n
+    <script src="dashboard-nav.js"></script>
 </body>
 
 </html>

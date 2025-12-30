@@ -4,101 +4,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aanvragen | Makelaars Dashboard | Vimmo</title>
+    <title>Aanvragen | Vimmo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
     <style>
-        /* Makelaars agenda specific styles */
-        .btn-contact {
-            color: white;
+        .calendar-container {
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid white;
         }
 
-        .btn-contact:hover {
-            background: var(--primary-dark-makelaars);
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .appointment-card {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 30px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .appointment-card:hover {
+            transform: translateY(-5px);
+            background: white;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary-makelaars);
+        }
+
+        .appointment-date {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(214, 48, 49, 0.1);
+            flex-shrink: 0;
+        }
+
+        .appointment-date .day {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-makelaars);
+            line-height: 1;
+        }
+
+        .appointment-date .month {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .property-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .appointment-info {
+            display: flex;
+            gap: 20px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .appointment-info i {
+            color: var(--primary-makelaars);
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-confirmed {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .calendar-nav button {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-main);
+        }
+
+        .calendar-nav button:hover {
+            border-color: var(--primary-makelaars);
+            color: var(--primary-makelaars);
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                display: none;
+            .appointment-card {
+                flex-direction: column;
+                align-items: flex-start;
             }
 
             .main-content {
-                margin-left: 0;
                 padding: 20px;
-            }
-
-            .appointment-card {
-                flex-direction: column;
             }
         }
     </style>
 </head>
 
-<body>
+<body class="role-makelaar">
     <div class="dashboard-makelaars">
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
-                <div class="nav-section">
-                    <div class="nav-section-title">Beheer</div>
-                    <a href="dashboard-makelaars.html" class="nav-item">
-                        <i class="ri-dashboard-line"></i> Overzicht
-                    </a>
-                    <a href="advertentie-makelaars.html" class="nav-item">
-                        <i class="ri-home-4-line"></i> Mijn Panden
-                    </a>
-                    <a href="agenda-makelaars.html" class="nav-item active">
-                        <i class="ri-calendar-event-line"></i> Aanvragen
-                        <span class="badge">3</span>
-                    </a>
-                    <a href="berichten-makelaars.html" class="nav-item">
-                        <i class="ri-message-3-line"></i> Berichten
-                        <span class="badge">2</span>
-                    </a>
-                </div>
+                <a href="dashboard-makelaars.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="advertentie-makelaars.html" class="nav-item">
+                    <i class="ri-home-4-line"></i> Mijn Panden
+                </a>
+                <a href="agenda-makelaars.html" class="nav-item active">
+                    <i class="ri-calendar-event-line"></i> Aanvragen
+                    <span
+                        style="margin-left: auto; background: var(--primary-makelaars); color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">3</span>
+                </a>
+                <a href="berichten-makelaars.html" class="nav-item">
+                    <i class="ri-message-3-line"></i> Berichten
+                    <span
+                        style="margin-left: auto; background: #2d3436; color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">2</span>
+                </a>
 
-                <div class="nav-section">
-                    <div class="nav-section-title">Account</div>
-                    <a href="instellingen-makelaars.html" class="nav-item">
-                        <i class="ri-settings-3-line"></i> Instellingen
-                    </a>
-                    <a href="index.html" class="nav-item">
-                        <i class="ri-logout-box-line"></i> Uitloggen
-                    </a>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
+                <a href="instellingen-makelaars.html" class="nav-item" style="opacity: 0.7;">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+
+                <div class="sidebar-user">
+                    <div class="user-avatar"
+                        style="background: rgba(214, 48, 49, 0.1); color: var(--primary-makelaars);">
+                        JD</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Jan de Vries</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Vimmo Partner</div>
+                    </div>
                 </div>
             </nav>
-
-            <div class="sidebar-user">
-                <div class="user-avatar">JD</div>
-                <div class="user-info">
-                    <h4>Jan de Vries</h4>
-                    <p>Vimmo Partner</p>
-                </div>
-            </div>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="page-header">
-                <h1>Mijn Bezichtigingen</h1>
-                <p style="color: var(--text-muted);">Overzicht van al uw geplande en afgeronde bezichtigingen</p>
+            <div style="margin-bottom: 40px; padding: 20px 0;">
+                <h1 style="font-size: 2.8rem; font-weight: 800; color: var(--text-main);">Aanvragen</h1>
+                <p style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">Beheer uw bezichtigingen en
+                    afspraken.</p>
             </div>
 
-            <div class="calendar-container">
+            <div class="calendar-container glass-panel">
                 <div class="calendar-header">
-                    <h2>December 2024</h2>
-                    <div class="calendar-nav">
+                    <h2 style="font-size: 1.8rem; font-weight: 800;">December 2024</h2>
+                    <div class="calendar-nav" style="display: flex; gap: 10px;">
                         <button><i class="ri-arrow-left-s-line"></i></button>
-                        <button>Vandaag</button>
+                        <button style="width: auto; padding: 0 20px; font-weight: 700;">Vandaag</button>
                         <button><i class="ri-arrow-right-s-line"></i></button>
                     </div>
                 </div>
@@ -110,18 +215,18 @@
                             <div class="day">18</div>
                             <div class="month">DEC</div>
                         </div>
-                        <div class="appointment-details">
-                            <div class="property">Penthouse aan de Schelde</div>
-                            <div class="info">
+                        <div style="flex: 1;">
+                            <div class="property-name">Penthouse aan de Schelde</div>
+                            <div class="appointment-info">
                                 <div><i class="ri-time-line"></i> 14:00 - 15:00</div>
-                                <div><i class="ri-map-pin-line"></i> Scheldelaan 123, 2000 Antwerpen</div>
-                                <div><i class="ri-user-line"></i> Makelaar Vastgoed - +32 123 456 789</div>
+                                <div><i class="ri-user-line"></i> Emma Peeters</div>
                             </div>
                         </div>
-                        <div class="appointment-actions">
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
                             <span class="status-badge status-confirmed">Bevestigd</span>
-                            <button class="btn-small btn-contact" onclick="window.location.href='chat.html?id=1'">
-                                <i class="ri-message-3-line"></i> Bericht sturen
+                            <button class="btn" onclick="window.location.href='chat-makelaars.html?id=1'"
+                                style="padding: 10px 20px; background: var(--primary-makelaars); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
+                                Bericht Sturen
                             </button>
                         </div>
                     </div>
@@ -132,40 +237,18 @@
                             <div class="day">20</div>
                             <div class="month">DEC</div>
                         </div>
-                        <div class="appointment-details">
-                            <div class="property">Stadsloft in historisch pand</div>
-                            <div class="info">
+                        <div style="flex: 1;">
+                            <div class="property-name">Moderne Stadswoning</div>
+                            <div class="appointment-info">
                                 <div><i class="ri-time-line"></i> 10:30 - 11:30</div>
-                                <div><i class="ri-map-pin-line"></i> Korenmarkt 45, 9000 Gent</div>
-                                <div><i class="ri-user-line"></i> Jan De Vries - +32 987 654 321</div>
+                                <div><i class="ri-user-line"></i> Lucas Vermeulen</div>
                             </div>
                         </div>
-                        <div class="appointment-actions">
-                            <span class="status-badge status-pending">In afwachting</span>
-                            <button class="btn-small btn-contact" onclick="window.location.href='chat.html?id=2'">
-                                <i class="ri-message-3-line"></i> Bericht sturen
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Appointment 3 -->
-                    <div class="appointment-card">
-                        <div class="appointment-date">
-                            <div class="day">22</div>
-                            <div class="month">DEC</div>
-                        </div>
-                        <div class="appointment-details">
-                            <div class="property">Duurzaam Wonen in 't Groen</div>
-                            <div class="info">
-                                <div><i class="ri-time-line"></i> 16:00 - 17:00</div>
-                                <div><i class="ri-map-pin-line"></i> Groeneweg 78, 3001 Leuven</div>
-                                <div><i class="ri-user-line"></i> Premium Homes - +32 456 789 123</div>
-                            </div>
-                        </div>
-                        <div class="appointment-actions">
-                            <span class="status-badge status-confirmed">Bevestigd</span>
-                            <button class="btn-small btn-contact" onclick="window.location.href='chat.html?id=3'">
-                                <i class="ri-message-3-line"></i> Bericht sturen
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
+                            <span class="status-badge status-pending">Nieuw</span>
+                            <button class="btn" onclick="window.location.href='chat-makelaars.html?id=2'"
+                                style="padding: 10px 20px; background: var(--primary-makelaars); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
+                                Bericht Sturen
                             </button>
                         </div>
                     </div>
@@ -175,7 +258,7 @@
     </div>
 
     <script src="app.js"></script>
-    <script src="dashboard-nav.js"></script>`n
+    <script src="dashboard-nav.js"></script>
 </body>
 
 </html>

@@ -9,7 +9,10 @@ require('./db');
 const authRoutes = require('./routes/auth');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5500;
+
+// Serve static files from the root directory
+app.use(express.static(path.join(__dirname, '..')));
 
 // Middleware
 app.use(cors({

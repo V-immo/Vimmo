@@ -11,123 +11,51 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
 
     <style>
-        :root {
-            --primary-zoeker: #8b5cf6;
-            --primary-dark-zoeker: #7c3aed;
-        }
-
-        .dashboard-zoeker {
-            display: flex;
-            min-height: 100vh;
-            background: var(--bg-light);
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--bg-card);
-            border-right: 1px solid rgba(0, 0, 0, 0.06);
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .sidebar .brand {
-            padding: 0 30px 30px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: block;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-nav {
-            padding: 0 15px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 15px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: var(--radius-md);
-            margin-bottom: 4px;
-            transition: all 0.2s;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-light);
-            color: var(--text-main);
-        }
-
-        .nav-item.active {
-            background: var(--primary-zoeker);
-            color: white;
-        }
-
-        .nav-item i {
-            font-size: 1.2rem;
-        }
-
-        .main-content {
-            margin-left: 280px;
-            flex: 1;
-            padding: 40px;
-        }
-
         .messages-container {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border-radius: 30px;
             overflow: hidden;
-            max-width: 1200px;
-        }
-
-        .messages-header {
-            padding: 24px 30px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-        }
-
-        .messages-header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 4px;
+            border: 1px solid white;
         }
 
         .conversation-item {
             display: flex;
-            gap: 16px;
-            padding: 20px 30px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            gap: 25px;
+            padding: 30px 40px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            align-items: center;
+        }
+
+        .conversation-item:last-child {
+            border-bottom: none;
         }
 
         .conversation-item:hover {
-            background: var(--bg-light);
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateX(10px);
         }
 
         .conversation-item.unread {
-            background: #f0f7ff;
+            background: rgba(108, 92, 231, 0.03);
         }
 
         .message-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
             background: var(--primary-zoeker);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
+            font-weight: 800;
+            font-size: 1.3rem;
             flex-shrink: 0;
+            box-shadow: 0 8px 16px rgba(108, 92, 231, 0.15);
         }
 
         .conversation-content {
@@ -139,64 +67,82 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .conversation-name {
-            font-weight: 600;
-            font-size: 1.05rem;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .conversation-time {
             font-size: 0.85rem;
             color: var(--text-muted);
+            font-weight: 600;
         }
 
         .conversation-property {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
+            font-size: 0.95rem;
+            color: var(--primary-zoeker);
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .conversation-preview {
             color: var(--text-muted);
+            font-size: 1rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            font-weight: 500;
         }
 
         .conversation-item.unread .conversation-preview {
             color: var(--text-main);
-            font-weight: 500;
+            font-weight: 700;
         }
 
-        .unread-badge {
-            width: 10px;
-            height: 10px;
-            background: var(--accent-red);
+        .unread-indicator {
+            width: 12px;
+            height: 12px;
+            background: var(--primary-zoeker);
             border-radius: 50%;
-            margin-left: 8px;
+            box-shadow: 0 0 0 4px white;
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                display: none;
+            .main-content {
+                padding: 20px;
             }
 
-            .main-content {
-                margin-left: 0;
+            .conversation-item {
                 padding: 20px;
+                gap: 15px;
+            }
+
+            .message-avatar {
+                width: 50px;
+                height: 50px;
+                border-radius: 15px;
+                font-size: 1.1rem;
             }
         }
     </style>
 </head>
 
-<body>
+<body class="role-zoeker">
     <div class="dashboard-zoeker">
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
@@ -211,40 +157,50 @@
                 </a>
                 <a href="berichten-zoeker.html" class="nav-item active">
                     <i class="ri-message-3-line"></i> Berichten
-                    <span class="badge"
-                        style="margin-left: auto; background: var(--primary-zoeker); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                    <span
+                        style="margin-left: auto; background: var(--primary-zoeker); color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">2</span>
                 </a>
                 <a href="zoekopdrachten-zoeker.html" class="nav-item">
                     <i class="ri-search-line"></i> Zoekopdrachten
                 </a>
 
-                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
-                <a href="instellingen-zoeker.html" class="nav-item">
+                <a href="instellingen-zoeker.html" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
+
+                <div class="sidebar-user">
+                    <div class="user-avatar" style="background: rgba(108, 92, 231, 0.1); color: var(--primary-zoeker);">
+                        AK</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Anouk Kerstens</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Woningzoeker</div>
+                    </div>
+                </div>
             </nav>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="messages-container">
-                <div class="messages-header">
-                    <h1>Berichten</h1>
-                    <p style="color: var(--text-muted);">Al uw conversaties met makelaars en verkopers</p>
-                </div>
+            <div style="margin-bottom: 40px; padding: 20px 0;">
+                <h1 style="font-size: 2.8rem; font-weight: 800; color: var(--text-main);">Berichten</h1>
+                <p style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">Al uw conversaties met
+                    makelaars en verkopers.</p>
+            </div>
 
+            <div class="messages-container glass-panel">
                 <!-- Conversation 1 - Unread -->
-                <div class="conversation-item unread" onclick="window.location.href='chat.html?id=1'">
-                    <div class="message-avatar" style="background: var(--primary-zoeker);">MV</div>
+                <div class="conversation-item unread" onclick="window.location.href='chat-zoeker.html?id=1'">
+                    <div class="message-avatar">MV</div>
                     <div class="conversation-content">
                         <div class="conversation-header">
                             <div class="conversation-name">
                                 Makelaar Vastgoed
-                                <span class="unread-badge"></span>
+                                <span class="unread-indicator"></span>
                             </div>
                             <div class="conversation-time">2u geleden</div>
                         </div>
@@ -258,13 +214,13 @@
                 </div>
 
                 <!-- Conversation 2 - Unread -->
-                <div class="conversation-item unread" onclick="window.location.href='chat.html?id=2'">
-                    <div class="message-avatar" style="background: var(--primary-zoeker);">JD</div>
+                <div class="conversation-item unread" onclick="window.location.href='chat-zoeker.html?id=2'">
+                    <div class="message-avatar">JD</div>
                     <div class="conversation-content">
                         <div class="conversation-header">
                             <div class="conversation-name">
                                 Jan De Vries
-                                <span class="unread-badge"></span>
+                                <span class="unread-indicator"></span>
                             </div>
                             <div class="conversation-time">1d geleden</div>
                         </div>
@@ -278,8 +234,8 @@
                 </div>
 
                 <!-- Conversation 3 - Read -->
-                <div class="conversation-item" onclick="window.location.href='chat.html?id=3'">
-                    <div class="message-avatar" style="background: var(--primary-zoeker);">PH</div>
+                <div class="conversation-item" onclick="window.location.href='chat-zoeker.html?id=3'">
+                    <div class="message-avatar">PH</div>
                     <div class="conversation-content">
                         <div class="conversation-header">
                             <div class="conversation-name">Premium Homes</div>
@@ -295,8 +251,8 @@
                 </div>
 
                 <!-- Conversation 4 - Read -->
-                <div class="conversation-item" onclick="window.location.href='chat.html?id=4'">
-                    <div class="message-avatar" style="background: var(--primary-zoeker);">EV</div>
+                <div class="conversation-item" onclick="window.location.href='chat-zoeker.html?id=4'">
+                    <div class="message-avatar">EV</div>
                     <div class="conversation-content">
                         <div class="conversation-header">
                             <div class="conversation-name">Elite Vastgoed</div>
@@ -315,7 +271,7 @@
     </div>
 
     <script src="app.js"></script>
-    <script src="dashboard-nav.js"></script>`n
+    <script src="dashboard-nav.js"></script>
 </body>
 
 </html>

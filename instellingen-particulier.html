@@ -11,91 +11,22 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
 
     <style>
-        :root {
-            --primary-particulier: #10b981;
-            --primary-dark-particulier: #059669;
+        /* Groene achtergrond voor particulier pagina's */
+        body.role-particulier {
+            background: linear-gradient(180deg, #ecfdf5 0%, #059669 100%) !important;
+            background-attachment: fixed !important;
         }
 
         .settings-page {
-            display: flex;
-            min-height: 100vh;
-            background: var(--bg-light);
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--bg-card);
-            border-right: 1px solid rgba(0, 0, 0, 0.06);
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .sidebar .brand {
-            padding: 0 30px 30px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: block;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-nav {
-            padding: 0 15px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 15px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: var(--radius-md);
-            margin-bottom: 4px;
-            transition: all 0.2s;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-light);
-            color: var(--text-main);
-        }
-
-        .nav-item.active {
-            background: var(--primary-particulier);
-            color: white;
-        }
-
-        .main-content {
-            margin-left: 280px;
-            flex: 1;
-            padding: 40px;
-            max-width: 1200px;
-        }
-
-        .settings-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 30px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            margin-bottom: 24px;
-        }
-
-        .settings-card h2 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            background: transparent !important;
         }
 
         .setting-item {
             padding: 20px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            border-bottom: 1px solid #f1f5f9;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -105,35 +36,29 @@
             border-bottom: none;
         }
 
-        .setting-info h3 {
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
-
-        .setting-info p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
         .btn-edit {
-            padding: 8px 20px;
-            background: white;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--radius-md);
+            padding: 10px 20px;
+            background: #f8fafc;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--btn-transition);
         }
 
         .btn-edit:hover {
-            border-color: var(--primary);
-            color: var(--primary);
+            background: var(--primary-particulier);
+            color: white;
+            border-color: var(--primary-particulier);
+            transform: scale(1.05);
         }
 
         .toggle-switch {
             position: relative;
             width: 50px;
-            height: 26px;
-            background: #ccc;
+            height: 28px;
+            background: #e2e8f0;
             border-radius: 100px;
             cursor: pointer;
             transition: background 0.3s;
@@ -150,256 +75,411 @@
             height: 20px;
             background: white;
             border-radius: 50%;
-            top: 3px;
-            left: 3px;
+            top: 4px;
+            left: 4px;
             transition: left 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .toggle-switch.active::after {
-            left: 27px;
+            left: 26px;
         }
 
-        @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            z-index: 1000;
+        }
 
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 50px;
+            max-width: 1200px;
+        }
+
+        @media (max-width: 1024px) {
             .main-content {
                 margin-left: 0;
-                padding: 20px;
+                padding: 25px;
             }
         }
     </style>
 </head>
 
-<body>
-    <div class="settings-page">
+<body class="role-particulier">
+    <div class="settings-page" style="background: #f8fafc; display: flex; min-height: 100vh;">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <a href="index.html" class="brand">
-                <span style="color: #d63031; font-weight: 400;">V</span> <span
-                    style="color: #3d3530; font-weight: 400;">I</span><span
-                    style="color: #3d3530; font-weight: 800;">MMO</span>
+            <a href="index.html" class="sidebar-brand">
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
+                <!-- User Profile at TOP -->
+                <div class="sidebar-user" style="border-top: none; margin-bottom: 20px; padding-top: 5px;">
+                    <div class="user-avatar"
+                        style="background: rgba(16, 185, 129, 0.1); color: var(--primary-particulier);">
+                        TV</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Tomas Verbeeck</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Particulier</div>
+                    </div>
+                </div>
+
+                <div style="margin: 10px 0 20px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
                 <a href="dashboard-particulier.html" class="nav-item">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
                 <a href="advertentie-particulier.html" class="nav-item">
-                    <i class="ri-home-4-line"></i> Mijn Advertentie
+                    <i class="ri-home-4-line"></i> Mijn Aanbod
                 </a>
                 <a href="beschikbaarheid-particulier.html" class="nav-item">
                     <i class="ri-calendar-line"></i> Beschikbaarheid
                 </a>
-                <a href="agenda-particulier.html" class="nav-item">
-                    <i class="ri-calendar-check-line"></i> Aanvragen
+                <a href="aanvragen-particulier.html" class="nav-item">
+                    <i class="ri-mail-line"></i> Aanvragen
+                    <span
+                        style="margin-left: auto; background: #ef4444; color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
                 </a>
                 <a href="berichten-particulier.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
+                    <span
+                        style="margin-left: auto; background: var(--primary-particulier); color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
+                </a>
+                <a href="pakket-beheer.html" class="nav-item">
+                    <i class="ri-box-3-line"></i> Pakket Beheer
+                    <span id="sidebar-package-usage"
+                        style="margin-left: auto; color: var(--primary-particulier); font-weight: 800; font-size: 0.8rem;"></span>
                 </a>
 
-                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
                 <a href="instellingen-particulier.html" class="nav-item active">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
             </nav>
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content">
-            <div style="margin-bottom: 30px;">
-                <h1 style="font-size: 2rem; margin-bottom: 8px;">Instellingen</h1>
-                <p style="color: var(--text-muted);">Beheer uw account en voorkeuren</p>
+        <main class="main-content" style="padding: 40px 60px;">
+            <!-- Breadcrumbs -->
+            <div class="particulier-breadcrumb"
+                style="margin-bottom: 25px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 700;">
+                <a href="dashboard-particulier.html" style="color: var(--text-muted); text-decoration: none;"><i
+                        class="ri-dashboard-line"></i> Dashboard</a>
+                <span style="color: #cbd5e1;">/</span>
+                <span class="current" style="color: var(--primary-particulier);">Instellingen</span>
             </div>
 
-            <!-- Account Info -->
-            <div class="settings-card">
-                <h2><i class="ri-user-line"></i> Account Informatie</h2>
-
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Naam</h3>
-                        <p>Emma Peeters</p>
+            <div class="particulier-page-header" style="margin-bottom: 40px;">
+                <div class="page-header-info">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <a href="dashboard-particulier.html" class="back-btn glass-panel"
+                            style="width: 45px; height: 45px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); background: white; display: flex; align-items: center; justify-content: center; color: var(--text-main); text-decoration: none;">
+                            <i class="ri-arrow-left-line"></i>
+                        </a>
+                        <div>
+                            <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-main);">Instellingen</h1>
+                            <p class="page-subtitle"
+                                style="color: var(--text-muted); font-weight: 600; margin-top: 5px;">Beheer uw account
+                                en voorkeuren</p>
+                        </div>
                     </div>
-                    <button class="btn-edit"
-                        onclick="editField('Naam', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
-                </div>
-
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>E-mailadres</h3>
-                        <p>emma.peeters@example.com</p>
-                    </div>
-                    <button class="btn-edit"
-                        onclick="editField('E-mailadres', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
-                </div>
-
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Telefoonnummer</h3>
-                        <p>+32 475 12 34 56</p>
-                    </div>
-                    <button class="btn-edit"
-                        onclick="editField('Telefoonnummer', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
-                </div>
-
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Wachtwoord</h3>
-                        <p>••••••••</p>
-                    </div>
-                    <button class="btn-edit"
-                        onclick="alert('Wachtwoord wijzigen functionaliteit komt binnenkort!')">Wijzigen</button>
                 </div>
             </div>
 
-            <!-- Notifications -->
-            <div class="settings-card">
-                <h2><i class="ri-notification-line"></i> Notificaties</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <!-- Account Info -->
+                <div class="settings-card glass-panel"
+                    style="background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); padding: 35px; border-radius: 24px;">
+                    <h2
+                        style="margin-bottom: 25px; display: flex; align-items: center; gap: 12px; font-size: 1.3rem; font-weight: 800; color: var(--text-main);">
+                        <i class="ri-user-line" style="color: var(--primary-particulier);"></i> Account Informatie
+                    </h2>
 
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>E-mail notificaties</h3>
-                        <p>Ontvang updates over bezichtigingen en berichten</p>
+                    <div class="setting-item" style="padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div class="setting-info">
+                            <h3
+                                style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">
+                                Naam</h3>
+                            <p style="font-weight: 700; color: var(--text-main); font-size: 1.1rem;">Tomas Verbeeck</p>
+                        </div>
+                        <button class="btn-edit"
+                            onclick="editField('Naam', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
                     </div>
-                    <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+
+                    <div class="setting-item" style="padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div class="setting-info">
+                            <h3
+                                style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">
+                                E-mailadres</h3>
+                            <p style="font-weight: 700; color: var(--text-main); font-size: 1.1rem;">
+                                tomas.verbeeck@example.com</p>
+                        </div>
+                        <button class="btn-edit"
+                            onclick="editField('E-mailadres', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
+                    </div>
+
+                    <div class="setting-item" style="padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div class="setting-info">
+                            <h3
+                                style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">
+                                Telefoonnummer</h3>
+                            <p style="font-weight: 700; color: var(--text-main); font-size: 1.1rem;">+32 475 12 34 56
+                            </p>
+                        </div>
+                        <button class="btn-edit"
+                            onclick="editField('Telefoonnummer', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
+                    </div>
+
+                    <div class="setting-item" style="padding: 20px 0; border-bottom: none;">
+                        <div class="setting-info">
+                            <h3
+                                style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">
+                                Wachtwoord</h3>
+                            <p style="font-weight: 700; color: var(--text-main); font-size: 1.1rem;">••••••••</p>
+                        </div>
+                        <button class="btn-edit"
+                            onclick="alert('Wachtwoord wijzigen functionaliteit komt binnenkort!')">Wijzigen</button>
+                    </div>
                 </div>
 
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Nieuwe woningen</h3>
-                        <p>Waarschuwing bij nieuwe woningen die aan uw zoekopdrachten voldoen</p>
+                <!-- Notifications -->
+                <div class="settings-card glass-panel"
+                    style="background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); padding: 35px; border-radius: 24px;">
+                    <h2
+                        style="margin-bottom: 25px; display: flex; align-items: center; gap: 12px; font-size: 1.3rem; font-weight: 800; color: var(--text-main);">
+                        <i class="ri-notification-line" style="color: var(--primary-particulier);"></i> Notificaties
+                    </h2>
+
+                    <div class="setting-item" style="padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div class="setting-info">
+                            <h3
+                                style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">
+                                E-mail notificaties</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Ontvang updates
+                                over bezichtigingen en berichten</p>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleSetting(this)"></div>
                     </div>
-                    <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+
+                    <div class="setting-item" style="padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div class="setting-info">
+                            <h3
+                                style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">
+                                Nieuwe woningen</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Waarschuwing bij
+                                nieuwe woningen voor uw zoekopdracht</p>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleSetting(this)"></div>
+                    </div>
+
+                    <div class="setting-item" style="padding: 20px 0; border-bottom: none;">
+                        <div class="setting-info">
+                            <h3
+                                style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">
+                                Prijswijzigingen</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Notificatie bij
+                                prijswijzigingen van opgeslagen woningen</p>
+                        </div>
+                        <div class="toggle-switch" onclick="toggleSetting(this)"></div>
+                    </div>
                 </div>
 
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Prijswijzigingen</h3>
-                        <p>Notificatie bij prijswijzigingen van opgeslagen woningen</p>
+                <!-- Dossier Standaard - Span beide kolommen -->
+                <div class="settings-card glass-panel"
+                    style="grid-column: 1 / -1; background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); padding: 35px; border-radius: 24px;">
+                    <h2
+                        style="margin-bottom: 25px; display: flex; align-items: center; gap: 12px; font-size: 1.3rem; font-weight: 800; color: var(--text-main);">
+                        <i class="ri-folder-user-line" style="color: var(--primary-particulier);"></i> Dossier Standaard
+                    </h2>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-bottom: 20px;">
+                        Stel in welke documenten u standaard wilt opvragen bij een dossieraanvraag.
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                        <div class="setting-item"
+                            style="padding: 15px; background: rgba(255,255,255,0.5); border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); flex-direction: column; gap: 15px;">
+                            <div class="setting-info" style="text-align: center;">
+                                <h3
+                                    style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 2px;">
+                                    Identiteitskaart</h3>
+                                <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Kopie voor- en
+                                    achterkant</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="toggleSetting(this)"></div>
+                        </div>
+
+                        <div class="setting-item"
+                            style="padding: 15px; background: rgba(255,255,255,0.5); border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); flex-direction: column; gap: 15px;">
+                            <div class="setting-info" style="text-align: center;">
+                                <h3
+                                    style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 2px;">
+                                    Loonbrieven (3 mnd)</h3>
+                                <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Bewijs van
+                                    inkomen</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="toggleSetting(this)"></div>
+                        </div>
+
+                        <div class="setting-item"
+                            style="padding: 15px; background: rgba(255,255,255,0.5); border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); flex-direction: column; gap: 15px;">
+                            <div class="setting-info" style="text-align: center;">
+                                <h3
+                                    style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 2px;">
+                                    Werkgeversverklaring</h3>
+                                <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Bevestiging
+                                    dienstverband</p>
+                            </div>
+                            <div class="toggle-switch" onclick="toggleSetting(this)"></div>
+                        </div>
                     </div>
-                    <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
                 </div>
-            </div>
 
-            <!-- Privacy -->
-            <div class="settings-card">
-                <h2><i class="ri-shield-check-line"></i> Privacy & Beveiliging</h2>
+                <!-- Privacy -->
+                <div class="settings-card glass-panel"
+                    style="background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); padding: 35px; border-radius: 24px;">
+                    <h2
+                        style="margin-bottom: 25px; display: flex; align-items: center; gap: 12px; font-size: 1.3rem; font-weight: 800; color: var(--text-main);">
+                        <i class="ri-shield-check-line" style="color: var(--primary-particulier);"></i> Privacy &
+                        Beveiliging
+                    </h2>
 
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Itsme Verificatie</h3>
-                        <p>Geverifieerd met itsme</p>
+                    <div class="setting-item" style="padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div class="setting-info">
+                            <h3
+                                style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">
+                                ITSME® Verificatie</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Uw identiteit
+                                is succesvol geverifieerd</p>
+                        </div>
+                        <span
+                            style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.1); padding: 8px 16px; font-size: 0.75rem; font-weight: 800; border-radius: 100px; display: flex; align-items: center; gap: 6px;">
+                            <i class="ri-checkbox-circle-fill"></i> Geverifieerd
+                        </span>
                     </div>
-                    <span style="color: #28a745; font-weight: 600;"><i class="ri-checkbox-circle-fill"></i>
-                        Actief</span>
+
+                    <div class="setting-item" style="padding: 20px 0; border-bottom: none;">
+                        <div class="setting-info">
+                            <h3
+                                style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">
+                                Twee-factor authenticatie</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Extra
+                                beveiliging voor uw account via SMS of App</p>
+                        </div>
+                        <button class="btn-edit"
+                            onclick="alert('2FA wordt binnenkort toegevoegd!')">Inschakelen</button>
+                    </div>
                 </div>
 
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Twee-factor authenticatie</h3>
-                        <p>Extra beveiliging voor uw account</p>
-                    </div>
-                    <button class="btn-edit" onclick="alert('2FA wordt binnenkort toegevoegd!')">Inschakelen</button>
-                </div>
+                <!-- Danger Zone -->
+                <div class="settings-card glass-panel"
+                    style="background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); padding: 35px; border-radius: 24px; border-top: 5px solid #ef4444;">
+                    <h2
+                        style="margin-bottom: 25px; display: flex; align-items: center; gap: 12px; font-size: 1.3rem; font-weight: 800; color: #ef4444;">
+                        <i class="ri-error-warning-line"></i> Account Beheer
+                    </h2>
 
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Privacy instellingen</h3>
-                        <p>Beheer wie uw profiel kan zien</p>
+                    <div class="setting-item" style="padding: 20px 0; border-bottom: none;">
+                        <div class="setting-info">
+                            <h3
+                                style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">
+                                Account verwijderen</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Permanent uw
+                                account en alle gegevens verwijderen</p>
+                        </div>
+                        <button class="btn-edit" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.2);"
+                            onclick="if(confirm('Weet u zeker dat u uw account wilt verwijderen?')) alert('Account verwijderen functionaliteit komt binnenkort!')">Verwijderen</button>
                     </div>
-                    <button class="btn-edit" onclick="alert('Privacy instellingen komen binnenkort!')">Beheren</button>
-                </div>
-            </div>
-
-            <!-- Danger Zone -->
-            <div class="settings-card">
-                <h2 style="color: #dc3545;"><i class="ri-error-warning-line"></i> Account Beheer</h2>
-
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Account verwijderen</h3>
-                        <p>Permanent uw account en alle gegevens verwijderen</p>
-                    </div>
-                    <button class="btn-edit" style="color: #dc3545; border-color: #dc3545;"
-                        onclick="if(confirm('Weet u zeker dat u uw account wilt verwijderen?')) alert('Account verwijderen functionaliteit komt binnenkort!')">Verwijderen</button>
                 </div>
             </div>
         </main>
-    </div>
 
-    </div>
-
-    <!-- Edit Modal -->
-    <div id="editModal"
-        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-        <div
-            style="background: var(--bg-card); border-radius: var(--radius-lg); padding: 30px; max-width: 500px; width: 90%;">
-            <h3 id="modalTitle" style="margin-bottom: 20px;">Bewerken</h3>
-            <input type="text" id="modalInput"
-                style="width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); margin-bottom: 20px;">
-            <div style="display: flex; gap: 12px; justify-content: flex-end;">
-                <button onclick="closeEditModal()"
-                    style="padding: 10px 20px; background: white; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); cursor: pointer;">Annuleren</button>
-                <button onclick="saveEdit()"
-                    style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: var(--radius-md); cursor: pointer;">Opslaan</button>
+        <!-- Edit Modal -->
+        <div id="editModal"
+            style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+            <div
+                style="background: white; border-radius: 24px; padding: 40px; max-width: 500px; width: 90%; box-shadow: var(--luxe-shadow-hover);">
+                <h3 id="modalTitle"
+                    style="margin-bottom: 25px; font-size: 1.5rem; font-weight: 800; color: var(--text-main);">
+                    Bewerken</h3>
+                <div style="margin-bottom: 30px;">
+                    <label
+                        style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Nieuwe
+                        waarde</label>
+                    <input type="text" id="modalInput"
+                        style="width: 100%; padding: 15px; border: 1px solid #f1f5f9; border-radius: 12px; font-size: 1rem; font-family: var(--font-body); outline: none; transition: border-color 0.3s;"
+                        onfocus="this.style.borderColor='var(--primary-particulier)'"
+                        onblur="this.style.borderColor='#f1f5f9'">
+                </div>
+                <div style="display: flex; gap: 15px; justify-content: flex-end;">
+                    <button onclick="closeEditModal()"
+                        style="padding: 12px 25px; background: #f1f5f9; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; color: #64748b; transition: all 0.3s;">Annuleren</button>
+                    <button onclick="saveEdit()"
+                        style="padding: 12px 25px; background: var(--primary-particulier); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); transition: all 0.3s;">Opslaan</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script src="app.js"></script>
-    <script>
-        let currentEditField = null;
-        let currentEditElement = null;
+        <script src="propertyContext.js"></script>
+        <script src="particulier-utils.js"></script>
+        <script src="dashboard-nav.js"></script>
+        <script>
+            function toggleSetting(el) {
+                el.classList.toggle('active');
+                ParticulierUtils.toast('Instelling bijgewerkt', 'success');
+            }
 
-        function editField(field, currentValue, element) {
-            currentEditField = field;
-            currentEditElement = element;
-            document.getElementById('modalTitle').textContent = `${field} bewerken`;
-            document.getElementById('modalInput').value = currentValue;
-            document.getElementById('editModal').style.display = 'flex';
-        }
+            async function editField(field, currentValue, element) {
+                const newValue = await ParticulierUtils.prompt(
+                    `${field} aanpassen`,
+                    `Voer uw nieuwe ${field.toLowerCase()} in:`,
+                    currentValue
+                );
 
-        function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
-        }
+                if (newValue && newValue.trim() && newValue !== currentValue) {
+                    element.textContent = newValue;
 
-        function saveEdit() {
-            const newValue = document.getElementById('modalInput').value;
-            if (newValue.trim()) {
-                currentEditElement.textContent = newValue;
+                    // Save to localStorage (mocking a backend save)
+                    const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+                    settings[field] = newValue;
+                    localStorage.setItem('userSettings', JSON.stringify(settings));
 
-                // Save to localStorage
+                    ParticulierUtils.toast(`${field} succesvol bijgewerkt`, 'success');
+                }
+            }
+
+
+            // Close modal on overlay click
+            document.getElementById('editModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('editModal')) {
+                    closeEditModal();
+                }
+            });
+
+            // Load saved settings
+            window.addEventListener('load', () => {
                 const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
-                settings[currentEditField] = newValue;
-                localStorage.setItem('userSettings', JSON.stringify(settings));
 
-                alert(`✅ ${currentEditField} bijgewerkt!`);
-                closeEditModal();
-            }
-        }
+                const nameEl = Array.from(document.querySelectorAll('h3')).find(h => h.textContent === 'Naam')?.nextElementSibling;
+                if (nameEl) nameEl.textContent = settings.Naam || 'Tomas Verbeeck';
 
-        // Close modal on overlay click
-        document.getElementById('editModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('editModal')) {
-                closeEditModal();
-            }
-        });
+                const emailEl = Array.from(document.querySelectorAll('h3')).find(h => h.textContent === 'E-mailadres')?.nextElementSibling;
+                if (emailEl) emailEl.textContent = settings['E-mailadres'] || 'tomas.verbeeck@example.com';
 
-        // Load saved settings
-        window.addEventListener('load', () => {
-            const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
-            if (settings.Naam) document.querySelector('.setting-item:nth-child(1) p').textContent = settings.Naam;
-            if (settings['E-mailadres']) document.querySelector('.setting-item:nth-child(2) p').textContent = settings['E-mailadres'];
-            if (settings.Telefoonnummer) document.querySelector('.setting-item:nth-child(3) p').textContent = settings.Telefoonnummer;
-        });
-    </script>
-    <script src="dashboard-nav.js"></script>`n</body>
+                const phoneEl = Array.from(document.querySelectorAll('h3')).find(h => h.textContent === 'Telefoonnummer')?.nextElementSibling;
+                if (phoneEl) phoneEl.textContent = settings.Telefoonnummer || '+32 475 12 34 56';
+            });
+        </script>
+        <script src="dashboard-nav.js"></script>
+</body>
 
 </html>
-

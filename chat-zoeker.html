@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat | Particulier | Vimmo</title>
+    <title>Chat | Woningzoeker | Vimmo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -17,7 +17,7 @@
         .chat-page {
             display: flex;
             height: 100vh;
-            background: #f7fcf9;
+            background: #fcfaff;
         }
 
         .chat-container {
@@ -28,9 +28,7 @@
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
-            box-shadow: var(--luxe-shadow);
-            border-left: 1px solid var(--glass-border);
-            border-right: 1px solid var(--glass-border);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
         }
 
         .chat-header {
@@ -59,21 +57,21 @@
         }
 
         .back-btn:hover {
-            border-color: var(--primary-particulier);
-            color: var(--primary-particulier);
+            border-color: var(--primary-zoeker);
+            color: var(--primary-zoeker);
         }
 
         .header-avatar {
             width: 48px;
             height: 48px;
             border-radius: 14px;
-            background: var(--primary-particulier);
+            background: var(--primary-zoeker);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 4px 10px rgba(108, 92, 231, 0.2);
         }
 
         .header-info {
@@ -88,7 +86,7 @@
 
         .header-info .property {
             font-size: 0.85rem;
-            color: var(--primary-particulier);
+            color: var(--primary-zoeker);
             font-weight: 700;
             margin-top: 2px;
         }
@@ -100,7 +98,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            background: #fcfdfc;
+            background: #fafbff;
         }
 
         .message {
@@ -129,7 +127,7 @@
         }
 
         .message.sent .msg-avatar {
-            background: var(--primary-particulier);
+            background: var(--primary-zoeker);
             color: white;
         }
 
@@ -143,12 +141,12 @@
         }
 
         .message.sent .msg-bubble {
-            background: var(--primary-particulier);
+            background: var(--primary-zoeker);
             color: white;
             border-top-left-radius: 20px;
             border-top-right-radius: 4px;
             border: none;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.2);
         }
 
         .msg-text {
@@ -170,7 +168,7 @@
         }
 
         .property-card-inline {
-            background: #f7fcf9;
+            background: #f8fafc;
             border-radius: 15px;
             padding: 12px;
             margin-top: 15px;
@@ -178,13 +176,12 @@
             gap: 12px;
             text-decoration: none;
             color: inherit;
-            border: 1px solid rgba(16, 185, 129, 0.1);
+            border: 1px solid #e2e8f0;
             transition: transform 0.2s;
         }
 
         .property-card-inline:hover {
             transform: scale(1.02);
-            border-color: var(--primary-particulier);
         }
 
         .property-card-inline img {
@@ -196,7 +193,7 @@
 
         .property-card-inline .p-price {
             font-weight: 800;
-            color: var(--primary-particulier);
+            color: var(--primary-zoeker);
             font-size: 0.9rem;
         }
 
@@ -230,16 +227,16 @@
         }
 
         .chat-input:focus {
-            border-color: var(--primary-particulier);
+            border-color: var(--primary-zoeker);
             background: white;
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
         }
 
         .send-button {
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: var(--primary-particulier);
+            background: var(--primary-zoeker);
             color: white;
             border: none;
             cursor: pointer;
@@ -248,12 +245,12 @@
             justify-content: center;
             font-size: 1.4rem;
             transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
         }
 
         .send-button:hover {
             transform: scale(1.05) rotate(-10deg);
-            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 6px 15px rgba(108, 92, 231, 0.4);
         }
 
         @media (max-width: 768px) {
@@ -269,57 +266,17 @@
 </head>
 
 <body>
-    <div class="chat-page dashboard-particulier">
-        <!-- Mobile Toggle -->
-        <button class="particulier-mobile-toggle">
-            <i class="ri-menu-line"></i>
-        </button>
-
-        <!-- Sidebar (Mini Version for Chat) -->
-        <aside class="sidebar sidebar-mini">
-            <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
-            </a>
-
-            <nav class="sidebar-nav">
-                <a href="dashboard-particulier.html" class="nav-item" title="Dashboard">
-                    <i class="ri-dashboard-line"></i>
-                </a>
-                <a href="advertentie-particulier.html" class="nav-item" title="Mijn Aanbod">
-                    <i class="ri-home-4-line"></i>
-                </a>
-                <a href="beschikbaarheid-particulier.html" class="nav-item" title="Beschikbaarheid">
-                    <i class="ri-calendar-line"></i>
-                </a>
-                <a href="agenda-particulier.html" class="nav-item" title="Aanvragen">
-                    <i class="ri-calendar-check-line"></i>
-                </a>
-                <a href="berichten-particulier.html" class="nav-item active" title="Berichten">
-                    <i class="ri-message-3-line"></i>
-                </a>
-
-                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
-
-                <a href="instellingen-particulier.html" class="nav-item" title="Instellingen">
-                    <i class="ri-settings-3-line"></i>
-                </a>
-
-                <div class="sidebar-user">
-                    <div class="user-avatar">TV</div>
-                </div>
-            </nav>
-        </aside>
-
+    <div class="chat-page">
         <div class="chat-container">
             <!-- Chat Header -->
             <div class="chat-header">
                 <button class="back-btn" onclick="history.back()">
                     <i class="ri-arrow-left-line"></i>
                 </button>
-                <div class="header-avatar" id="headerAvatar">EP</div>
+                <div class="header-avatar">MV</div>
                 <div class="header-info">
-                    <div class="name" id="contactName">Emma Peeters</div>
-                    <div class="property"><i class="ri-home-4-line"></i> Luxe Appartement aan de Kust</div>
+                    <div class="name">Makelaar Vastgoed</div>
+                    <div class="property"><i class="ri-home-4-line"></i> Penthouse aan de Schelde</div>
                 </div>
             </div>
 
@@ -327,39 +284,39 @@
             <div class="chat-messages" id="chatMessages">
                 <!-- Received -->
                 <div class="message">
-                    <div class="msg-avatar" id="msgAvatarRec">EP</div>
+                    <div class="msg-avatar">MV</div>
                     <div class="msg-bubble">
-                        <div class="msg-text">Beste Tomas, ik heb interesse in uw woning. Is het mogelijk om deze week
-                            nog een bezichtiging te plannen?</div>
-                        <span class="msg-time">09:15</span>
+                        <div class="msg-text">Goedemiddag! De documenten voor de penthouse zijn zojuist naar uw e-mail
+                            verzonden.</div>
+                        <span class="msg-time">10:45</span>
                     </div>
                 </div>
 
                 <!-- Sent -->
                 <div class="message sent">
-                    <div class="msg-avatar">TV</div>
+                    <div class="msg-avatar">EP</div>
                     <div class="msg-bubble">
-                        <div class="msg-text">Beste Emma, dat kan zeker! Ik heb via de agenda mijn beschikbare tijden
-                            gedeeld. U kunt daar direct een slot kiezen.</div>
-                        <span class="msg-time">09:42</span>
+                        <div class="msg-text">Bedankt voor het snelle bericht! Ik heb ze ontvangen en ga ze direct
+                            bekijken.</div>
+                        <span class="msg-time">11:02</span>
                     </div>
                 </div>
 
                 <!-- Received with card -->
                 <div class="message">
-                    <div class="msg-avatar" id="msgAvatarRec2">EP</div>
+                    <div class="msg-avatar">MV</div>
                     <div class="msg-bubble">
-                        <div class="msg-text">Perfect, ik heb zojuist gekeken. Ik zou graag vrijdag om 14:00 uur komen
-                            kijken. Gaat dit over deze woning?</div>
-                        <a href="advertentie-particulier.html" class="property-card-inline">
-                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200&q=80"
+                        <div class="msg-text">U vindt hieronder ook nog even de directe link naar de advertentie voor de
+                            details.</div>
+                        <a href="property.html" class="property-card-inline">
+                            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=200&q=80"
                                 alt="Property">
                             <div class="p-info">
-                                <div class="p-price">€ 425.000</div>
-                                <div class="p-title">Luxe Appartement aan de Kust</div>
+                                <div class="p-price">€ 1.250.000</div>
+                                <div class="p-title">Penthouse aan de Schelde</div>
                             </div>
                         </a>
-                        <span class="msg-time">10:05</span>
+                        <span class="msg-time">11:05</span>
                     </div>
                 </div>
             </div>
@@ -376,87 +333,49 @@
         </div>
     </div>
 
-    <script src="propertyContext.js"></script>
-    <script src="particulier-utils.js"></script>
-    <script src="dashboard-nav.js"></script>
-    <script src="sla.js"></script>
     <script>
-        // Simple state based on URL ID
-        const urlParams = new URLSearchParams(window.location.search);
-        const chatId = urlParams.get('id');
-
-        function initChat() {
-            if (!window.propertyContext || !chatId) return;
-            const requests = propertyContext.getRequests();
-            const app = requests.find(r => String(r.id) === String(chatId));
-            if (!app) return;
-
-            document.getElementById('contactName').textContent = app.name;
-            const initial = app.name.substring(0, 2).toUpperCase();
-            document.getElementById('headerAvatar').textContent = initial;
-
-            renderMessages();
-        }
-
-        function renderMessages() {
-            const display = document.getElementById('chatMessages');
-            const messages = propertyContext.getMessages(chatId);
-
-            display.innerHTML = messages.map(m => {
-                const isSent = m.type === 'sent';
-                const time = new Date(m.timestamp).toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' });
-                const initial = isSent ? 'TV' : (document.getElementById('headerAvatar').textContent);
-
-                return `
-                    <div class="message ${isSent ? 'sent' : ''}">
-                        <div class="msg-avatar">${initial}</div>
-                        <div class="msg-bubble">
-                            <div class="msg-text">${m.text}</div>
-                            <span class="msg-time">${time}</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            display.scrollTop = display.scrollHeight;
-        }
-
         function sendMessage() {
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
-            if (!text || !chatId) return;
+            if (!text) return;
 
-            const property = propertyContext.getCurrent();
+            const messages = document.getElementById('chatMessages');
+            const now = new Date();
+            const time = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
 
-            // 1. Persist
-            propertyContext.addMessage(chatId, {
-                type: 'sent',
-                text: text
-            });
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message sent';
+            msgDiv.innerHTML = `
+                <div class="msg-avatar">EP</div>
+                <div class="msg-bubble">
+                    <div class="msg-text">${text}</div>
+                    <span class="msg-time">${time}</span>
+                </div>
+            `;
 
-            // 2. Clear & Render
+            messages.appendChild(msgDiv);
             input.value = '';
-            renderMessages();
+            messages.scrollTop = messages.scrollHeight;
 
-            // 3. SLA Update
-            if (window.markLeadReplied) {
-                markLeadReplied(property.id, chatId, propertyContext, { auto: false, message: text });
-            }
+            // Auto-reply
+            setTimeout(() => {
+                const replyDiv = document.createElement('div');
+                replyDiv.className = 'message';
+                replyDiv.innerHTML = `
+                    <div class="msg-avatar">MV</div>
+                    <div class="msg-bubble">
+                        <div class="msg-text">Ik heb uw bericht ontvangen. Ik kom er zo snel mogelijk bij u op terug!</div>
+                        <span class="msg-time">${time}</span>
+                    </div>
+                `;
+                messages.appendChild(replyDiv);
+                messages.scrollTop = messages.scrollHeight;
+            }, 1500);
         }
 
         document.getElementById('chatInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') sendMessage();
         });
-
-        // Robust initialization
-        function start() {
-            if (!window.propertyContext) {
-                setTimeout(start, 50);
-                return;
-            }
-            initChat();
-        }
-        start();
     </script>
 </body>
 

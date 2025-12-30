@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Vimmo Preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;800&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Inter, system-ui;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 22px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .badge {
+            font-family: Outfit;
+            font-weight: 900;
+            font-size: 12px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #111827;
+            color: #fff;
+        }
+
+        .badge.concept {
+            background: #f59e0b;
+            color: #111827;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, .08);
+            border-radius: 22px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .08);
+            overflow: hidden;
+        }
+
+        .hero {
+            position: relative;
+            height: 360px;
+            background: #0f172a;
+        }
+
+        .hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, .0), rgba(0, 0, 0, .55));
+        }
+
+        .hero .meta {
+            position: absolute;
+            left: 22px;
+            right: 22px;
+            bottom: 18px;
+            color: #fff;
+        }
+
+        h1 {
+            font-family: Outfit;
+            font-size: 34px;
+            margin: 0 0 6px;
+        }
+
+        .sub {
+            opacity: .9;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 16px;
+            padding: 18px;
+        }
+
+        .panel {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, .08);
+            border-radius: 18px;
+            padding: 16px;
+        }
+
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .kpi {
+            border: 1px solid rgba(0, 0, 0, .08);
+            border-radius: 16px;
+            padding: 12px;
+            background: #f8fafc;
+        }
+
+        .kpi .v {
+            font-family: Outfit;
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .kpi .l {
+            font-size: 11px;
+            font-weight: 800;
+            opacity: .65;
+            letter-spacing: .6px;
+            text-transform: uppercase;
+        }
+
+        .price {
+            font-family: Outfit;
+            font-weight: 900;
+            font-size: 28px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            padding: 12px 14px;
+            font-weight: 900;
+            border: 1px solid rgba(0, 0, 0, .10);
+            cursor: pointer;
+            background: #10b981;
+            color: #fff;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, .25);
+        }
+
+        .muted {
+            color: rgba(0, 0, 0, .55);
+            font-weight: 700;
+        }
+
+        .photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .photos img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, .08);
+        }
+
+        @media (max-width: 980px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                height: 280px;
+            }
+        }
+
+        /* Trust Badges */
+        .tbadge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 12px;
+            border: 1px solid rgba(255, 255, 255, .22);
+            background: rgba(0, 0, 0, .28);
+            color: #fff;
+            backdrop-filter: blur(10px);
+        }
+
+        .tbadge.ok {
+            background: rgba(16, 185, 129, .22);
+            border-color: rgba(16, 185, 129, .35);
+        }
+
+        .tbadge.warn {
+            background: rgba(245, 158, 11, .22);
+            border-color: rgba(245, 158, 11, .35);
+        }
+
+        .tbadge .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .65);
+        }
+
+        .tbadge.ok .dot {
+            background: #10b981;
+        }
+
+        .tbadge.warn .dot {
+            background: #f59e0b;
+        }
+    </style>
+    <script src="propertyContext.js"></script>
+    <script src="particulier-utils.js"></script>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="top">
+            <div id="badge" class="badge concept">Concept Preview</div>
+            <button class="btn" style="width:auto;background:#fff;color:#0f172a;" onclick="history.back()">← Terug naar
+                editor</button>
+        </div>
+
+        <div class="card">
+            <div class="hero">
+                <img id="heroImg" alt="">
+                <div class="overlay"></div>
+                <div class="meta">
+                    <h1 id="title">—</h1>
+                    <div class="sub" id="addr">—</div>
+                    <div id="trustBadges" style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;"></div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="panel">
+                    <div class="kpis">
+                        <div class="kpi">
+                            <div class="v" id="kBed">—</div>
+                            <div class="l">Slaapkamers</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="v" id="kBath">—</div>
+                            <div class="l">Badkamers</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="v" id="kSurf">—</div>
+                            <div class="l">m²</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:14px;" class="muted" id="extra">—</div>
+                    <div id="photoGrid" class="photos"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="price" id="price">—</div>
+                    <div class="muted" id="epc" style="margin-top:6px;">—</div>
+                    <div style="height:12px;"></div>
+                    <button class="btn" onclick="alert('Preview: contact flow volgt in productie')">Contacteer
+                        verkoper</button>
+                    <div style="height:10px;"></div>
+                    <button class="btn" style="background:#f1f5f9;color:#0f172a;"
+                        onclick="alert('Preview: bezichtiging aanvragen')">Bezichtiging aanvragen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const qs = new URLSearchParams(location.search);
+            const propId = qs.get("prop") || qs.get("listingId");
+            const ctx = window.propertyContext;
+            if (!ctx || !propId) { alert("Geen pand gevonden."); return; }
+
+            if (typeof ctx.switch === "function") ctx.switch(propId);
+            const p = ctx.getCurrent() || {};
+
+            const status = String(p.listingStatus || "Concept").toLowerCase();
+            const badge = document.getElementById("badge");
+            if (status.includes("actief")) {
+                badge.textContent = "Live";
+                badge.classList.remove("concept");
+                badge.style.background = "#10b981";
+            } else if (status.includes("gepauzeerd")) {
+                badge.textContent = "Gepauzeerd";
+                badge.classList.remove("concept");
+                badge.style.background = "#64748b";
+            }
+
+            const photos = Array.isArray(p.photos) ? p.photos.filter(x => x && x.dataUrl) : [];
+            document.getElementById("heroImg").src = (photos[0]?.dataUrl) || "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200&q=80";
+
+            // Photo grid
+            const photoGrid = document.getElementById("photoGrid");
+            if (photos.length > 1) {
+                photoGrid.innerHTML = photos.slice(1, 7).map(ph => `<img src="${ph.dataUrl}" alt="">`).join("");
+                if (photos.length > 7) {
+                    photoGrid.innerHTML += `<div style="display:flex;align-items:center;justify-content:center;background:#f1f5f9;border-radius:12px;font-weight:900;color:#64748b;">+${photos.length - 7}</div>`;
+                }
+            }
+
+            document.getElementById("title").textContent = p.name || "Advertentie";
+            const address = (p.postcode && p.address) ? `${p.postcode} ${p.address}` : (p.location || "Locatie niet ingevuld");
+            document.getElementById("addr").textContent = address;
+
+            document.getElementById("kBed").textContent = p.bedrooms || "—";
+            document.getElementById("kBath").textContent = p.bathrooms || "—";
+            document.getElementById("kSurf").textContent = p.surface ? Number(p.surface).toLocaleString("nl-BE") : "—";
+
+            document.getElementById("price").textContent =
+                p.price ? `€${Number(p.price).toLocaleString("nl-BE")}` : "Prijs op aanvraag";
+
+            document.getElementById("epc").textContent =
+                p.epcLabel ? `EPC: ${String(p.epcLabel).toUpperCase()}` : "EPC: —";
+
+            const extra = [];
+            if (p.transactionType) extra.push(`${p.transactionType === 'koop' ? 'Te Koop' : 'Te Huur'}`);
+            if (p.type) extra.push(p.type);
+            if (p.state) extra.push(p.state);
+            if (p.availability) extra.push(`Beschikbaar: ${p.availability}`);
+            document.getElementById("extra").textContent = extra.length ? extra.join(" · ") : "—";
+
+            // Trust Badges
+            const trustEl = document.getElementById("trustBadges");
+            if (trustEl) {
+                const docs = p.docs || {};
+
+                const hasEpc = !!(docs.doc_epc && docs.doc_epc.ok);
+                const hasAsbest = !!(docs.doc_asbest && docs.doc_asbest.ok);
+                const hasBodem = !!(docs.doc_bodem && docs.doc_bodem.ok);
+                const ownerOk = !!p.ownerVerified;
+
+                function badge(label, ok) {
+                    return `
+                        <span class="tbadge ${ok ? 'ok' : 'warn'}" title="${ok ? 'In orde' : 'Ontbreekt'}">
+                            <span class="dot"></span>${label}
+                        </span>
+                    `;
+                }
+
+                trustEl.innerHTML =
+                    badge("EPC", hasEpc) +
+                    badge("Asbest", hasAsbest) +
+                    badge("Bodem", hasBodem) +
+                    badge("Verified Owner", ownerOk);
+
+                // Vimmo Score
+                const scoreObj = (typeof computeVimmoScore === "function") ? computeVimmoScore(p, ctx) : null;
+                if (scoreObj) {
+                    trustEl.insertAdjacentHTML("beforeend",
+                        `<span class="tbadge" title="${(scoreObj.tips || []).slice(0, 2).join(' ')}" style="background:rgba(15,23,42,.75);">
+                            <span class="dot" style="background:#60a5fa"></span> Vimmo Score ${scoreObj.score}/10
+                        </span>`
+                    );
+                }
+            }
+        })();
+    </script>
+</body>
+
+</html>

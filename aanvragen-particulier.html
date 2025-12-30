@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aanvragen | Vimmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="style.css?v=2.0">
+
+    <style>
+        /* Funnel Tabs */
+        .funnel-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            width: fit-content;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .funnel-tab {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .funnel-tab.active {
+            background: white;
+            color: var(--primary-particulier);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .funnel-tab .count {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+        }
+
+        .funnel-tab.active .count {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-particulier);
+        }
+
+        /* Bulk Action Bar */
+        .bulk-action-bar {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text-main);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            z-index: 1000;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .bulk-action-bar.active {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Dossier Detail Slide-over */
+        .dossier-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .dossier-panel {
+            position: absolute;
+            top: 0;
+            right: -600px;
+            width: 580px;
+            height: 100%;
+            background: #f8fafc;
+            box-shadow: -20px 0 50px rgba(0, 0, 0, 0.1);
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dossier-panel.active {
+            right: 0;
+        }
+
+        .dossier-header {
+            padding: 30px;
+            background: white;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .dossier-tabs {
+            display: flex;
+            border-bottom: 1px solid #f1f5f9;
+            background: white;
+            padding: 0 30px;
+        }
+
+        .dossier-tab {
+            padding: 15px 0;
+            margin-right: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dossier-tab.active {
+            color: var(--primary-particulier);
+        }
+
+        .dossier-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-particulier);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .dossier-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* Detail Cards */
+        .detail-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .detail-value {
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .doc-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        /* Layout handled by global style.css */
+
+        @media (max-width: 1100px) {
+            .client-cell {
+                display: none;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .time-cell {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="role-particulier">
+    <div class="dashboard-particulier">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-brand">
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+            </a>
+
+            <nav class="sidebar-nav">
+                <!-- User Profile at TOP -->
+                <div class="sidebar-user" style="border-top: none; margin-bottom: 20px; padding-top: 5px;">
+                    <div class="user-avatar"
+                        style="background: rgba(16, 185, 129, 0.1); color: var(--primary-particulier);">
+                        TV</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Tomas Verbeeck</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Particulier</div>
+                    </div>
+                </div>
+
+                <div style="margin: 10px 0 20px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
+                <a href="dashboard-particulier.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="advertentie-particulier.html" class="nav-item">
+                    <i class="ri-home-4-line"></i> Mijn Aanbod
+                </a>
+                <a href="beschikbaarheid-particulier.html" class="nav-item">
+                    <i class="ri-calendar-line"></i> Beschikbaarheid
+                </a>
+                <a href="aanvragen-particulier.html" class="nav-item">
+                    <i class="ri-mail-line"></i> Aanvragen
+                    <span
+                        style="margin-left: auto; background: #ef4444; color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
+                </a>
+                <a href="berichten-particulier.html" class="nav-item">
+                    <i class="ri-message-3-line"></i> Berichten
+                    <span
+                        style="margin-left: auto; background: var(--primary-particulier); color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
+                </a>
+                <a href="pakket-beheer.html" class="nav-item">
+                    <i class="ri-box-3-line"></i> Pakket Beheer
+                    <span id="sidebar-package-usage"
+                        style="margin-left: auto; color: var(--primary-particulier); font-weight: 800; font-size: 0.8rem;"></span>
+                </a>
+
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
+                <a href="instellingen-particulier.html" class="nav-item" style="opacity: 0.7;">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" style="padding: 40px 60px;">
+            <div class="funnel-tabs">
+                <div class="funnel-tab active" data-filter="all">Alles <span class="count">3</span></div>
+                <div class="funnel-tab" data-filter="nieuw">Nieuw <span class="count">1</span></div>
+                <div class="funnel-tab" data-filter="dossier">Dossier <span class="count">1</span></div>
+                <div class="funnel-tab" data-filter="bezichtiging">Bezichtiging <span class="count">1</span></div>
+                <div class="funnel-tab" data-filter="beslissing">Beslissing <span class="count">0</span></div>
+            </div>
+
+            <div class="agenda-container" id="applicationsContainer"
+                style="background: transparent; border: none; box-shadow: none; display: flex; flex-direction: column; gap: 20px;">
+                <!-- Cards will be rendered here -->
+            </div>
+        </main>
+    </div> <!-- Closing dashboard-particulier -->
+
+    <!-- Bulk Action Bar -->
+    <div id="bulkBar" class="bulk-action-bar">
+        <div style="font-weight: 700; font-size: 0.9rem;"><span id="selectCount">0</span> geselecteerd</div>
+        <div style="width: 1px; height: 24px; background: rgba(255,255,255,0.2);"></div>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn" onclick="handleBulkAction('reject')"
+                style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.85rem;"><i
+                    class="ri-close-line"></i> Weigeren</button>
+            <button class="btn" onclick="handleBulkAction('accept')"
+                style="background: var(--primary-particulier); color: white; border: none; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.85rem;"><i
+                    class="ri-mail-send-line"></i> Uitnodigen</button>
+        </div>
+    </div>
+
+    <!-- Dossier Detail Panel -->
+    <div id="dossierOverlay" class="dossier-overlay" onclick="closeDossier()">
+        <div class="dossier-panel" onclick="event.stopPropagation()">
+            <div class="dossier-header">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <div id="dossierStatus" style="margin-bottom: 8px;"></div>
+                        <h2 id="dossierName" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);"></h2>
+                        <p id="dossierProperty"
+                            style="color: var(--text-muted); font-weight: 600; font-size: 0.9rem; margin-top: 4px;"></p>
+                    </div>
+                    <button onclick="closeDossier()" class="btn-mini"
+                        style="width: 40px; height: 40px; border-radius: 12px;"><i class="ri-close-line"></i></button>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn"
+                        style="flex: 1; background: var(--primary-particulier); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;">Bevestigen</button>
+                    <button id="dossierMessageBtn" class="btn"
+                        style="width: 50px; background: white; border: 1px solid #e2e8f0; border-radius: 12px;"><i
+                            class="ri-message-3-line"></i></button>
+                </div>
+            </div>
+
+            <div class="dossier-tabs">
+                <div class="dossier-tab active" data-tab="overview">Overzicht</div>
+                <div class="dossier-tab" data-tab="work">Werk & Inkomen</div>
+                <div class="dossier-tab" data-tab="docs">Documenten</div>
+                <div class="dossier-tab" data-tab="timeline">Tijdlijn</div>
+            </div>
+
+            <div id="dossierContent" class="dossier-content">
+                <!-- Tab content will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="propertyContext.js"></script>
+    <script src="particulier-utils.js"></script>
+    <script src="dashboard-nav.js"></script>
+    <script>
+        let currentFilter = 'all';
+        let selectedDossier = null;
+        let selectedIds = new Set();
+
+        function loadApplications() {
+            if (!window.propertyContext) return;
+            const data = propertyContext.getRequests() || [];
+
+            renderFunnelCounts(data);
+            renderApplications(data);
+        }
+
+        function renderFunnelCounts(data) {
+            const counts = {
+                all: data.length,
+                nieuw: data.filter(r => r.status === 'Nieuw').length,
+                dossier: data.filter(r => r.type === 'Dossier').length,
+                bezichtiging: data.filter(r => r.type === 'Bezichtiging').length,
+                beslissing: data.filter(r => r.type === 'Beslissing').length
+            };
+
+            document.querySelectorAll('.funnel-tab').forEach(tab => {
+                const filter = tab.dataset.filter;
+                const countEl = tab.querySelector('.count');
+                if (countEl) countEl.textContent = counts[filter] || 0;
+            });
+        }
+
+        function renderApplications(data) {
+            const container = document.getElementById('applicationsContainer');
+            container.innerHTML = '';
+
+            const filtered = data.filter(r => {
+                if (currentFilter === 'all') return true;
+                if (currentFilter === 'nieuw') return r.status === 'Nieuw';
+                return r.type.toLowerCase() === currentFilter;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px; color: var(--text-muted);">
+                        <i class="ri-inbox-line" style="font-size: 3rem; opacity: 0.2; display: block; margin-bottom: 10px;"></i>
+                        <p style="font-weight: 600;">Geen aanvragen gevonden in deze categorie.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(app => {
+                const card = document.createElement('div');
+                card.className = 'appointment-card glass-panel';
+                card.style.cssText = 'padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: space-between; transition: all 0.3s; cursor: pointer;';
+
+                const isSelected = selectedIds.has(app.id);
+
+                card.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 20px; flex: 1;" onclick="openDossier('${app.id}')">
+                        <div onclick="toggleSelect(event, '${app.id}')" style="width: 24px; height: 24px; border-radius: 6px; border: 2px solid ${isSelected ? 'var(--primary-particulier)' : '#e2e8f0'}; background: ${isSelected ? 'var(--primary-particulier)' : 'white'}; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                            ${isSelected ? '<i class="ri-check-line" style="color: white; font-size: 0.9rem;"></i>' : ''}
+                        </div>
+                        <div class="date-badge" style="background: white; padding: 10px; border-radius: 15px; width: 65px; text-align: center; box-shadow: 0 8px 15px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); flex-shrink: 0;">
+                            <div style="font-size: 1.4rem; font-weight: 800; line-height: 1; color: var(--text-main);">${app.date.split(' ')[0]}</div>
+                            <div style="font-size: 0.7rem; font-weight: 800; color: var(--primary-particulier); text-transform: uppercase; margin-top: 4px;">${app.date.split(' ')[1]}</div>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                <h3 style="margin:0; font-size: 1.1rem; font-weight: 800; color: var(--text-main);">${app.emoji || '👤'} ${app.name}</h3>
+                                ${app.verification ? `<span style="background: #f0fdf4; color: #10b981; padding: 2px 10px; border-radius: 100px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase;"><i class="ri-shield-check-line"></i> ${app.verification}</span>` : ''}
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 15px;">
+                                <span><i class="ri-time-line" style="color: var(--primary-particulier);"></i> ${app.time}</span>
+                                <span style="font-size: 0.75rem; background: #f1f5f9; padding: 2px 8px; border-radius: 6px;">${app.type}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 25px;">
+                        <span class="status-pill ${app.status === 'Nieuw' ? 'status-pending-pill' : 'status-confirmed-pill'}" style="padding: 8px 18px; font-size: 0.8rem;">${app.status}</span>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-mini" style="width: 40px; height: 40px; border-radius: 10px;"><i class="ri-more-2-line"></i></button>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function toggleSelect(event, id) {
+            event.stopPropagation();
+            if (selectedIds.has(id)) {
+                selectedIds.delete(id);
+            } else {
+                selectedIds.add(id);
+            }
+            updateBulkBar();
+            loadApplications();
+        }
+
+        function updateBulkBar() {
+            const bar = document.getElementById('bulkBar');
+            const count = document.getElementById('selectCount');
+            if (selectedIds.size > 0) {
+                bar.classList.add('active');
+                count.textContent = selectedIds.size;
+            } else {
+                bar.classList.remove('active');
+            }
+        }
+
+        function openDossier(id) {
+            const property = propertyContext.getCurrent();
+            const app = propertyContext.getRequests().find(r => r.id === id);
+            if (!app) return;
+
+            selectedDossier = app;
+            document.getElementById('dossierName').textContent = app.name;
+            document.getElementById('dossierProperty').textContent = property.name;
+            document.getElementById('dossierStatus').innerHTML = `<span class="status-pill status-confirmed-pill">${app.status}</span>`;
+            document.getElementById('dossierMessageBtn').onclick = () => window.location.href = `berichten-particulier.html?id=${id}`;
+
+            document.getElementById('dossierOverlay').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('dossierOverlay').style.opacity = '1';
+                document.querySelector('.dossier-panel').classList.add('active');
+            }, 10);
+
+            renderDossierTab('overview');
+        }
+
+        function closeDossier() {
+            document.getElementById('dossierOverlay').style.opacity = '0';
+            document.querySelector('.dossier-panel').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('dossierOverlay').style.display = 'none';
+            }, 300);
+        }
+
+        function renderDossierTab(tab) {
+            const content = document.getElementById('dossierContent');
+            document.querySelectorAll('.dossier-tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.tab === tab);
+            });
+
+            if (tab === 'overview') {
+                const snapshot = selectedDossier.snapshot || {};
+                const personal = snapshot.personal || { name: selectedDossier.name, email: 'info@example.com', phone: '+32 123 45 67', city: 'Antwerpen' };
+                const housing = snapshot.housing || { occupants: '1 Persoon', pets: 'Nee', moveInDate: 'TBD' };
+
+                content.innerHTML = `
+                    <div class="detail-card">
+                        <h4 style="margin-top:0; margin-bottom:15px; font-size: 1rem;">Persoonlijke Details</h4>
+                        <div class="detail-row"><span class="detail-label">E-mail</span><span class="detail-value">${personal.email}</span></div>
+                        <div class="detail-row"><span class="detail-label">Telefoon</span><span class="detail-value">${personal.phone}</span></div>
+                        <div class="detail-row"><span class="detail-label">Huidige woonplaats</span><span class="detail-value">${personal.city}</span></div>
+                    </div>
+                    <div class="detail-card">
+                        <h4 style="margin-top:0; margin-bottom:15px; font-size: 1rem;">Woonwensen</h4>
+                        <div class="detail-row"><span class="detail-label">Aantal personen</span><span class="detail-value">${housing.occupants}</span></div>
+                        <div class="detail-row"><span class="detail-label">Huisdieren</span><span class="detail-value">${housing.pets}</span></div>
+                        <div class="detail-row"><span class="detail-label">Gewenste intrekdatum</span><span class="detail-value">${housing.moveInDate}</span></div>
+                    </div>
+                `;
+            } else if (tab === 'work') {
+                const snapshot = selectedDossier.snapshot || {};
+                const work = snapshot.work || { status: 'Zelfstandige', employer: 'Eigen zaak', seniority: '5 jaar', income: '€ 3.500' };
+
+                content.innerHTML = `
+                    <div class="detail-card">
+                        <h4 style="margin-top:0; margin-bottom:15px; font-size: 1rem;">Werkstatus</h4>
+                        <div class="detail-row"><span class="detail-label">Statuut</span><span class="detail-value">${work.status}</span></div>
+                        <div class="detail-row"><span class="detail-label">Werkgever</span><span class="detail-value">${work.employer}</span></div>
+                        <div class="detail-row"><span class="detail-label">Anciënniteit</span><span class="detail-value">${work.seniority}</span></div>
+                    </div>
+                    <div class="detail-card">
+                        <h4 style="margin-top:0; margin-bottom:15px; font-size: 1rem;">Inkomsten</h4>
+                        <div class="detail-row"><span class="detail-label">Netto maandinkomen</span><span class="detail-value">${work.income}</span></div>
+                        <div class="detail-row"><span class="detail-label">Extra inkomsten</span><span class="detail-value">NVT</span></div>
+                    </div>
+                `;
+            } else if (tab === 'docs') {
+                const snapshot = selectedDossier.snapshot || {};
+                const docs = snapshot.documents || [
+                    { name: 'Identiteitskaart.pdf', verified: true },
+                    { name: 'Loonbrief.pdf', verified: false }
+                ];
+
+                content.innerHTML = docs.map(doc => `
+                    <div class="doc-item">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="ri-file-user-line" style="font-size: 1.5rem; color: var(--primary-particulier);"></i>
+                            <div>
+                                <div style="font-size: 0.85rem; font-weight: 700;">${doc.name}</div>
+                                <div style="font-size: 0.7rem; color: var(--text-muted);">${doc.verified ? 'Geverifieerd via ITSME®' : 'Geüpload door huurder'}</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            ${doc.verified ? '<i class="ri-checkbox-circle-fill" style="color: #10b981;"></i>' : ''}
+                            <button class="btn-mini"><i class="ri-eye-line"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+            } else if (tab === 'timeline') {
+                content.innerHTML = `
+                    <div style="padding-left: 20px; border-left: 2px solid #f1f5f9; margin-left: 10px;">
+                        <div style="position: relative; margin-bottom: 25px;">
+                            <div style="position: absolute; left: -27px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--primary-particulier); border: 2px solid white;"></div>
+                            <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-main);">Afspraak ingepland</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">Vandaag, 09:15</div>
+                        </div>
+                        <div style="position: relative; margin-bottom: 25px;">
+                            <div style="position: absolute; left: -27px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; border: 2px solid white;"></div>
+                            <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-main);">Dossier vervolledigd</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">15 Dec, 14:30</div>
+                        </div>
+                        <div style="position: relative;">
+                            <div style="position: absolute; left: -27px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; border: 2px solid white;"></div>
+                            <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-main);">Aanvraag ontvangen</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">12 Dec, 10:05</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize - robust initialization
+        function initPage() {
+            if (!window.propertyContext) {
+                setTimeout(initPage, 50);
+                return;
+            }
+
+            loadApplications();
+
+            // Setup Funnel Tabs
+            document.querySelectorAll('.funnel-tab').forEach(tab => {
+                tab.onclick = () => {
+                    document.querySelectorAll('.funnel-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentFilter = tab.dataset.filter;
+                    loadApplications();
+                };
+            });
+
+            // Setup Dossier Tabs
+            document.querySelectorAll('.dossier-tab').forEach(tab => {
+                tab.onclick = () => renderDossierTab(tab.dataset.tab);
+            });
+
+            if (window.ParticulierUtils && ParticulierUtils.initTooltips) {
+                ParticulierUtils.initTooltips();
+            }
+        }
+
+        // Start as soon as possible
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPage);
+        } else {
+            initPage();
+        }
+
+        async function handleBulkAction(action) {
+            if (selectedIds.size === 0) return;
+
+            const confirmed = await ParticulierUtils.confirm(
+                `${action === 'accept' ? 'Accepteren' : 'Weigeren'} bevestigen`,
+                `Weet u zeker dat u deze ${selectedIds.size} aanvragen wilt ${action === 'accept' ? 'accepteren' : 'weigeren'}?`,
+                action === 'accept' ? 'Ja, Bevestigen' : 'Ja, Weigeren',
+                action === 'accept' ? 'normal' : 'danger'
+            );
+
+            if (confirmed) {
+                const status = action === 'accept' ? 'Dossier' : 'Geweigerd';
+                selectedIds.forEach(id => {
+                    propertyContext.updateRequest(id, { status: status });
+                });
+
+                ParticulierUtils.toast(`${selectedIds.size} aanvragen bijgewerkt`, 'success');
+                selectedIds.clear();
+                updateBulkBar();
+                loadApplications();
+            }
+        }
+    </script>
+</body>
+
+</html>

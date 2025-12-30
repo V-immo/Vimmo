@@ -52,7 +52,7 @@ async function sendVerificationEmail(email, firstName, token) {
       <body>
         <div class="container">
           <div class="logo" style="text-align: center; font-family: 'Outfit', sans-serif; font-size: 32px; letter-spacing: -1px;">
-            <span style="color: #d63031; font-weight: 400;">V</span> <span style="color: #3d3530; font-weight: 100;">I</span><span style="color: #3d3530; font-weight: 800;">MMO</span>
+            <span style="color: #d63031; font-weight: 500;">V</span>&nbsp;<span style="color: #3d3530; font-weight: 500;">I</span><span style="color: #3d3530; font-weight: 800;">MMO</span>
           </div>
           
           <h2>Hallo ${firstName}! 👋</h2>
@@ -134,7 +134,7 @@ async function sendPasswordResetEmail(email, firstName, token) {
       <body>
         <div class="container">
           <div class="logo" style="text-align: center; font-family: 'Outfit', sans-serif; font-size: 32px; letter-spacing: -1px;">
-            <span style="color: #d63031; font-weight: 400;">V</span> <span style="color: #3d3530; font-weight: 100;">I</span><span style="color: #3d3530; font-weight: 800;">MMO</span>
+            <span style="color: #d63031; font-weight: 500;">V</span>&nbsp;<span style="color: #3d3530; font-weight: 500;">I</span><span style="color: #3d3530; font-weight: 800;">MMO</span>
           </div>
           
           <h2>Wachtwoord resetten</h2>

@@ -11,15 +11,214 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
+
+    <style>
+        .filter-header {
+            border-radius: 30px;
+            padding: 35px;
+            margin: 40px 0;
+            border: 1px solid white;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            align-items: flex-end;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.5);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+            color: var(--text-main);
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            border-color: var(--primary-zoeker);
+            background: white;
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.1);
+        }
+
+        .btn-reset {
+            padding: 14px 25px;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            height: 52px;
+            transition: all 0.2s;
+            color: var(--text-main);
+        }
+
+        .btn-reset:hover {
+            background: #f8fafc;
+            transform: translateY(-2px);
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 35px;
+        }
+
+        .property-card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid white;
+        }
+
+        .property-card:hover {
+            transform: translateY(-12px);
+            background: white;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-zoeker);
+        }
+
+        .property-image {
+            height: 240px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .property-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .property-card:hover .property-image img {
+            transform: scale(1.1);
+        }
+
+        .property-tag {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--primary-zoeker);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ef4444;
+            font-size: 1.4rem;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .favorite-btn:hover {
+            background: white;
+            transform: scale(1.1) rotate(8deg);
+        }
+
+        .property-info {
+            padding: 30px;
+        }
+
+        .property-price {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-zoeker);
+            margin-bottom: 10px;
+        }
+
+        .property-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+
+        .property-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .property-features {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.03);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .property-features span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .property-features i {
+            color: var(--primary-zoeker);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
-<body>
+<body class="role-zoeker">
     <div class="dashboard-zoeker">
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
@@ -34,50 +233,56 @@
                 </a>
                 <a href="berichten-zoeker.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
-                    <span class="badge"
-                        style="margin-left: auto; background: var(--primary-zoeker); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                    <span
+                        style="margin-left: auto; background: var(--primary-zoeker); color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">2</span>
                 </a>
                 <a href="zoekopdrachten-zoeker.html" class="nav-item">
                     <i class="ri-search-line"></i> Zoekopdrachten
                 </a>
 
-                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
-                <a href="instellingen-zoeker.html" class="nav-item">
+                <a href="instellingen-zoeker.html" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
+
+                <div class="sidebar-user">
+                    <div class="user-avatar" style="background: rgba(108, 92, 231, 0.1); color: var(--primary-zoeker);">
+                        AK</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Anouk Kerstens</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Woningzoeker</div>
+                    </div>
+                </div>
             </nav>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <div>
-                <h1 style="font-size: 2rem; margin-bottom: 8px;">Opgeslagen Woningen</h1>
-                <p style="color: var(--text-muted);">Al uw favoriete woningen op één plek (<span
-                        id="propertyCount">0</span> woningen)</p>
+            <div style="margin-bottom: 40px; padding: 20px 0;">
+                <h1 style="font-size: 2.8rem; font-weight: 800; color: var(--text-main);">Opgeslagen Woningen</h1>
+                <p style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">Al uw favoriete woningen op
+                    één plek (<span id="propertyCount">0</span> woningen).</p>
             </div>
 
             <!-- Filters & Sort -->
-            <div
-                style="background: var(--bg-card); padding: 24px; border-radius: var(--radius-lg); margin: 30px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
-                <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Sorteer op:</label>
-                        <select id="sortSelect" onchange="renderProperties()"
-                            style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md);">
+            <div class="filter-header glass-panel">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Sorteer op:</label>
+                        <select id="sortSelect" onchange="renderProperties()">
                             <option value="newest">Nieuwste eerst</option>
                             <option value="price-low">Prijs: laag naar hoog</option>
                             <option value="price-high">Prijs: hoog naar laag</option>
                             <option value="location">Locatie</option>
                         </select>
                     </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Filter op type:</label>
-                        <select id="typeFilter" onchange="renderProperties()"
-                            style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md);">
+                    <div class="filter-group">
+                        <label>Filter op type:</label>
+                        <select id="typeFilter" onchange="renderProperties()">
                             <option value="all">Alle types</option>
                             <option value="huis">Huis</option>
                             <option value="appartement">Appartement</option>
@@ -85,17 +290,13 @@
                             <option value="penthouse">Penthouse</option>
                         </select>
                     </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Prijs max:</label>
-                        <input type="number" id="priceFilter" placeholder="€ 500.000" onchange="renderProperties()"
-                            style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md);">
+                    <div class="filter-group">
+                        <label>Prijs max:</label>
+                        <input type="number" id="priceFilter" placeholder="Bijv. 500.000" onchange="renderProperties()">
                     </div>
-                    <div style="align-self: flex-end;">
-                        <button onclick="clearFilters()"
-                            style="padding: 10px 20px; background: white; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); cursor: pointer;">
-                            <i class="ri-refresh-line"></i> Reset
-                        </button>
-                    </div>
+                    <button onclick="clearFilters()" class="btn-reset">
+                        <i class="ri-refresh-line"></i> Reset
+                    </button>
                 </div>
             </div>
 
@@ -150,7 +351,7 @@
 
             // Render
             grid.innerHTML = filtered.map(property => `
-                <div class="property-card" style="position: relative;">
+                <div class="property-card">
                     <div class="property-image">
                         <img src="${property.image}" alt="${property.title}">
                         ${property.tag ? `<span class="property-tag">${property.tag}</span>` : ''}
@@ -178,11 +379,11 @@
             // Show empty state if no properties
             if (filtered.length === 0) {
                 grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
-                        <i class="ri-heart-line" style="font-size: 4rem; opacity: 0.3; margin-bottom: 16px; display: block;"></i>
-                        <h3>Geen opgeslagen woningen</h3>
-                        <p>Begin met het opslaan van woningen die u interessant vindt!</p>
-                        <a href="kopen.html" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background: var(--primary); color: white; text-decoration: none; border-radius: var(--radius-md);">
+                    <div style="grid-column: 1/-1; text-align: center; padding: 100px 20px; color: var(--text-muted); background: white; border-radius: 30px; border: 1px dashed rgba(0,0,0,0.1);">
+                        <i class="ri-heart-line" style="font-size: 5rem; opacity: 0.2; margin-bottom: 25px; display: block;"></i>
+                        <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 10px;">Geen opgeslagen woningen</h3>
+                        <p style="font-weight: 500; margin-bottom: 30px;">Begin met het opslaan van woningen die u interessant vindt!</p>
+                        <a href="kopen.html" style="display: inline-block; padding: 15px 35px; background: var(--primary-zoeker); color: white; text-decoration: none; border-radius: 15px; font-weight: 800; box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);">
                             Woningen bekijken
                         </a>
                     </div>
@@ -215,7 +416,7 @@
         // Initial render
         document.addEventListener('DOMContentLoaded', renderProperties);
     </script>
-    <script src="dashboard-nav.js"></script>`n
+    <script src="dashboard-nav.js"></script>
 </body>
 
 </html>

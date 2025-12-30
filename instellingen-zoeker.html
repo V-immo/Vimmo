@@ -11,91 +11,33 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
 
     <style>
-        :root {
-            --primary-zoeker: #8b5cf6;
-            --primary-dark-zoeker: #7c3aed;
-        }
-
-        .dashboard-zoeker {
-            display: flex;
-            min-height: 100vh;
-            background: var(--bg-light);
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--bg-card);
-            border-right: 1px solid rgba(0, 0, 0, 0.06);
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .sidebar .brand {
-            padding: 0 30px 30px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: block;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-nav {
-            padding: 0 15px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 15px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: var(--radius-md);
-            margin-bottom: 4px;
-            transition: all 0.2s;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-light);
-            color: var(--text-main);
-        }
-
-        .nav-item.active {
-            background: var(--primary-zoeker);
-            color: white;
-        }
-
-        .main-content {
-            margin-left: 280px;
-            flex: 1;
-            padding: 40px;
-            max-width: 1200px;
-        }
-
         .settings-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 30px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            margin-bottom: 24px;
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid white;
         }
 
         .settings-card h2 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-main);
+        }
+
+        .settings-card h2 i {
+            color: var(--primary-zoeker);
         }
 
         .setting-item {
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 25px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -106,37 +48,45 @@
         }
 
         .setting-info h3 {
-            font-size: 1rem;
-            margin-bottom: 4px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
         }
 
         .setting-info p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
+            font-weight: 500;
         }
 
         .btn-edit {
-            padding: 8px 20px;
+            padding: 10px 22px;
             background: white;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--radius-md);
+            color: var(--text-main);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .btn-edit:hover {
-            border-color: var(--primary);
-            color: var(--primary);
+            background: var(--primary-zoeker);
+            color: white;
+            border-color: var(--primary-zoeker);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.2);
         }
 
         .toggle-switch {
             position: relative;
-            width: 50px;
-            height: 26px;
-            background: #ccc;
+            width: 52px;
+            height: 28px;
+            background: #e2e8f0;
             border-radius: 100px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
 
         .toggle-switch.active {
@@ -146,13 +96,14 @@
         .toggle-switch::after {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             background: white;
             border-radius: 50%;
             top: 3px;
             left: 3px;
-            transition: left 0.3s;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .toggle-switch.active::after {
@@ -160,24 +111,30 @@
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                display: none;
+            .main-content {
+                padding: 20px;
             }
 
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .btn-edit {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
 </head>
 
-<body>
+<body class="role-zoeker">
     <div class="dashboard-zoeker">
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
@@ -192,39 +149,49 @@
                 </a>
                 <a href="berichten-zoeker.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
-                    <span class="badge"
-                        style="margin-left: auto; background: var(--primary-zoeker); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                    <span
+                        style="margin-left: auto; background: var(--primary-zoeker); color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">2</span>
                 </a>
                 <a href="zoekopdrachten-zoeker.html" class="nav-item">
                     <i class="ri-search-line"></i> Zoekopdrachten
                 </a>
 
-                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
                 <a href="instellingen-zoeker.html" class="nav-item active">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
+
+                <div class="sidebar-user">
+                    <div class="user-avatar" style="background: rgba(108, 92, 231, 0.1); color: var(--primary-zoeker);">
+                        AK</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Anouk Kerstens</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Woningzoeker</div>
+                    </div>
+                </div>
             </nav>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <div style="margin-bottom: 30px;">
-                <h1 style="font-size: 2rem; margin-bottom: 8px;">Instellingen</h1>
-                <p style="color: var(--text-muted);">Beheer uw account en voorkeuren</p>
+            <div style="margin-bottom: 40px; padding: 20px 0;">
+                <h1 style="font-size: 2.8rem; font-weight: 800; color: var(--text-main);">Instellingen</h1>
+                <p style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">Beheer uw account en
+                    navigatievoorkeuren.</p>
             </div>
 
             <!-- Account Info -->
-            <div class="settings-card">
+            <div class="settings-card glass-panel">
                 <h2><i class="ri-user-line"></i> Account Informatie</h2>
 
                 <div class="setting-item">
                     <div class="setting-info">
                         <h3>Naam</h3>
-                        <p>Emma Peeters</p>
+                        <p>Anouk Kerstens</p>
                     </div>
                     <button class="btn-edit"
                         onclick="editField('Naam', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
@@ -233,7 +200,7 @@
                 <div class="setting-item">
                     <div class="setting-info">
                         <h3>E-mailadres</h3>
-                        <p>emma.peeters@example.com</p>
+                        <p>anouk.kerstens@example.com</p>
                     </div>
                     <button class="btn-edit"
                         onclick="editField('E-mailadres', this.previousElementSibling.querySelector('p').textContent, this.previousElementSibling.querySelector('p'))">Bewerken</button>
@@ -259,7 +226,7 @@
             </div>
 
             <!-- Notifications -->
-            <div class="settings-card">
+            <div class="settings-card glass-panel">
                 <h2><i class="ri-notification-line"></i> Notificaties</h2>
 
                 <div class="setting-item">
@@ -288,7 +255,7 @@
             </div>
 
             <!-- Privacy -->
-            <div class="settings-card">
+            <div class="settings-card glass-panel">
                 <h2><i class="ri-shield-check-line"></i> Privacy & Beveiliging</h2>
 
                 <div class="setting-item">
@@ -318,7 +285,7 @@
             </div>
 
             <!-- Danger Zone -->
-            <div class="settings-card">
+            <div class="settings-card glass-panel">
                 <h2 style="color: #dc3545;"><i class="ri-error-warning-line"></i> Account Beheer</h2>
 
                 <div class="setting-item">
@@ -339,15 +306,15 @@
     <div id="editModal"
         style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
         <div
-            style="background: var(--bg-card); border-radius: var(--radius-lg); padding: 30px; max-width: 500px; width: 90%;">
-            <h3 id="modalTitle" style="margin-bottom: 20px;">Bewerken</h3>
+            style="background: white; border-radius: 24px; padding: 40px; max-width: 500px; width: 95%; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+            <h3 id="modalTitle" style="margin-bottom: 25px; font-weight: 800; font-size: 1.4rem;">Bewerken</h3>
             <input type="text" id="modalInput"
-                style="width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); margin-bottom: 20px;">
-            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                style="width: 100%; padding: 15px; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; margin-bottom: 25px; font-size: 1rem; outline: none;">
+            <div style="display: flex; gap: 15px; justify-content: flex-end;">
                 <button onclick="closeEditModal()"
-                    style="padding: 10px 20px; background: white; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); cursor: pointer;">Annuleren</button>
+                    style="padding: 12px 24px; background: #f8fafc; border: 1px solid rgba(0,0,0,0.05); border-radius: 12px; cursor: pointer; font-weight: 700; color: var(--text-muted);">Annuleren</button>
                 <button onclick="saveEdit()"
-                    style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: var(--radius-md); cursor: pointer;">Opslaan</button>
+                    style="padding: 12px 24px; background: var(--primary-zoeker); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700;">Opslaan</button>
             </div>
         </div>
     </div>
@@ -394,12 +361,21 @@
         // Load saved settings
         window.addEventListener('load', () => {
             const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
-            if (settings.Naam) document.querySelector('.setting-item:nth-child(1) p').textContent = settings.Naam;
-            if (settings['E-mailadres']) document.querySelector('.setting-item:nth-child(2) p').textContent = settings['E-mailadres'];
-            if (settings.Telefoonnummer) document.querySelector('.setting-item:nth-child(3) p').textContent = settings.Telefoonnummer;
+            if (settings.Naam) {
+                const nameP = document.querySelector('.setting-item:nth-child(2) p');
+                if (nameP) nameP.textContent = settings.Naam;
+            }
+            if (settings['E-mailadres']) {
+                const emailP = document.querySelector('.setting-item:nth-child(3) p');
+                if (emailP) emailP.textContent = settings['E-mailadres'];
+            }
+            if (settings.Telefoonnummer) {
+                const phoneP = document.querySelector('.setting-item:nth-child(4) p');
+                if (phoneP) phoneP.textContent = settings.Telefoonnummer;
+            }
         });
     </script>
-    <script src="dashboard-nav.js"></script>`n
+    <script src="dashboard-nav.js"></script>
 </body>
 
 </html>

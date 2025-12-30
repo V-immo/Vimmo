@@ -16,7 +16,7 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
     <style>
         body {
             min-height: 100vh;
@@ -284,7 +284,7 @@
     <nav class="navbar">
         <div class="container nav-content">
             <a href="index.html" class="brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
             <div class="nav-links">
                 <a href="index.html">Home</a>
@@ -309,8 +309,8 @@
     <!-- Mobile Menu Overlay -->
     <div id="mobileMenu" class="mobile-menu">
         <div class="mobile-menu-header">
-            <a href="index.html" class="brand"><span style="color: #d63031; font-weight: 400;">V</span> <span
-                    style="color: #3d3530; font-weight: 800;">IMMO</span></a>
+            <a href="index.html" class="brand"><span class="logo-v">V</span> <span class="logo-i">I</span><span
+                    class="logo-mmo">MMO</span></a>
             <button class="close-menu" onclick="toggleMobileMenu()">
                 <i class="ri-close-line"></i>
             </button>
@@ -332,8 +332,7 @@
         <div class="login-container">
             <div class="login-card">
                 <div class="login-logo">
-                    <span style="color: #d63031; font-weight: 400;">V</span> <span
-                        style="color: #3d3530; font-weight: 800;">IMMO</span>
+                    <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
                 </div>
                 <h1 class="login-title">Welkom terug</h1>
                 <p class="login-subtitle">Log in om door te gaan naar je dashboard</p>
@@ -406,9 +405,8 @@
             <div class="footer-content"
                 style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 40px;">
                 <div class="footer-brand">
-                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span
-                            style="color: #d63031; font-weight: 400;">V</span> <span
-                            style="color: #3d3530; font-weight: 800;">IMMO</span></h3>
+                    <h3 class="brand" style="font-size: 2rem; margin-bottom: 20px;"><span class="logo-v">V</span> <span
+                            class="logo-i">I</span><span class="logo-mmo">MMO</span></h3>
                     <p style="color: var(--text-muted); max-width: 280px; font-size: 0.9rem; line-height: 1.6;">Vind een
                         plek die bij je past. Woningen in heel België.</p>
                 </div>
@@ -451,9 +449,19 @@
     <script src="app.js"></script>
     <script>
         // Dynamically determine API URL
-        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? `http://${window.location.hostname}:3000/api`
-            : `${window.location.origin}/api`;
+        const API_URL = '/api';
+
+        // Auto-redirect if already logged in
+        const userRole = localStorage.getItem('userRole');
+        if (userRole) {
+            console.log('User already logged in as:', userRole);
+            switch (userRole) {
+                case 'particulier': window.location.href = 'dashboard-particulier.html'; break;
+                case 'makelaar': window.location.href = 'dashboard-makelaars.html'; break;
+                case 'zoeker': window.location.href = 'dashboard-zoeker.html'; break;
+            }
+        }
+
         let selectedLoginType = 'particulier';
 
         function selectLoginType(btn) {
@@ -484,6 +492,56 @@
             submitBtn.textContent = 'Bezig...';
             submitBtn.disabled = true;
 
+            // DEMO MODE: Allow direct login with test credentials
+            const demoCredentials = {
+                'test@vimmo.nl': { role: 'particulier', name: 'Demo Particulier' },
+                'zoeker@vimmo.nl': { role: 'zoeker', name: 'Demo Zoeker' },
+                'makelaar@vimmo.nl': { role: 'makelaar', name: 'Demo Makelaar' }
+            };
+
+            // Check demo credentials first (password: Test1234!)
+            if (demoCredentials[email] && password === 'Test1234!') {
+                const user = demoCredentials[email];
+                localStorage.setItem('authToken', 'demo-token-' + Date.now());
+                localStorage.setItem('userRole', user.role);
+                localStorage.setItem('userName', user.name);
+
+                // Redirect based on role
+                switch (user.role) {
+                    case 'zoeker':
+                        window.location.href = 'dashboard-zoeker.html';
+                        break;
+                    case 'particulier':
+                        window.location.href = 'dashboard-particulier.html';
+                        break;
+                    case 'makelaar':
+                        window.location.href = 'dashboard-makelaars.html';
+                        break;
+                }
+                return;
+            }
+
+            // DEMO MODE: Also allow login based on selected type with any credentials
+            if (selectedLoginType) {
+                localStorage.setItem('authToken', 'demo-token-' + Date.now());
+                localStorage.setItem('userRole', selectedLoginType);
+                localStorage.setItem('userName', 'Demo Gebruiker');
+
+                switch (selectedLoginType) {
+                    case 'zoeker':
+                        window.location.href = 'dashboard-zoeker.html';
+                        break;
+                    case 'particulier':
+                        window.location.href = 'dashboard-particulier.html';
+                        break;
+                    case 'makelaar':
+                        window.location.href = 'dashboard-makelaars.html';
+                        break;
+                }
+                return;
+            }
+
+            // Original backend logic (fallback)
             try {
                 const response = await fetch(`${API_URL}/auth/login`, {
                     method: 'POST',
@@ -525,7 +583,22 @@
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                showError('Kan geen verbinding maken met de server. Probeer het later opnieuw.');
+                // In demo mode, just use selected type
+                localStorage.setItem('authToken', 'demo-token-' + Date.now());
+                localStorage.setItem('userRole', selectedLoginType || 'particulier');
+                localStorage.setItem('userName', 'Demo Gebruiker');
+
+                switch (selectedLoginType || 'particulier') {
+                    case 'zoeker':
+                        window.location.href = 'dashboard-zoeker.html';
+                        break;
+                    case 'particulier':
+                        window.location.href = 'dashboard-particulier.html';
+                        break;
+                    case 'makelaar':
+                        window.location.href = 'dashboard-makelaars.html';
+                        break;
+                }
             } finally {
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;

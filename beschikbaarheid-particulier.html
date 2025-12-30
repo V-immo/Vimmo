@@ -4,125 +4,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beschikbaarheid Instellen | Vimmo</title>
+    <title>Beschikbaarheid | Vimmo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.0">
+
     <style>
-        /* Beschikbaarheid specific styles */
-        .timeslots-container {
-            padding: 40px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        /* Page-specific styles only - layout handled by global style.css */
+        .page-header {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .timeslots-container h3 {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
+        .header-left h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-main);
         }
 
-        .timeslots-grid {
+        .compact-grid {
+            flex: 1;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 16px;
-            margin-top: 30px;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
         }
 
-        .timeslot {
-            padding: 16px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-            font-weight: 500;
-            font-size: 1.05rem;
+        .glass-container {
             background: white;
+            border-radius: 20px;
+            box-shadow: var(--luxe-shadow);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        .timeslot:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        .container-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafcfb;
         }
 
-        .timeslot.active {
-            background: var(--primary-particulier);
-            color: white;
-            border-color: var(--primary-particulier);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-save {
-            margin-top: 30px;
-            padding: 16px 40px;
-            background: var(--primary-particulier);
-            color: white;
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-size: 1.05rem;
-            font-weight: 600;
-            transition: all 0.2s;
+        .container-header h2 {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--text-main);
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .btn-save:hover {
-            background: var(--primary-dark-particulier);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        /* Calendar Styling */
+        .calendar-view {
+            flex: 1;
+            padding: 15px 20px;
+            overflow-y: auto;
         }
 
-        @media (max-width: 768px) {
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
 
-            .timeslots-grid {
-                grid-template-columns: repeat(2, 1fr);
+        .month-year {
+            font-weight: 800;
+            color: var(--text-main);
+            font-size: 1rem;
+        }
+
+        .cal-nav {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-nav {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #f1f5f9;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover {
+            border-color: var(--primary-particulier);
+            color: var(--primary-particulier);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #f1f5f9;
+            border: 1px solid #f1f5f9;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .calendar-day-header {
+            background: #fafcfb;
+            padding: 8px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+
+        .calendar-day {
+            background: white;
+            aspect-ratio: 1.3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: #f8fafc;
+        }
+
+        .calendar-day.selected {
+            background: var(--primary-particulier);
+            color: white;
+            z-index: 1;
+        }
+
+        .calendar-day.has-slots::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-particulier);
+            border-radius: 50%;
+        }
+
+        .calendar-day.selected.has-slots::after {
+            background: white;
+        }
+
+        .calendar-day.disabled {
+            color: #e2e8f0;
+            cursor: default;
+        }
+
+        /* Timeslots View */
+        .timeslots-view {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .slots-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .slot-item {
+            padding: 10px 15px;
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fafcfb;
+            font-size: 0.85rem;
+        }
+
+        .slot-item:hover {
+            border-color: var(--primary-particulier);
+            background: white;
+        }
+
+        .slot-item.active {
+            border-color: var(--primary-particulier);
+            background: rgba(16, 185, 129, 0.05);
+            color: var(--primary-particulier);
+        }
+
+        .slot-item strong {
+            font-weight: 700;
+        }
+
+        .slots-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #f1f5f9;
+            background: white;
+        }
+
+        .btn-save {
+            width: 100%;
+            padding: 11px;
+            background: var(--primary-particulier);
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .prop-picker {
+            padding: 8px 16px;
+            border: 1.5px solid #f1f5f9;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+            cursor: pointer;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .prop-picker:hover {
+            border-color: var(--primary-particulier);
+        }
+
+        @media (max-width: 1024px) {
+            .availability-layout {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .compact-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 
-<body>
+<body class="role-particulier">
     <div class="dashboard-particulier">
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
+                <!-- User Profile at TOP -->
+                <div class="sidebar-user" style="border-top: none; margin-bottom: 20px; padding-top: 5px;">
+                    <div class="user-avatar"
+                        style="background: rgba(16, 185, 129, 0.1); color: var(--primary-particulier);">
+                        TV</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Tomas Verbeeck</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Particulier</div>
+                    </div>
+                </div>
+
+                <div style="margin: 10px 0 20px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
                 <a href="dashboard-particulier.html" class="nav-item">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
                 <a href="advertentie-particulier.html" class="nav-item">
-                    <i class="ri-home-4-line"></i> Mijn Advertentie
+                    <i class="ri-home-4-line"></i> Mijn Aanbod
                 </a>
                 <a href="beschikbaarheid-particulier.html" class="nav-item active">
                     <i class="ri-calendar-line"></i> Beschikbaarheid
                 </a>
-                <a href="agenda-particulier.html" class="nav-item">
-                    <i class="ri-calendar-check-line"></i> Aanvragen
-                    <span class="badge"
-                        style="margin-left: auto; background: var(--accent-red); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">3</span>
+                <a href="aanvragen-particulier.html" class="nav-item">
+                    <i class="ri-mail-line"></i> Aanvragen
+                    <span
+                        style="margin-left: auto; background: #ef4444; color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
                 </a>
                 <a href="berichten-particulier.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
                     <span
-                        style="margin-left: auto; background: var(--primary-particulier); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                        style="margin-left: auto; background: var(--primary-particulier); color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
+                </a>
+                <a href="pakket-beheer.html" class="nav-item">
+                    <i class="ri-box-3-line"></i> Pakket Beheer
+                    <span id="sidebar-package-usage"
+                        style="margin-left: auto; color: var(--primary-particulier); font-weight: 800; font-size: 0.8rem;"></span>
                 </a>
 
-                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
-                <a href="instellingen-particulier.html" class="nav-item">
+                <a href="instellingen-particulier.html" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
             </nav>
@@ -130,203 +330,417 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <div style="margin-bottom: 30px;">
-                <h1 style="font-size: 2rem; margin-bottom: 8px;">Beschikbaarheid Instellen</h1>
-                <p style="color: var(--text-muted); margin-bottom: 16px;">Stel de tijden in waarop u bezichtigingen kunt
-                    ontvangen</p>
-
-                <div
-                    style="background: white; padding: 20px; border-radius: var(--radius-md); border: 2px solid var(--primary-particulier); margin-top: 20px;">
-                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                        <i class="ri-home-4-line" style="font-size: 1.5rem; color: var(--primary-particulier);"></i>
-                        <strong style="font-size: 1.1rem;">Beschikbaarheid instellen voor:</strong>
-                    </div>
-                    <select id="propertySelector" onchange="switchProperty()"
-                        style="width: 100%; padding: 12px 16px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); background: white; cursor: pointer; font-size: 1rem;">
-                        <option value="prop-1" selected>🏠 Moderne Woning - Antwerpen</option>
-                        <option value="prop-2">🏢 Penthouse - Schelde</option>
-                        <option value="prop-3">🏡 Villa - Brasschaat</option>
-                    </select>
+            <div class="page-header" style="margin-bottom: 40px;">
+                <div class="header-left">
+                    <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-main);">Beschikbaarheid</h1>
+                    <p style="color: var(--text-muted); font-weight: 600; font-size: 0.95rem; margin-top: 5px;">Beheer
+                        uw bezichtingsmomenten per pand.</p>
                 </div>
-            </div>
-
-            <!-- Calendar -->
-            <div class="calendar-container">
-                <div class="calendar-header">
-                    <h2 id="currentMonth">December 2024</h2>
-                    <div class="calendar-nav">
-                        <button onclick="previousMonth()"><i class="ri-arrow-left-s-line"></i></button>
-                        <button onclick="today()">Vandaag</button>
-                        <button onclick="nextMonth()"><i class="ri-arrow-right-s-line"></i></button>
+                <div class="header-right">
+                    <div class="property-pill glass-panel"
+                        style="padding: 12px 24px; border-radius: 100px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(16, 185, 129, 0.2); background: #f0fdf4;">
+                        <span id="activePropertyEmoji" style="font-size: 1.4rem;">🏠</span>
+                        <span id="activePropertyName"
+                            style="font-weight: 800; color: #10b981; font-size: 0.9rem;">Moderne Woning</span>
                     </div>
                 </div>
-
-                <div class="calendar-grid" id="calendarGrid">
-                    <!-- Calendar will be rendered here -->
-                </div>
             </div>
 
-            <!-- Timeslots -->
-            <div class="timeslots-container">
-                <h3 style="margin-bottom: 8px;">Beschikbare tijden voor <span id="selectedDate">18 december 2024</span>
-                </h3>
-                <p style="color: var(--text-muted); margin-bottom: 20px;">Selecteer de tijdslots waarop u bezichtigingen
-                    kunt ontvangen</p>
+            <div class="search-bar-container" style="margin-bottom: 40px; position: relative;">
+                <i class="ri-search-line"
+                    style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.4rem;"></i>
+                <input type="text" placeholder="Zoek op adres, postcode of referentienummer..."
+                    style="width: 100%; padding: 18px 20px 18px 55px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.8); box-shadow: 0 10px 30px rgba(0,0,0,0.03); outline: none; transition: all 0.3s; font-size: 1rem; font-weight: 500; backdrop-filter: blur(10px);">
+            </div>
 
-                <div class="timeslots-grid" id="timeslotsGrid">
-                    <!-- Timeslots will be rendered here -->
+            <div class="compact-grid" style="display: grid; grid-template-columns: 1fr 380px; gap: 30px;">
+                <!-- Left: Calendar -->
+                <div class="glass-container glass-panel"
+                    style="border: none; padding: 0; background: rgba(255,255,255,0.4); border-radius: 30px;">
+                    <div class="container-header"
+                        style="background: rgba(16, 185, 129, 0.05); border-bottom: 1px solid rgba(16, 185, 129, 0.1); padding: 25px 30px;">
+                        <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--primary-particulier);"><i
+                                class="ri-calendar-event-line"></i> Kalender Review</h2>
+                        <div class="cal-nav">
+                            <button class="btn-nav" style="width: 35px; height: 35px; border-radius: 10px;"><i
+                                    class="ri-arrow-left-s-line"></i></button>
+                            <button class="btn-nav" style="width: 35px; height: 35px; border-radius: 10px;"><i
+                                    class="ri-arrow-right-s-line"></i></button>
+                        </div>
+                    </div>
+                    <div class="calendar-view" style="padding: 30px;">
+                        <div class="calendar-header" style="margin-bottom: 25px;">
+                            <span class="month-year" style="font-size: 1.4rem; font-weight: 800;">December 2024</span>
+                        </div>
+                        <div class="calendar-grid"
+                            style="border-radius: 20px; border: 1px solid rgba(0,0,0,0.05); background: white;">
+                            <div class="calendar-day-header" style="padding: 15px 0;">Ma</div>
+                            <div class="calendar-day-header" style="padding: 15px 0;">Di</div>
+                            <div class="calendar-day-header" style="padding: 15px 0;">Wo</div>
+                            <div class="calendar-day-header" style="padding: 15px 0;">Do</div>
+                            <div class="calendar-day-header" style="padding: 15px 0;">Vr</div>
+                            <div class="calendar-day-header" style="padding: 15px 0;">Za</div>
+                            <div class="calendar-day-header" style="padding: 15px 0;">Zo</div>
+                            <!-- Calendar days are rendered dynamically by renderCalendar() -->
+                        </div>
+                    </div>
                 </div>
 
-                <button class="btn-save" onclick="saveAvailability()">
-                    <i class="ri-save-line"></i> Beschikbaarheid Opslaan
-                </button>
-            </div>
+                <!-- Right: Config & Timeslots -->
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    <!-- Configuration Panel -->
+                    <div class="glass-container glass-panel"
+                        style="border: none; padding: 0; background: rgba(255,255,255,0.4); border-radius: 30px;">
+                        <div class="container-header"
+                            style="background: rgba(16, 185, 129, 0.05); border-bottom: 1px solid rgba(16, 185, 129, 0.1); padding: 25px 30px;">
+                            <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--primary-particulier);"><i
+                                    class="ri-settings-3-line"></i> Instellingen</h2>
+                        </div>
+                        <div style="padding: 25px; display: grid; gap: 20px;">
+                            <div class="form-group">
+                                <label
+                                    style="display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Bevestigingsmodus</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                    <button id="modeAuto" onclick="setMode('auto')"
+                                        style="padding: 10px; border-radius: 10px; border: 2px solid #10b981; background: #10b981; color: white; font-weight: 700; font-size: 0.8rem; cursor: pointer;">Automatisch</button>
+                                    <button id="modeReview" onclick="setMode('review')"
+                                        style="padding: 10px; border-radius: 10px; border: 2px solid #e2e8f0; background: white; color: var(--text-main); font-weight: 700; font-size: 0.8rem; cursor: pointer;">Eerst
+                                        Review</button>
+                                </div>
+                                <div id="modeNotice"
+                                    style="margin-top: 10px; font-size: 0.75rem; color: var(--text-muted); font-weight: 500; line-height: 1.4;">
+                                    <i class="ri-information-line" style="color: #10b981;"></i> Nieuwe aanvragen worden
+                                    direct bevestigd in uw agenda.
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div class="form-group">
+                                    <label
+                                        style="display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Duur
+                                        (min)</label>
+                                    <select id="slotDuration"
+                                        style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; outline: none; font-weight: 600;">
+                                        <option value="15">15 min</option>
+                                        <option value="30" selected>30 min</option>
+                                        <option value="45">45 min</option>
+                                        <option value="60">60 min</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label
+                                        style="display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Buffer
+                                        (min)</label>
+                                    <select id="slotBuffer"
+                                        style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; outline: none; font-weight: 600;">
+                                        <option value="0">Geen</option>
+                                        <option value="5" selected>5 min</option>
+                                        <option value="10">10 min</option>
+                                        <option value="15">15 min</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label
+                                    style="display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Max
+                                    dossiers per slot</label>
+                                <div
+                                    style="display: flex; align-items: center; gap: 15px; background: white; border: 1px solid #e2e8f0; padding: 5px 15px; border-radius: 12px;">
+                                    <i class="ri-file-user-line" style="color: var(--primary-particulier);"></i>
+                                    <input type="number" id="maxDossiers" value="1" min="1" max="5"
+                                        style="border: none; outline: none; width: 40px; font-weight: 800; font-size: 1rem; color: var(--text-main);">
+                                    <span
+                                        style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">(Aangeraden:
+                                        1)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeslots Panel -->
+                    <div class="glass-container glass-panel"
+                        style="border: none; padding: 0; background: rgba(255,255,255,0.4); border-radius: 30px; flex: 1;">
+                        <div class="container-header"
+                            style="background: rgba(16, 185, 129, 0.05); border-bottom: 1px solid rgba(16, 185, 129, 0.1); padding: 25px 30px;">
+                            <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--primary-particulier);"><i
+                                    class="ri-time-line"></i> Slots voor 18 Dec</h2>
+                        </div>
+                        <div class="timeslots-view">
+                            <div class="slots-list" style="padding: 25px;">
+                                <div class="slot-item active glass-panel"
+                                    style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 16px; padding: 15px 20px;">
+                                    <strong style="font-size: 1rem;">09:00 - 10:00</strong>
+                                    <i class="ri-checkbox-circle-fill"
+                                        style="color: var(--primary-particulier); font-size: 1.2rem;"></i>
+                                </div>
+                                <div class="slot-item glass-panel"
+                                    style="background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.5); border-radius: 16px; padding: 15px 20px;">
+                                    <strong style="font-size: 1rem; color: var(--text-main);">10:00 - 11:00</strong>
+                                </div>
+                                <div class="slot-item active glass-panel"
+                                    style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 16px; padding: 15px 20px;">
+                                    <strong style="font-size: 1rem;">11:00 - 12:00</strong>
+                                    <i class="ri-checkbox-circle-fill"
+                                        style="color: var(--primary-particulier); font-size: 1.2rem;"></i>
+                                </div>
+                                <div class="slot-item glass-panel"
+                                    style="background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.5); border-radius: 16px; padding: 15px 20px;">
+                                    <strong style="font-size: 1rem; color: var(--text-main);">13:00 - 14:00</strong>
+                                </div>
+                                <div class="slot-item glass-panel"
+                                    style="background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.5); border-radius: 16px; padding: 15px 20px;">
+                                    <strong style="font-size: 1rem; color: var(--text-main);">14:00 - 15:00</strong>
+                                </div>
+                                <div class="slot-item active glass-panel"
+                                    style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 16px; padding: 15px 20px;">
+                                    <strong style="font-size: 1rem;">15:00 - 16:00</strong>
+                                    <i class="ri-checkbox-circle-fill"
+                                        style="color: var(--primary-particulier); font-size: 1.2rem;"></i>
+                                </div>
+                                <div class="slot-item glass-panel"
+                                    style="background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.5); border-radius: 16px; padding: 15px 20px;">
+                                    <strong style="font-size: 1rem; color: var(--text-main);">16:00 - 17:00</strong>
+                                </div>
+                            </div>
+                            <div class="slots-footer"
+                                style="padding: 25px; background: transparent; border-top: 1px solid rgba(16, 185, 129, 0.1);">
+                                <button class="btn-save"
+                                    style="border-radius: 16px; padding: 16px; font-size: 1rem; font-weight: 800; letter-spacing: 0.5px;">Opslaan
+                                    Wijzigingen</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </main>
     </div>
 
-    <script src="app.js"></script>
+    <script src="propertyContext.js"></script>
+    <script src="particulier-utils.js"></script>
+    <script src="dashboard-nav.js"></script>
     <script>
-        let currentDate = new Date();
-        let selectedDay = new Date();
-        let availability = JSON.parse(localStorage.getItem('availability') || '{}');
+        let currentMode = 'auto';
+        let selectedDate = new Date();
+        let availabilityData = {}; // Format: { 'YYYY-MM-DD': [ { start, end, blocked } ] }
 
-        const timeslots = [
-            '09:00', '10:00', '11:00', '12:00',
-            '13:00', '14:00', '15:00', '16:00',
-            '17:00', '18:00', '19:00'
-        ];
+        function setMode(mode) {
+            currentMode = mode;
+            const btnAuto = document.getElementById('modeAuto');
+            const btnReview = document.getElementById('modeReview');
+            const notice = document.getElementById('modeNotice');
+
+            if (mode === 'auto') {
+                btnAuto.style.background = '#10b981';
+                btnAuto.style.color = 'white';
+                btnAuto.style.border = '2px solid #10b981';
+                btnReview.style.background = 'white';
+                btnReview.style.color = 'var(--text-main)';
+                btnReview.style.border = '2px solid #e2e8f0';
+                notice.innerHTML = '<i class="ri-information-line" style="color: #10b981;"></i> Nieuwe aanvragen worden direct bevestigd in uw agenda.';
+            } else {
+                btnReview.style.background = '#10b981';
+                btnReview.style.color = 'white';
+                btnReview.style.border = '2px solid #10b981';
+                btnAuto.style.background = 'white';
+                btnAuto.style.color = 'var(--text-main)';
+                btnAuto.style.border = '2px solid #e2e8f0';
+                notice.innerHTML = '<i class="ri-information-line" style="color: #f59e0b;"></i> U moet een aanvraag handmatig goedkeuren voordat het slot definitief gereserveerd wordt.';
+            }
+        }
 
         function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
+            const grid = document.querySelector('.calendar-grid');
+            const monthLabel = document.querySelector('.month-year');
+            if (!grid || !monthLabel) return;
 
-            // Update header
-            const monthNames = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni',
-                'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
-            document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
-
-            // Get first day of month and number of days
+            const year = selectedDate.getFullYear();
+            const month = selectedDate.getMonth();
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-            const grid = document.getElementById('calendarGrid');
+            const monthNames = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+            monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+            // Reset grid but keep headers
+            const headers = Array.from(grid.querySelectorAll('.calendar-day-header'));
             grid.innerHTML = '';
+            headers.forEach(h => grid.appendChild(h));
 
-            // Day headers
-            const dayNames = ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'];
-            dayNames.forEach(day => {
-                const header = document.createElement('div');
-                header.className = 'calendar-day-header';
-                header.textContent = day;
-                grid.appendChild(header);
-            });
+            // Adjusted first day (Monday = 0 instead of Sunday = 0)
+            let startOffset = firstDay === 0 ? 6 : firstDay - 1;
 
-            // Empty cells before first day
-            const startDay = firstDay === 0 ? 6 : firstDay - 1;
-            for (let i = 0; i < startDay; i++) {
-                grid.appendChild(document.createElement('div'));
+            // Empty slots for start
+            for (let i = 0; i < startOffset; i++) {
+                const div = document.createElement('div');
+                div.className = 'calendar-day disabled';
+                grid.appendChild(div);
             }
 
-            // Days
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayEl = document.createElement('div');
-                dayEl.className = 'calendar-day';
-                dayEl.textContent = day;
+            const today = new Date();
+            const currentPropId = propertyContext.getCurrentId();
+            const propAvailability = propertyContext.getData('availability', currentPropId) || {};
 
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            for (let d = 1; d <= daysInMonth; d++) {
+                const div = document.createElement('div');
+                div.className = 'calendar-day';
+                div.textContent = d;
 
-                // Check if has slots
-                if (availability[dateStr] && availability[dateStr].length > 0) {
-                    dayEl.classList.add('has-slots');
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                if (propAvailability[dateStr] && propAvailability[dateStr].length > 0) {
+                    div.classList.add('has-slots');
                 }
 
-                // Check if selected
-                if (day === selectedDay.getDate() &&
-                    month === selectedDay.getMonth() &&
-                    year === selectedDay.getFullYear()) {
-                    dayEl.classList.add('selected');
+                if (today.getFullYear() === year && today.getMonth() === month && today.getDate() === d) {
+                    div.style.border = '2px solid var(--primary-particulier)';
                 }
 
-                dayEl.onclick = () => selectDay(year, month, day);
-                grid.appendChild(dayEl);
+                if (selectedDate.getDate() === d) {
+                    div.classList.add('selected');
+                }
+
+                div.onclick = () => {
+                    selectedDate.setDate(d);
+                    renderCalendar();
+                    renderSlots();
+                };
+                grid.appendChild(div);
             }
         }
 
-        function selectDay(year, month, day) {
-            selectedDay = new Date(year, month, day);
-            renderCalendar();
-            renderTimeslots();
+        function renderSlots() {
+            const container = document.querySelector('.slots-list');
+            const title = document.querySelector('.container-header h2 i + span') || document.querySelector('.container-header h2');
+            if (!container) return;
 
-            const monthNames = ['januari', 'februari', 'maart', 'april', 'mei', 'juni',
-                'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
-            document.getElementById('selectedDate').textContent =
-                `${day} ${monthNames[month]} ${year}`;
+            const dateStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+            const displayDate = selectedDate.toLocaleDateString('nl-BE', { day: 'numeric', month: 'short' });
+
+            const headerTitle = document.querySelector('.timeslots-view').previousElementSibling.querySelector('h2');
+            if (headerTitle) headerTitle.innerHTML = `<i class="ri-time-line"></i> Slots voor ${displayDate}`;
+
+            const currentPropId = propertyContext.getCurrentId();
+            const propAvailability = propertyContext.getData('availability', currentPropId) || {};
+            const activeSlots = propAvailability[dateStr] || [];
+
+            const hours = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+
+            container.innerHTML = hours.map(h => {
+                const isActive = activeSlots.includes(h);
+                return `
+                    <div class="slot-item ${isActive ? 'active' : ''} glass-panel" onclick="toggleSlot('${h}')" style="${isActive ? 'background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2);' : 'background: rgba(255,255,255,0.6);'}">
+                        <strong style="font-size: 1rem; color: ${isActive ? 'var(--primary-particulier)' : 'var(--text-main)'};">${h}</strong>
+                        ${isActive ? '<i class="ri-checkbox-circle-fill" style="color: var(--primary-particulier); font-size: 1.2rem;"></i>' : ''}
+                    </div>
+                `;
+            }).join('');
         }
 
-        function renderTimeslots() {
-            const dateStr = `${selectedDay.getFullYear()}-${String(selectedDay.getMonth() + 1).padStart(2, '0')}-${String(selectedDay.getDate()).padStart(2, '0')}`;
-            const selectedSlots = availability[dateStr] || [];
+        function toggleSlot(time) {
+            const dateStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+            const currentPropId = propertyContext.getCurrentId();
+            let propAvailability = propertyContext.getData('availability', currentPropId) || {};
 
-            const grid = document.getElementById('timeslotsGrid');
-            grid.innerHTML = '';
-
-            timeslots.forEach(time => {
-                const slot = document.createElement('div');
-                slot.className = 'timeslot';
-                if (selectedSlots.includes(time)) {
-                    slot.classList.add('active');
-                }
-                slot.textContent = time;
-                slot.onclick = () => toggleTimeslot(time);
-                grid.appendChild(slot);
-            });
-        }
-
-        function toggleTimeslot(time) {
-            const dateStr = `${selectedDay.getFullYear()}-${String(selectedDay.getMonth() + 1).padStart(2, '0')}-${String(selectedDay.getDate()).padStart(2, '0')}`;
-
-            if (!availability[dateStr]) {
-                availability[dateStr] = [];
-            }
-
-            const index = availability[dateStr].indexOf(time);
-            if (index > -1) {
-                availability[dateStr].splice(index, 1);
+            let dateSlots = propAvailability[dateStr] || [];
+            if (dateSlots.includes(time)) {
+                dateSlots = dateSlots.filter(s => s !== time);
             } else {
-                availability[dateStr].push(time);
+                dateSlots.push(time);
             }
 
-            renderTimeslots();
+            propAvailability[dateStr] = dateSlots;
+            propertyContext.saveData('availability', propAvailability, currentPropId);
+
+            renderSlots();
             renderCalendar();
         }
 
-        function saveAvailability() {
-            localStorage.setItem('availability', JSON.stringify(availability));
-            alert('Beschikbaarheid opgeslagen!');
-        }
-
-        function previousMonth() {
-            currentDate.setMonth(currentDate.getMonth() - 1);
+        function changeMonth(delta) {
+            selectedDate.setMonth(selectedDate.getMonth() + delta);
             renderCalendar();
+            renderSlots();
         }
 
-        function nextMonth() {
-            currentDate.setMonth(currentDate.getMonth() + 1);
+        function loadAvailabilitySettings() {
+            if (!window.propertyContext) return;
+            const property = propertyContext.getCurrent();
+            const propertyId = property.id;
+
+            // Update Header
+            const emojiEl = document.getElementById('activePropertyEmoji');
+            const nameEl = document.getElementById('activePropertyName');
+            if (emojiEl) emojiEl.textContent = property.emoji || '🏠';
+            if (nameEl) nameEl.textContent = property.name || 'Woning';
+
+            const settings = propertyContext.getData('availabilitySettings', propertyId) || {
+                mode: 'auto',
+                duration: 30,
+                buffer: 5,
+                maxDossiers: 1
+            };
+
+            setMode(settings.mode);
+            document.getElementById('slotDuration').value = settings.duration;
+            document.getElementById('slotBuffer').value = settings.buffer;
+            document.getElementById('maxDossiers').value = settings.maxDossiers;
+
             renderCalendar();
+            renderSlots();
         }
 
-        function today() {
-            currentDate = new Date();
-            selectedDay = new Date();
-            renderCalendar();
-            renderTimeslots();
+        function saveAvailabilitySettings() {
+            if (!window.propertyContext) return;
+            const propertyId = propertyContext.getCurrentId();
+            const settings = {
+                mode: currentMode,
+                duration: parseInt(document.getElementById('slotDuration').value),
+                buffer: parseInt(document.getElementById('slotBuffer').value),
+                maxDossiers: parseInt(document.getElementById('maxDossiers').value)
+            };
+
+            propertyContext.saveData('availabilitySettings', settings, propertyId);
+            ParticulierUtils.toast('Instellingen succesvol opgeslagen', 'success');
         }
 
-        // Initialize
-        renderCalendar();
-        renderTimeslots();
+        // Initialize - robust initialization that handles async script loading
+        function initPage() {
+            // Check if propertyContext is ready
+            if (!window.propertyContext) {
+                // Retry in 50ms if not ready yet
+                setTimeout(initPage, 50);
+                return;
+            }
+
+            loadAvailabilitySettings();
+
+            const saveBtn = document.querySelector('.btn-save');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', saveAvailabilitySettings);
+            }
+
+            // Add nav listeners
+            const navBtns = document.querySelectorAll('.btn-nav');
+            if (navBtns.length >= 2) {
+                navBtns[0].onclick = () => changeMonth(-1);
+                navBtns[1].onclick = () => changeMonth(1);
+            }
+
+            if (window.ParticulierUtils) {
+                ParticulierUtils.initTooltips();
+            }
+        }
+
+        // Start initialization as soon as possible
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPage);
+        } else {
+            // DOM already loaded, init immediately
+            initPage();
+        }
+
+        window.addEventListener('propertyChanged', () => {
+            loadAvailabilitySettings();
+        });
     </script>
-    <script src="dashboard-nav.js"></script>`n
 </body>
 
 </html>

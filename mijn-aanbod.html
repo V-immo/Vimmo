@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijn Aanbod | VIMMO</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        /* =========================================
+           MIJN AANBOD - Control Center
+           Namespace: .ma-* for layout, .lc-* for listing cards
+           ========================================= */
+
+        /* === PAGE LAYOUT === */
+        .my-aanbod {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-particulier);
+        }
+
+        .ma-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        /* === TOP BAR (Control Bar + Filters + View Controls) === */
+        .ma-topbar {
+            background: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 20px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ma-control-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .ma-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ma-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .ma-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .ma-stat-val {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+
+        .ma-stat-val.is-accent {
+            color: var(--primary-particulier);
+        }
+
+        .ma-stat-val.is-warning {
+            color: #f59e0b;
+        }
+
+        .ma-stat-lbl {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+        }
+
+        .ma-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ma-btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+
+        .ma-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .ma-btn.primary {
+            background: var(--primary-particulier);
+            color: #fff;
+        }
+
+        .ma-btn.secondary {
+            background: #fff;
+            color: var(--text-main);
+            border: 1px solid rgba(0, 0, 0, 0.12);
+        }
+
+        .lc-boost-badge {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(251, 191, 36, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
+            }
+        }
+
+        /* === FILTERS === */
+        .ma-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .ma-search {
+            flex: 1;
+            min-width: 200px;
+            max-width: 320px;
+            position: relative;
+        }
+
+        .ma-search input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border: 1px solid rgba(0, 0, 0, 0.10);
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            background: #f8fafc;
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+
+        .ma-search input:focus {
+            outline: none;
+            border-color: var(--primary-particulier);
+            background: #fff;
+        }
+
+        .ma-search i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 16px;
+        }
+
+        .ma-filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .ma-filter-chip:hover {
+            background: #e2e8f0;
+        }
+
+        .ma-filter-chip.is-active {
+            background: var(--primary-particulier);
+            color: #fff;
+            border-color: var(--primary-particulier);
+        }
+
+        .ma-filter-chip .count {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 999px;
+            font-size: 10px;
+        }
+
+        .ma-filter-chip.is-active .count {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .ma-filter-reset {
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 800;
+            background: transparent;
+            color: #94a3b8;
+            border: none;
+            cursor: pointer;
+        }
+
+        .ma-filter-reset:hover {
+            color: #64748b;
+            text-decoration: underline;
+        }
+
+        /* === VIEW CONTROLS === */
+        .ma-view {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .ma-view-toggle {
+            display: flex;
+            gap: 4px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .ma-view-btn {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .ma-view-btn.is-active {
+            background: #fff;
+            color: var(--text-main);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .ma-sort {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ma-sort-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .ma-sort select {
+            padding: 8px 12px;
+            border: 1px solid rgba(0, 0, 0, 0.10);
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        /* === CONTENT GRID (Listings + Panel) === */
+        .ma-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 0;
+            overflow: hidden;
+        }
+
+        .ma-list {
+            padding: 24px;
+            overflow-y: auto;
+            background: var(--bg-particulier);
+        }
+
+        .ma-list-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .ma-list-table {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* === ACTION PANEL === */
+        .ma-panel {
+            background: #fff;
+            border-left: 1px solid rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .ma-panel.is-empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .ma-panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ma-panel-title {
+            font-weight: 900;
+            font-size: 15px;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ma-panel-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.10);
+            background: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #64748b;
+            transition: background 0.15s ease;
+        }
+
+        .ma-panel-close:hover {
+            background: #f8fafc;
+        }
+
+        .ma-panel-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 0 20px;
+        }
+
+        .ma-panel-tab {
+            padding: 12px 16px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #64748b;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: color 0.15s ease;
+            margin-bottom: -1px;
+        }
+
+        .ma-panel-tab:hover {
+            color: var(--text-main);
+        }
+
+        .ma-panel-tab.is-active {
+            color: var(--primary-particulier);
+            border-bottom-color: var(--primary-particulier);
+        }
+
+        .ma-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .ma-panel-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #94a3b8;
+            text-align: center;
+            gap: 12px;
+        }
+
+        .ma-panel-placeholder i {
+            font-size: 48px;
+            opacity: 0.4;
+        }
+
+        /* === LISTING CARD COMPONENT === */
+        /* Less visual noise - clean and premium */
+        .listing-card {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.07);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+            border-radius: 22px;
+            overflow: hidden;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .listing-card:hover .lc-stats-reveal {
+            opacity: 1;
+            transform: translateY(0);
+            max-height: 100px;
+            margin-top: 10px;
+        }
+
+        .listing-card.is-selected {
+            border-color: var(--primary-particulier);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15), 0 16px 40px rgba(0, 0, 0, 0.10);
+        }
+
+        /* Urgent Strip */
+        .lc-urgent {
+            background: linear-gradient(90deg, #fef3c7, #fde68a);
+            padding: 8px 14px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #92400e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lc-urgent i {
+            font-size: 14px;
+        }
+
+        /* Subtle Health Bar on Card */
+        .lc-health-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.1);
+            width: 100%;
+            z-index: 10;
+        }
+
+        .lc-health-fill {
+            height: 100%;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .lc-health-fill.is-excellent {
+            background: #10b981;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+
+        .lc-health-fill.is-good {
+            background: #10b981;
+            opacity: 0.8;
+        }
+
+        .lc-health-fill.is-ok {
+            background: #f59e0b;
+        }
+
+        .lc-health-fill.is-weak {
+            background: #ef4444;
+        }
+
+        .lc-health-fill.is-critical {
+            background: #000;
+        }
+
+        .lc-urgent-text {
+            flex: 1;
+        }
+
+        .lc-urgent-more {
+            font-weight: 900;
+            color: #b45309;
+            cursor: pointer;
+        }
+
+        /* Card Hero (Cover Image) */
+        .lc-hero {
+            position: relative;
+            height: 160px;
+            background: #f1f5f9;
+            overflow: hidden;
+        }
+
+        .lc-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .lc-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
+        }
+
+        .lc-hero-badges {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .lc-status {
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(8px);
+        }
+
+        .lc-status.is-live {
+            background: rgba(16, 185, 129, 0.9);
+            color: #fff;
+        }
+
+        .lc-status.is-concept {
+            background: rgba(245, 158, 11, 0.9);
+            color: #fff;
+        }
+
+        .lc-status.is-review {
+            background: rgba(99, 102, 241, 0.9);
+            color: #fff;
+        }
+
+        .lc-status.is-expired {
+            background: rgba(239, 68, 68, 0.9);
+            color: #fff;
+        }
+
+        .lc-status.is-paused {
+            background: rgba(100, 116, 139, 0.9);
+            color: #fff;
+        }
+
+        .lc-health {
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 900;
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .lc-health.is-excellent {
+            background: rgba(16, 185, 129, 0.9);
+            color: #fff;
+            border: 1px solid #059669;
+        }
+
+        .lc-health.is-good {
+            background: rgba(16, 185, 129, 0.85);
+            color: #fff;
+        }
+
+        .lc-health.is-ok {
+            background: rgba(245, 158, 11, 0.85);
+            color: #fff;
+        }
+
+        /* STAP 5.1 - MINIMALISATIE - hide stats by default */
+        .lc-stats,
+        .lc-metrics,
+        .lc-ranking,
+        .lc-health-badge,
+        .lc-boost {
+            display: none !important;
+        }
+
+        /* Urgent strip: hidden by default, only show for critical listings */
+        .lc-urgent {
+            display: none !important;
+        }
+
+        .listing-card.critical .lc-urgent {
+            display: flex !important;
+        }
+
+        /* health = bar, geen badge */
+        .lc-healthbar {
+            height: 6px;
+            background: #e5efe9;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .lc-healthbar span {
+            height: 100%;
+            display: block;
+            background: #0e8f61;
+        }
+
+        .lc-health.is-weak {
+            background: rgba(239, 68, 68, 0.9);
+            color: #fff;
+        }
+
+        .lc-health.is-critical {
+            background: #000;
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .lc-carousel-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4px;
+        }
+
+        .lc-carousel-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .lc-carousel-dot.is-active {
+            background: #fff;
+        }
+
+        /* Card Body */
+        .lc-body {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .lc-title {
+            font-weight: 900;
+            font-size: 15px;
+            color: var(--text-main);
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .lc-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(47, 42, 38, 0.62);
+        }
+
+        .lc-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .lc-price {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+
+        .lc-price-suffix {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        /* Card Stats reveal on hover */
+        .lc-stats-reveal {
+            opacity: 0;
+            transform: translateY(10px);
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 0;
+        }
+
+        .lc-stats {
+            display: flex;
+            gap: 12px;
+            padding: 10px 0;
+        }
+
+        .lc-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .lc-stat-val {
+            font-weight: 900;
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        .lc-stat-val.is-accent {
+            color: var(--primary-particulier);
+        }
+
+        .lc-stat-lbl {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+        }
+
+        /* Card Footer */
+        .lc-footer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            background: #fafafa;
+        }
+
+        .lc-primary-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.12s ease, opacity 0.12s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .lc-primary-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .lc-primary-btn.is-live {
+            background: var(--primary-particulier);
+            color: #fff;
+        }
+
+        .lc-primary-btn.is-concept {
+            background: #f59e0b;
+            color: #fff;
+        }
+
+        .lc-primary-btn.is-review {
+            background: #6366f1;
+            color: #fff;
+        }
+
+        .lc-primary-btn.is-expired {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .lc-primary-btn.is-paused {
+            background: #64748b;
+            color: #fff;
+        }
+
+        .lc-kebab {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.10);
+            background: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #64748b;
+            position: relative;
+            transition: background 0.15s ease;
+        }
+
+        .lc-kebab:hover {
+            background: #f8fafc;
+        }
+
+        /* Kebab Menu */
+        .lc-menu {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 6px;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.10);
+            border-radius: 12px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+            min-width: 160px;
+            z-index: 100;
+            display: none;
+            overflow: hidden;
+        }
+
+        .lc-kebab.is-open .lc-menu {
+            display: block;
+        }
+
+        .lc-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .lc-menu-item:hover {
+            background: #f8fafc;
+        }
+
+        .lc-menu-item i {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        .lc-menu-item.is-danger {
+            color: #ef4444;
+        }
+
+        .lc-menu-item.is-danger i {
+            color: #ef4444;
+        }
+
+        /* === LIST VIEW MODIFIER === */
+        .listing-card.is-list {
+            display: grid;
+            grid-template-columns: 140px 1fr auto;
+            border-radius: 14px;
+        }
+
+        .listing-card.is-list .lc-urgent {
+            grid-column: 1 / -1;
+        }
+
+        .listing-card.is-list .lc-hero {
+            height: 100%;
+            min-height: 100px;
+            border-radius: 14px 0 0 14px;
+        }
+
+        .listing-card.is-list .lc-body {
+            padding: 12px 16px;
+            gap: 6px;
+        }
+
+        .listing-card.is-list .lc-stats {
+            flex-direction: row;
+            border-top: none;
+            padding: 6px 0;
+        }
+
+        .listing-card.is-list .lc-footer {
+            flex-direction: column;
+            justify-content: center;
+            padding: 12px;
+            background: transparent;
+            border-top: none;
+            border-left: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1200px) {
+            .ma-content {
+                grid-template-columns: 1fr;
+            }
+
+            .ma-panel {
+                display: none;
+            }
+
+            .ma-panel.is-open {
+                display: flex;
+                position: fixed;
+                inset: 0;
+                z-index: 9000;
+                border-left: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ma-topbar {
+                padding: 16px;
+            }
+
+            .ma-control-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .ma-stats {
+                justify-content: center;
+            }
+
+            .ma-filters {
+                flex-direction: column;
+            }
+
+            .ma-search {
+                max-width: none;
+            }
+
+            .ma-list {
+                padding: 16px;
+            }
+
+            .ma-list-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* === FOCUS STATES === */
+        .listing-card:focus-within {
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25), 0 16px 40px rgba(0, 0, 0, 0.10);
+        }
+
+        .ma-btn:focus,
+        .lc-primary-btn:focus,
+        .lc-kebab:focus,
+        .ma-panel-tab:focus {
+            outline: 3px solid rgba(16, 185, 129, 0.35);
+            outline-offset: 2px;
+        }
+
+        /* === EMPTY STATE === */
+        .ma-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+            gap: 16px;
+        }
+
+        .ma-empty i {
+            font-size: 64px;
+            color: #e2e8f0;
+        }
+
+        .ma-empty-title {
+            font-weight: 900;
+            font-size: 18px;
+            color: var(--text-main);
+        }
+
+        .ma-empty-text {
+            font-size: 14px;
+            color: #64748b;
+            max-width: 300px;
+        }
+    </style>
+</head>
+
+<body class="my-aanbod">
+    <!-- Sidebar (reuse from dashboard) -->
+    <aside class="sidebar sidebar-particulier"
+        style="width: 260px; background: #fff; border-right: 1px solid rgba(0,0,0,0.08); display: flex; flex-direction: column;">
+        <a href="index.html" class="sidebar-brand">
+            <span class="brand-v">V</span><span class="brand-i">I</span><span class="brand-mmo">MMO</span>
+        </a>
+        <nav class="sidebar-nav" style="flex: 1; padding: 0 15px;">
+            <a href="dashboard-particulier.html" class="nav-item"><i class="ri-dashboard-3-line"></i> Dashboard</a>
+            <a href="mijn-aanbod.html" class="nav-item active"><i class="ri-home-4-line"></i> Mijn Aanbod</a>
+            <a href="berichten-particulier.html" class="nav-item"><i class="ri-message-3-line"></i> Berichten</a>
+            <a href="beschikbaarheid-particulier.html" class="nav-item"><i class="ri-calendar-line"></i>
+                Beschikbaarheid</a>
+            <a href="pakket-beheer.html" class="nav-item"><i class="ri-vip-crown-line"></i> Pakket</a>
+            <a href="instellingen-particulier.html" class="nav-item"><i class="ri-settings-3-line"></i> Instellingen</a>
+        </nav>
+        <div style="padding: 20px; border-top: 1px solid rgba(0,0,0,0.06);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div
+                    style="width: 40px; height: 40px; border-radius: 12px; background: var(--primary-particulier); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900;">
+                    JD</div>
+                <div>
+                    <div style="font-weight: 800; font-size: 13px;">Jan Doe</div>
+                    <div style="font-size: 11px; color: #64748b;">Premium</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ma-main">
+        <!-- Top Bar -->
+        <header class="ma-topbar">
+            <!-- Control Bar -->
+            <div class="ma-control-bar">
+                <h1 class="ma-title">
+                    <i class="ri-home-4-line"></i>
+                    Mijn Aanbod
+                </h1>
+
+                <div class="ma-stats">
+                    <div class="ma-stat">
+                        <div class="ma-stat-val" id="statTotal">0</div>
+                        <div class="ma-stat-lbl">Totaal</div>
+                    </div>
+                    <div class="ma-stat">
+                        <div class="ma-stat-val is-accent" id="statLive">0</div>
+                        <div class="ma-stat-lbl">Live</div>
+                    </div>
+                    <div class="ma-stat">
+                        <div class="ma-stat-val is-warning" id="statUrgent">0</div>
+                        <div class="ma-stat-lbl">Urgent</div>
+                    </div>
+                </div>
+
+                <div class="ma-actions">
+                    <button class="ma-btn secondary" id="btnImport">
+                        <i class="ri-upload-2-line"></i> Importeren
+                    </button>
+                    <button class="ma-btn primary" id="btnNewListing">
+                        <i class="ri-add-line"></i> Nieuw pand
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="ma-filters">
+                <div class="ma-search">
+                    <i class="ri-search-line"></i>
+                    <input type="text" id="searchInput" placeholder="Zoek op titel, adres, referentie...">
+                </div>
+
+                <button class="ma-filter-chip is-active" data-filter="all">
+                    Alles <span class="count" id="filterAllCount">0</span>
+                </button>
+                <button class="ma-filter-chip" data-filter="live">
+                    Live <span class="count" id="filterLiveCount">0</span>
+                </button>
+                <button class="ma-filter-chip" data-filter="concept">
+                    Concept <span class="count" id="filterConceptCount">0</span>
+                </button>
+                <button class="ma-filter-chip" data-filter="review">
+                    In review <span class="count" id="filterReviewCount">0</span>
+                </button>
+                <button class="ma-filter-chip" data-filter="expired">
+                    Verlopen <span class="count" id="filterExpiredCount">0</span>
+                </button>
+
+                <button class="ma-filter-reset" id="btnResetFilters">Reset filters</button>
+            </div>
+
+            <!-- View Controls -->
+            <div class="ma-view">
+                <div class="ma-view-toggle">
+                    <button class="ma-view-btn is-active" data-view="grid" title="Grid weergave">
+                        <i class="ri-grid-fill"></i>
+                    </button>
+                    <button class="ma-view-btn" data-view="list" title="Lijst weergave">
+                        <i class="ri-list-check"></i>
+                    </button>
+                </div>
+
+                <div class="ma-sort">
+                    <span class="ma-sort-label">Sorteer op:</span>
+                    <select id="sortSelect">
+                        <option value="urgent">Meest urgent</option>
+                        <option value="leads">Meeste leads</option>
+                        <option value="health">Beste health</option>
+                        <option value="views">Meeste views</option>
+                        <option value="expiring">Binnenkort verlopen</option>
+                        <option value="updated">Laatst aangepast</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Grid -->
+        <div class="ma-content">
+            <!-- Listings Column -->
+            <section class="ma-list">
+                <div class="ma-list-grid" id="listingsGrid">
+                    <!-- Listings rendered here by JS -->
+                </div>
+            </section>
+
+            <!-- Action Panel -->
+            <aside class="ma-panel" id="actionPanel">
+                <div class="ma-panel-placeholder">
+                    <i class="ri-cursor-line"></i>
+                    <div>Selecteer een listing om details te bekijken</div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Load propertyContext -->
+    <script src="property-context.js"></script>
+    <script src="particulier-utils.js"></script>
+
+    <!-- Mijn Aanbod Logic -->
+    <script>
+        (function () {
+            const ctx = window.propertyContext;
+            if (!ctx) {
+                console.error("propertyContext not available");
+                return;
+            }
+
+            // DOM refs
+            const grid = document.getElementById("listingsGrid");
+            const panel = document.getElementById("actionPanel");
+            const searchInput = document.getElementById("searchInput");
+            const sortSelect = document.getElementById("sortSelect");
+
+            // State
+            let currentView = "grid";
+            let currentFilter = "all";
+            let currentSort = "urgent";
+            let selectedId = null;
+
+            // Status config
+            const STATUS_CONFIG = {
+                live: { label: "Live", class: "is-live", action: "Live bekijken", icon: "ri-external-link-line" },
+                concept: { label: "Concept", class: "is-concept", action: "Afwerken", icon: "ri-edit-line" },
+                review: { label: "In review", class: "is-review", action: "Review volgen", icon: "ri-time-line" },
+                expired: { label: "Verlopen", class: "is-expired", action: "Verlengen", icon: "ri-refresh-line" },
+                paused: { label: "Gepauzeerd", class: "is-paused", action: "Hervatten", icon: "ri-play-line" }
+            };
+
+            // Health config (moved to engine)
+
+            // Get all listings
+            function getListings() {
+                const all = ctx.getAll ? ctx.getAll() : [];
+                return all.map(p => {
+                    const healthData = getHealthData(p);
+                    return {
+                        ...p,
+                        status: (p.listingStatus || "Concept").toLowerCase().replace(" ", ""),
+                        healthScore: healthData.score,
+                        blockers: healthData.blockers
+                    };
+                });
+            }
+
+            // Real Listing Health Engine (World-class)
+            function getHealthData(prop) {
+                return ParticulierUtils.computeListingHealth(prop, propertyContext);
+            }
+
+            // Filter listings
+            function filterListings(listings) {
+                const search = (searchInput.value || "").toLowerCase().trim();
+
+                return listings.filter(p => {
+                    // Status filter
+                    if (currentFilter !== "all" && p.status !== currentFilter) return false;
+
+                    // Search filter
+                    if (search) {
+                        const haystack = `${p.name || ""} ${p.location || ""} ${p.address || ""} ${p.postcode || ""} ${p.id}`.toLowerCase();
+                        if (!haystack.includes(search)) return false;
+                    }
+
+                    return true;
+                });
+            }
+
+            // Sort listings
+            function sortListings(listings) {
+                return listings.slice().sort((a, b) => {
+                    switch (currentSort) {
+                        case "urgent":
+                            const ha = getHealthData(a);
+                            const hb = getHealthData(b);
+                            const statsA = ctx.getData?.("stats", a.id) || { views: 0, requests: 0 };
+                            const statsB = ctx.getData?.("stats", b.id) || { views: 0, requests: 0 };
+
+                            // 1. Expired listings first
+                            const isExpA = a.status === "expired" ? 1 : 0;
+                            const isExpB = b.status === "expired" ? 1 : 0;
+                            if (isExpB !== isExpA) return isExpB - isExpA;
+
+                            // 2. Publish blockers (count DESC)
+                            if (hb.blockers.length !== ha.blockers.length) return hb.blockers.length - ha.blockers.length;
+
+                            // 3. Low health score < 55 (score ASC)
+                            const isPoorA = ha.score < 55 ? 1 : 0;
+                            const isPoorB = hb.score < 55 ? 1 : 0;
+                            if (isPoorB !== isPoorA) return isPoorB - isPoorA;
+                            if (isPoorA && isPoorB && ha.score !== hb.score) return ha.score - hb.score;
+
+                            // 4. Low leads / High views (Conversion gap)
+                            // Priority to listings with 0 leads and high views
+                            const gapA = (statsA.requests === 0 && statsA.views > 50) ? statsA.views : 0;
+                            const gapB = (statsB.requests === 0 && statsB.views > 50) ? statsB.views : 0;
+                            if (gapB !== gapA) return gapB - gapA;
+
+                            // 5. Default by health score DESC
+                            return ha.score - hb.score;
+                        case "leads":
+                            const leadsA = ctx.getData?.("stats", a.id)?.requests || 0;
+                            const leadsB = ctx.getData?.("stats", b.id)?.requests || 0;
+                            return leadsB - leadsA;
+                        case "health":
+                            return getHealthData(b).score - getHealthData(a).score;
+                        case "views":
+                            const viewsA = ctx.getData?.("stats", a.id)?.views || 0;
+                            const viewsB = ctx.getData?.("stats", b.id)?.views || 0;
+                            return viewsB - viewsA;
+                        case "updated":
+                            return new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0);
+                        default:
+                            return 0;
+                    }
+                });
+            }
+
+            // Render listing card
+            function renderCard(p) {
+                const status = STATUS_CONFIG[p.status] || STATUS_CONFIG.concept;
+                const health = getHealthData(p);
+                const stats = ctx.getData?.("stats", p.id) || { views: 0, requests: 0 };
+                const isSelected = p.id === selectedId;
+
+                // STAP 2: Urgent strip alleen bij echte pijn (blockers of expired)
+                const hasBlockers = health.blockers && health.blockers.length > 0;
+                const isExpired = p.status === "expired";
+                const showUrgentStrip = hasBlockers || isExpired;
+
+                const isListView = currentView === "list";
+                const coverUrl = p.photos?.[0]?.dataUrl || "";
+
+                const price = p.price ? `€${Number(p.price).toLocaleString("nl-BE")}` : "—";
+                const priceSuffix = (p.transactionType || "").toLowerCase().includes("huur") ? "/maand" : "";
+
+                const ranking = propertyContext.getRankingMultiplier(p.id);
+
+                const isCritical = health.blockers.length > 0 || p.status === 'expired' || p.status === 'Verlopen';
+
+                return `
+                    <article class="listing-card ${isSelected ? 'is-selected' : ''} ${isListView ? 'is-list' : ''} ${isCritical ? 'critical' : ''}"
+                        data-listing-id="${p.id}" data-status="${p.status}">
+                        
+                        ${showUrgentStrip ? `
+                            <div class="lc-urgent" style="background: ${isExpired ? '#fee2e2' : '#fef3c7'}; color: ${isExpired ? '#b91c1c' : '#92400e'};">
+                                <i class="${isExpired ? 'ri-timer-line' : 'ri-error-warning-line'}"></i>
+                                <span class="lc-urgent-text">${isExpired ? 'Publicatie verlopen' : health.blockers[0].label}</span>
+                                ${health.blockers.length > 1 ? `<span class="lc-urgent-more">+${health.blockers.length - 1} meer</span>` : ""}
+                            </div>
+                        ` : ""}
+                        
+                        <div class="lc-hero">
+                            ${coverUrl ? `<img src="${coverUrl}" alt="">` : `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:2rem;color:#cbd5e1;">🏠</div>`}
+                            <div class="lc-hero-overlay"></div>
+                            <div class="lc-hero-badges">
+                                <span class="lc-status ${status.class}" style="backdrop-filter: blur(10px); padding: 4px 12px; font-size: 9px;">${status.label}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="lc-body" style="padding: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 4px;">
+                                <h3 class="lc-title" style="margin: 0; font-size: 14px; font-weight: 800;">${p.name || "Geen titel"}</h3>
+                                <div class="lc-price" style="font-size: 14px; white-space: nowrap;">${price}</div>
+                            </div>
+                            
+                            <div class="lc-meta" style="opacity: 0.6; margin-bottom: 12px;">
+                                <span class="lc-meta-item"><i class="ri-map-pin-line"></i> ${p.location || p.address || "—"}</span>
+                            </div>
+
+                            <!-- STAP 5.2 HTML: Health = bar, geen badge -->
+                            <div class="lc-healthbar">
+                                <span style="width:${health.score}%"></span>
+                            </div>
+                        </div>
+
+                        <div class="lc-footer" style="padding: 12px 16px; border-top: none; background: transparent;">
+                            <button class="lc-primary-btn" data-action="primary" style="background: #f8fafc; color: var(--text-main); border: 1px solid rgba(0,0,0,0.05); font-weight: 800;">
+                                <i class="ri-eye-line"></i> Details
+                            </button>
+                            <div class="lc-kebab" data-action="kebab">
+                                <i class="ri-more-2-fill"></i>
+                                <div class="lc-menu">
+                                    <div class="lc-menu-item" data-action="boost" style="color: #b45309; font-weight: 800;"><i class="ri-flashlight-line"></i> Boost Woning</div>
+                                    <div style="height: 1px; background: rgba(0,0,0,0.05); margin: 4px 0;"></div>
+                                    <div class="lc-menu-item" data-action="edit"><i class="ri-edit-line"></i> Bewerken</div>
+                                    <div class="lc-menu-item" data-action="duplicate"><i class="ri-file-copy-line"></i> Dupliceren</div>
+                                    <div class="lc-menu-item" data-action="pause"><i class="ri-pause-circle-line"></i> Pauzeren</div>
+                                    <div class="lc-menu-item is-danger" data-action="delete"><i class="ri-delete-bin-line"></i> Verwijderen</div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }
+
+            // Render panel
+            function renderPanel(p) {
+                if (!p) {
+                    panel.innerHTML = `
+                        <div class="ma-panel-placeholder">
+                            <i class="ri-cursor-line"></i>
+                            <div>Selecteer een listing om details te bekijken</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const status = STATUS_CONFIG[p.status] || STATUS_CONFIG.concept;
+                const health = getHealthData(p);
+                const ranking = propertyContext.getRankingMultiplier(p.id);
+
+                panel.innerHTML = `
+                    <div class="ma-panel-header">
+                        <h2 class="ma-panel-title">${p.name || "Geen titel"}</h2>
+                        <button class="ma-panel-close" data-action="close-panel">&times;</button>
+                    </div>
+                    <div class="ma-panel-tabs">
+                        <button class="ma-panel-tab is-active" data-tab="overzicht">Overzicht</button>
+                        <button class="ma-panel-tab" data-tab="bewerken">Bewerken</button>
+                        <button class="ma-panel-tab" data-tab="leads">Leads</button>
+                        <button class="ma-panel-tab" data-tab="beheer">Beheer</button>
+                    </div>
+                    <div class="ma-panel-body">
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <span class="lc-status ${status.class}">${status.label}</span>
+                                <span class="lc-health is-${health.tier}"><i class="ri-heart-pulse-line"></i> ${health.score}% ${health.label}</span>
+                                <span class="lc-status" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a;">
+                                    <i class="ri-flashlight-line"></i> Power: ${ranking.multiplier}x
+                                </span>
+                            </div>
+                            
+                            <div style="background: #f8fafc; border: 1px solid rgba(0,0,0,0.05); border-radius: 12px; padding: 12px;">
+                                <div style="font-weight: 800; font-size: 11px; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">Ranking Power Breakdown</div>
+                                <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;">
+                                    <span>Pakket (${propertyContext.account.tier})</span>
+                                    <span style="font-weight: 700;">${ranking.breakdown.package}x</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;">
+                                    <span>Health Factor</span>
+                                    <span style="font-weight: 700; color: ${ranking.breakdown.healthFactor < 1 ? '#ef4444' : '#10b981'};">${ranking.breakdown.healthFactor}x</span>
+                                </div>
+                                ${ranking.isBoosted ? `
+                                <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0;">
+                                    <span>Actieve Boost</span>
+                                    <span style="font-weight: 700; color: #f59e0b;">+50% (1.5x)</span>
+                                </div>
+                                ` : ''}
+                                ${ranking.capApplied ? `
+                                <div style="font-size: 11px; color: #ef4444; font-weight: 700; margin-top: 5px; text-align: center; border-top: 1px dashed #fee2e2; pt: 5px;">
+                                    MAX CAP BEREIKT (2.0x)
+                                </div>
+                                ` : ''}
+                            </div>
+
+                            ${ranking.warnings.length > 0 ? `
+                                <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 12px; padding: 12px;">
+                                    ${ranking.warnings.map(w => `
+                                        <div style="display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: #92400e; margin-bottom: 4px;">
+                                            <i class="ri-alert-line" style="margin-top: 2px;"></i>
+                                            <span>${w}</span>
+                                        </div>
+                                    `).join("")}
+                                </div>
+                            ` : ""}
+                            
+                            ${health.blockers.length > 0 ? `
+                                <div style="background: #fef2f2; border: 1px solid #fee2e2; border-radius: 12px; padding: 12px;">
+                                    <div style="font-weight: 800; font-size: 12px; color: #ef4444; margin-bottom: 8px;">Blockers (Publicatie verhinderd)</div>
+                                    ${health.blockers.map(b => `
+                                        <div style="display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px;">
+                                            <i class="ri-error-warning-line" style="color: #ef4444;"></i>
+                                            <span style="flex: 1; color: #1e293b;">${b.label}</span>
+                                            <button onclick="window.location.href='advertentie-particulier.html?prop=${p.id}#${b.fixTarget}'" 
+                                                style="padding: 4px 10px; border-radius: 8px; border: none; background: #ef4444; color: #fff; font-size: 11px; font-weight: 800; cursor: pointer;">Oplossen</button>
+                                        </div>
+                                    `).join("")}
+                                </div>
+                            ` : ""}
+
+                            ${health.penalties.length > 0 ? `
+                                <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 12px; padding: 12px;">
+                                    <div style="font-weight: 800; font-size: 12px; color: #b45309; margin-bottom: 8px;">Verbeterpunten (Lage ranking)</div>
+                                    ${health.penalties.map(pen => `
+                                        <div style="display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px;">
+                                            <i class="ri-alert-line" style="color: #f59e0b;"></i>
+                                            <span style="flex: 1; color: #1e293b;">${pen.label}</span>
+                                            <button onclick="window.location.href='advertentie-particulier.html?prop=${p.id}#${pen.fixTarget}'" 
+                                                style="padding: 4px 10px; border-radius: 8px; border: 1px solid #fde68a; background: #fff; color: #92400e; font-size: 11px; font-weight: 800; cursor: pointer;">Fix</button>
+                                        </div>
+                                    `).join("")}
+                                </div>
+                            ` : ""}
+                            
+                            ${(health.blockers.length === 0 && health.penalties.length === 0) ? `
+                                <div style="background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 12px; padding: 12px;">
+                                    <div style="display: flex; align-items: center; gap: 8px; color: #15803d;">
+                                        <i class="ri-checkbox-circle-fill"></i>
+                                        <span style="font-weight: 800; font-size: 13px;">Listing is optimaal geconfigureerd</span>
+                                    </div>
+                                </div>
+                            ` : ""}
+                            
+                            <div style="padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.06);">
+                                <div style="font-weight: 800; font-size: 12px; color: #64748b; margin-bottom: 10px;">Snelle acties</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                    <button class="ma-btn secondary" onclick="window.location.href='advertentie-particulier.html?prop=${p.id}'" style="font-size: 12px; padding: 8px 12px;">
+                                        <i class="ri-edit-line"></i> Bewerken
+                                    </button>
+                                    <button class="ma-btn secondary" style="font-size: 12px; padding: 8px 12px;">
+                                        <i class="ri-share-line"></i> Delen
+                                    </button>
+                                    <button class="ma-btn secondary" style="font-size: 12px; padding: 8px 12px;">
+                                        <i class="ri-rocket-line"></i> Boost
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Update stats
+            function updateStats(listings) {
+                const total = listings.length;
+                const live = listings.filter(p => p.status === "live").length;
+                const concept = listings.filter(p => p.status === "concept").length;
+                const review = listings.filter(p => p.status === "review").length;
+                const expired = listings.filter(p => p.status === "expired").length;
+                const urgent = listings.filter(p => p.blockers.length > 0).length;
+
+                document.getElementById("statTotal").textContent = total;
+                document.getElementById("statLive").textContent = live;
+                document.getElementById("statUrgent").textContent = urgent;
+
+                document.getElementById("filterAllCount").textContent = total;
+                document.getElementById("filterLiveCount").textContent = live;
+                document.getElementById("filterConceptCount").textContent = concept;
+                document.getElementById("filterReviewCount").textContent = review;
+                document.getElementById("filterExpiredCount").textContent = expired;
+            }
+
+            // Main render
+            function render() {
+                const all = getListings();
+                const filtered = filterListings(all);
+                const sorted = sortListings(filtered);
+
+                updateStats(all);
+
+                if (sorted.length === 0) {
+                    grid.innerHTML = `
+                        <div class="ma-empty">
+                            <i class="ri-home-smile-line"></i>
+                            <div class="ma-empty-title">Geen listings gevonden</div>
+                            <div class="ma-empty-text">Pas je filters aan of voeg een nieuw pand toe.</div>
+                            <button class="ma-btn primary" id="btnNewListingEmpty">
+                                <i class="ri-add-line"></i> Nieuw pand
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    grid.className = currentView === "list" ? "ma-list-table" : "ma-list-grid";
+                    grid.innerHTML = sorted.map(renderCard).join("");
+                }
+
+                // Update panel if selected
+                const selected = selectedId ? sorted.find(p => p.id === selectedId) : null;
+                renderPanel(selected);
+            }
+
+            // Event handlers
+            grid.addEventListener("click", (e) => {
+                const card = e.target.closest("[data-listing-id]");
+                if (!card) return;
+
+                const action = e.target.closest("[data-action]")?.dataset.action;
+                const id = card.dataset.listingId;
+
+                // Kebab toggle
+                if (action === "kebab") {
+                    e.stopPropagation();
+                    const kebab = e.target.closest(".lc-kebab");
+                    document.querySelectorAll(".lc-kebab.is-open").forEach(k => {
+                        if (k !== kebab) k.classList.remove("is-open");
+                    });
+                    kebab.classList.toggle("is-open");
+                    return;
+                }
+
+                // Menu actions
+                if (action === "edit") {
+                    window.location.href = `advertentie-particulier.html?prop=${id}`;
+                    return;
+                }
+                if (action === "delete") {
+                    if (confirm("Weet je zeker dat je deze listing wilt verwijderen?")) {
+                        ctx.deleteProperty?.(id);
+                        if (selectedId === id) selectedId = null;
+                        render();
+                    }
+                    return;
+                }
+
+                if (action === "boost") {
+                    boostListing(id);
+                    return;
+                }
+
+                // Primary action
+                if (action === "primary") {
+                    const status = card.dataset.status;
+                    if (status === "live") {
+                        window.open(`listing-preview.html?prop=${id}`, "_blank");
+                    } else {
+                        window.location.href = `advertentie-particulier.html?prop=${id}`;
+                    }
+                    return;
+                }
+
+                // Select card
+                selectedId = id;
+                render();
+            });
+
+            // Close kebab on outside click
+            document.addEventListener("click", (e) => {
+                if (!e.target.closest(".lc-kebab")) {
+                    document.querySelectorAll(".lc-kebab.is-open").forEach(k => k.classList.remove("is-open"));
+                }
+            });
+
+            // Close kebab on Escape
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    document.querySelectorAll(".lc-kebab.is-open").forEach(k => k.classList.remove("is-open"));
+                }
+            });
+
+            // Panel close
+            panel.addEventListener("click", (e) => {
+                if (e.target.closest("[data-action='close-panel']")) {
+                    selectedId = null;
+                    render();
+                }
+            });
+
+            // Filter chips
+            document.querySelectorAll("[data-filter]").forEach(chip => {
+                chip.addEventListener("click", () => {
+                    currentFilter = chip.dataset.filter;
+                    document.querySelectorAll("[data-filter]").forEach(c => c.classList.remove("is-active"));
+                    chip.classList.add("is-active");
+                    render();
+                });
+            });
+
+            // View toggle
+            document.querySelectorAll("[data-view]").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    currentView = btn.dataset.view;
+                    document.querySelectorAll("[data-view]").forEach(b => b.classList.remove("is-active"));
+                    btn.classList.add("is-active");
+                    render();
+                });
+            });
+
+            // Sort
+            sortSelect.addEventListener("change", () => {
+                currentSort = sortSelect.value;
+                render();
+            });
+
+            // Search
+            let searchDebounce = null;
+            searchInput.addEventListener("input", () => {
+                clearTimeout(searchDebounce);
+                searchDebounce = setTimeout(render, 200);
+            });
+
+            // Reset filters
+            document.getElementById("btnResetFilters").addEventListener("click", () => {
+                currentFilter = "all";
+                searchInput.value = "";
+                document.querySelectorAll("[data-filter]").forEach(c => c.classList.remove("is-active"));
+                document.querySelector("[data-filter='all']").classList.add("is-active");
+                render();
+            });
+
+            // New listing button
+            document.getElementById("btnNewListing")?.addEventListener("click", () => {
+                const newId = ctx.createProperty?.({ name: "", listingStatus: "Concept" });
+                if (newId) {
+                    window.location.href = `advertentie-particulier.html?prop=${newId}&new=1`;
+                }
+            });
+
+            // Listen for property changes
+            window.addEventListener("propertyChanged", () => setTimeout(render, 50));
+            window.addEventListener("accountChanged", () => setTimeout(render, 50));
+
+            async function boostListing(id) {
+                const p = propertyContext.getById(id);
+                if (!p) return;
+
+                const rankingPower = propertyContext.getRankingMultiplier(id);
+                const health = getHealthData(p);
+
+                // 1. Check for blockers
+                if (health.blockers && health.blockers.length > 0) {
+                    await ParticulierUtils.alert(
+                        'Boost Geblokkeerd',
+                        `Je kunt deze woning pas boosten als de kritieke blockers zijn opgelost. <br><br><strong>Nodig:</strong> ${health.blockers.map(b => b.label).join(", ")}`
+                    );
+                    window.location.href = `advertentie-particulier.html?prop=${id}`;
+                    return;
+                }
+
+                // 2. Prepare ROI Message
+                const currentPower = Math.round((rankingPower.multiplier - 1) * 100);
+                const nextPower = Math.round(((rankingPower.multiplier * 1.5) - 1) * 100);
+                const visibilityGain = nextPower - currentPower;
+
+                let roiWarning = "";
+                if (rankingPower.healthScore < 70) {
+                    const potentialLoss = Math.round((1 - (rankingPower.breakdown.healthFactor || 1)) * 100);
+                    roiWarning = `
+                        <div style="margin-top: 15px; padding: 12px; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 12px; text-align: left;">
+                            <div style="color: #b45309; font-weight: 800; font-size: 13px; margin-bottom: 4px;">⚠ ROI Waarschuwing</div>
+                            <div style="color: #92400e; font-size: 12px; line-height: 1.4;">
+                                Je verliest momenteel <strong>${potentialLoss}% effect</strong> door een lage health score. Fix je listing voor maximale impact.
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const confirmed = await ParticulierUtils.confirm(
+                    'Boost Ranking Kracht',
+                    `
+                    <div style="text-align: left; margin-bottom: 15px;">
+                        Wil je "${p.name}" boosten? Dit verhoogt je zichtbaarheid direct.
+                    </div>
+                    <div style="background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 0.75rem; font-weight: 800; color: #15803d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Verwachte Impact</div>
+                        <div style="font-size: 2.2rem; font-weight: 900; color: #10b981;">+${visibilityGain}%</div>
+                        <div style="font-size: 0.85rem; font-weight: 700; color: #15803d;">extra zichtbaarheid in jouw tier</div>
+                    </div>
+                    ${roiWarning}
+                    <div style="font-size: 0.85rem; color: #64748b; margin-top: 15px;">Kosten: 1 Boost Credit (of €4.99). Geldig voor 7 dagen.</div>
+                    `,
+                    'Nu Boosten 🚀'
+                );
+
+                if (confirmed) {
+                    propertyContext.applyBoost(id);
+                    ParticulierUtils.toast('Woning succesvol geboost! 💥', 'success');
+                    setTimeout(render, 500);
+                }
+            }
+
+            // Initial render
+            render();
+        })();
+    </script>
+</body>
+
+</html>

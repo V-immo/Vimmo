@@ -17,7 +17,7 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
     <style>
         body {
             min-height: 100vh;
@@ -124,7 +124,7 @@
     <nav class="navbar">
         <div class="container nav-content">
             <a href="index.html" class="brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
             <div class="nav-links">
                 <a href="index.html">Home</a>
@@ -157,9 +157,7 @@
 
     <script>
         // Dynamically determine API URL
-        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? `http://${window.location.hostname}:3000/api`
-            : `${window.location.origin}/api`;
+        const API_URL = '/api';
 
         async function verifyEmail() {
             const urlParams = new URLSearchParams(window.location.search);

@@ -4,493 +4,1034 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Particulier Dashboard | Vimmo</title>
+    <title>Particulier Dashboard (V2) | Vimmo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.1">
     <style>
-        @media (max-width: 1024px) {
-            .dashboard-grid-multi {
-                grid-template-columns: 1fr !important;
-            }
+        /* Ultra-Robust Inline Fallback */
+        body.role-particulier {
+            background: linear-gradient(180deg, #ecfdf5 0%, #059669 100%) !important;
+            background-attachment: fixed !important;
+        }
+
+        .dashboard-particulier {
+            background: transparent !important;
+        }
+
+        /* === VIMMO CSS UPGRADE - Modern Polish === */
+        :root {
+            --vimmo-radius: 18px;
+            --vimmo-radius-sm: 12px;
+            --vimmo-border: rgba(0, 0, 0, .08);
+            --vimmo-border-focus: rgba(0, 0, 0, .18);
+            --vimmo-shadow-soft: 0 6px 18px rgba(0, 0, 0, .06);
+            --vimmo-shadow: 0 12px 28px rgba(0, 0, 0, .10);
+            --vimmo-muted: rgba(0, 0, 0, .55);
+        }
+
+        .kpi-card,
+        .smart-box,
+        .card,
+        .panel {
+            border-radius: var(--vimmo-radius);
+            box-shadow: var(--vimmo-shadow-soft);
+        }
+
+        .vimmo-btn {
+            border-radius: 999px;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, .10);
+            transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+        }
+
+        .vimmo-btn:hover {
+            opacity: .98;
+        }
+
+        .vimmo-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, .10);
+        }
+
+        .nav-item {
+            border-radius: 14px;
+            transition: transform .12s ease, background .12s ease, opacity .12s ease;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-1px);
+            opacity: .98;
+        }
+
+        .nav-item.is-active {
+            box-shadow: 0 10px 22px rgba(0, 0, 0, .08);
+        }
+
+        .smart-task {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 12px;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, .06);
+            background: rgba(255, 255, 255, .70);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, .06);
+            margin-top: 10px;
+        }
+
+        .smart-task .meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .smart-task .title {
+            font-weight: 700;
+            color: rgba(0, 0, 0, .85);
+        }
+
+        .smart-task .desc {
+            font-size: 12px;
+            color: var(--vimmo-muted);
+        }
+
+        .smart-task .go {
+            border-radius: 999px;
+            border: 1px solid rgba(0, 0, 0, .08);
+            background: rgba(255, 255, 255, .85);
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform .12s ease, box-shadow .12s ease;
+        }
+
+        .smart-task .go:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
         }
     </style>
+    <script src="particulier-utils.js"></script>
 </head>
 
-<body>
+<body class="role-particulier">
     <div class="dashboard-particulier">
+        <!-- Telemetry Marker (to confirm refresh & data) -->
+        <div id="vimmo-telemetry"
+            style="position: fixed; top: 10px; right: 10px; bottom: auto !important; background: #059669; color: white; padding: 10px 20px; border-radius: 12px; font-size: 0.8rem; font-weight: 800; z-index: 99999; border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer;"
+            onclick="initDashboard()">
+            VIMMO DEBUG: WAITING...
+        </div>
+        <!-- Mobile Toggle -->
+        <!-- Mobile Toggle (Top-Left per user feedback) -->
+        <button class="particulier-mobile-toggle"
+            style="display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--primary-particulier); color: white; border: none; border-radius: 12px; width: 45px; height: 45px; cursor: pointer; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <i class="ri-menu-line"></i>
+        </button>
+
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
-                <a href="dashboard-particulier.html" class="nav-item active">
+                <!-- User Profile Moved to Top per feedback -->
+                <div class="sidebar-user" style="border-top: none; margin-bottom: 20px; padding-top: 5px;">
+                    <div class="user-avatar"
+                        style="background: rgba(16, 185, 129, 0.1); color: var(--primary-particulier);">
+                        TV</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Tomas Verbeeck</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Particulier</div>
+                    </div>
+                </div>
+
+                <div style="margin: 10px 0 20px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
+                <a href="dashboard-particulier.html" class="nav-item" data-route="dashboard-particulier.html"
+                    data-title="Overzicht">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
-                <a href="advertentie-particulier.html" class="nav-item">
-                    <i class="ri-home-4-line"></i> Mijn Advertentie
+                <a href="advertentie-particulier.html" class="nav-item" data-route="advertentie-particulier.html"
+                    data-title="Mijn Aanbod">
+                    <i class="ri-home-4-line"></i> Mijn Aanbod
                 </a>
-                <a href="beschikbaarheid-particulier.html" class="nav-item">
+                <a href="beschikbaarheid-particulier.html" class="nav-item"
+                    data-route="beschikbaarheid-particulier.html" data-title="Beschikbaarheid">
                     <i class="ri-calendar-line"></i> Beschikbaarheid
                 </a>
-                <a href="agenda-particulier.html" class="nav-item">
-                    <i class="ri-calendar-check-line"></i> Aanvragen
-                    <span class="badge"
-                        style="margin-left: auto; background: var(--accent-red); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">3</span>
+                <a href="aanvragen-particulier.html" class="nav-item" data-route="aanvragen-particulier.html"
+                    data-title="Aanvragen">
+                    <i class="ri-mail-line"></i> Aanvragen
+                    <span
+                        style="margin-left: auto; background: #ef4444; color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
                 </a>
-                <a href="berichten-particulier.html" class="nav-item">
+                <a href="berichten-particulier.html" class="nav-item" data-route="berichten-particulier.html"
+                    data-title="Berichten">
                     <i class="ri-message-3-line"></i> Berichten
                     <span
-                        style="margin-left: auto; background: var(--primary-particulier); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">2</span>
+                        style="margin-left: auto; background: var(--primary-particulier); color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
                 </a>
-                <a href="pakket-beheer.html" class="nav-item">
+                <a href="pakket-beheer.html" class="nav-item" data-route="pakket-beheer.html"
+                    data-title="Pakket Beheer">
                     <i class="ri-box-3-line"></i> Pakket Beheer
                     <span id="sidebar-package-usage"
-                        style="margin-left: auto; color: #10b981; font-weight: 700;">2/3</span>
+                        style="margin-left: auto; color: var(--primary-particulier); font-weight: 800; font-size: 0.8rem;"></span>
                 </a>
 
-                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
-                <a href="instellingen-particulier.html" class="nav-item">
+                <!-- Sidebar Quick Actions -->
+                <div class="sidebar-quick-actions">
+                    <button data-action="fix-description" class="quick-action-btn" title="Advertentie Bewerken">
+                        <i class="ri-edit-box-line"></i>
+                    </button>
+                    <button data-action="go-berichten" class="quick-action-btn" title="Berichten">
+                        <i class="ri-message-3-line"></i>
+                    </button>
+                    <button data-action="go-beschikbaarheid" class="quick-action-btn" title="Agenda">
+                        <i class="ri-calendar-event-line"></i>
+                    </button>
+                </div>
+
+                <a href="instellingen-particulier.html" class="nav-item" data-route="instellingen-particulier.html"
+                    data-title="Instellingen" style="opacity: 0.7;">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="javascript:logout()" class="nav-item">
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
             </nav>
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content">
-            <!-- Luxury Hero Section -->
-            <div class="luxury-hero" id="propertyHero">
-                <img id="heroImage" src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200&q=80"
-                    alt="Woning">
-                <div class="luxury-hero-overlay">
-                    <span class="luxury-badge"><i class="ri-star-line"></i> Uw Advertentie</span>
-                    <h1 id="heroTitle" style="font-size: 2.5rem; margin-bottom: 8px;">Duurzaam Wonen in 't Groen</h1>
-                    <p id="heroAddress" style="font-size: 1.1rem; opacity: 0.9;"><i class="ri-map-pin-line"></i> Leuven,
-                        Kessel-Lo</p>
+        <main class="main-content" data-page="overzicht">
+            <!-- Breadcrumb + Page Title -->
+            <div class="particulier-breadcrumb" id="breadcrumb"
+                style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 700;">
+                <a href="dashboard-particulier.html" style="color: var(--primary-particulier); text-decoration: none;">
+                    <i class="ri-dashboard-line"></i> Dashboard
+                </a>
+                <span style="color: #cbd5e1;">/</span>
+                <span class="current" data-breadcrumb style="color: var(--text-main);">Overzicht</span>
+                <h1 data-page-title style="display:none;">Overzicht</h1>
+            </div>
 
-                    <!-- Integrated Stats in Hero -->
-                    <div style="display: flex; gap: 30px; margin-top: 24px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 2rem; font-weight: 700;">1,247</div>
-                            <div style="font-size: 0.85rem; opacity: 0.8;">Views</div>
+            <!-- Control Room Header -->
+            <div id="controlRoomHeader" style="display: none;">
+                <div class="control-room-header"
+                    style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <h1 style="font-size: 2.8rem; font-weight: 850; margin-bottom: 5px;">Control Room</h1>
+                        <p style="color: var(--text-muted); font-weight: 600; font-size: 1.1rem;">Welkom terug, Tomas.
+                            Hier is je portfolio status van vandaag.</p>
+                    </div>
+                    <div class="glass-panel"
+                        style="padding: 12px 24px; border-radius: 15px; background: white; border: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px;">
+                        <div style="text-align: right;">
+                            <div
+                                style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 800;">
+                                Portfolio Health</div>
+                            <div style="font-size: 1.1rem; font-weight: 850; color: #10b981;">Excellent (89%)</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 2rem; font-weight: 700;">12</div>
-                            <div style="font-size: 0.85rem; opacity: 0.8;">Aanvragen</div>
+                        <div
+                            style="width: 45px; height: 45px; border-radius: 50%; border: 4px solid #10b981; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem;">
+                            89</div>
+                    </div>
+                </div>
+
+                <!-- Performance Grid -->
+                <div class="performance-grid"
+                    style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px;">
+                    <div class="kpi-card glass-panel" style="padding: 25px; background: white;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                            <div
+                                style="width: 40px; height: 40px; border-radius: 10px; background: #ecfdf5; color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                <i class="ri-eye-line"></i></div>
+                            <div style="font-size: 0.75rem; font-weight: 800; color: #10b981;"><i
+                                    class="ri-arrow-up-line"></i> 12%</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 2rem; font-weight: 700;">34</div>
-                            <div style="font-size: 0.85rem; opacity: 0.8;">Opgeslagen</div>
+                        <div style="font-size: 1.8rem; font-weight: 850;" id="totalViews">0</div>
+                        <div
+                            style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                            Totaal Views</div>
+                    </div>
+                    <div class="kpi-card glass-panel" style="padding: 25px; background: white;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                            <div
+                                style="width: 40px; height: 40px; border-radius: 10px; background: #eff6ff; color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                <i class="ri-heart-line"></i></div>
+                            <div style="font-size: 0.75rem; font-weight: 800; color: #3b82f6;"><i
+                                    class="ri-arrow-up-line"></i> 8%</div>
                         </div>
+                        <div style="font-size: 1.8rem; font-weight: 850;" id="totalSaves">0</div>
+                        <div
+                            style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                            Favorieten</div>
+                    </div>
+                    <div class="kpi-card glass-panel" style="padding: 25px; background: white;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                            <div
+                                style="width: 40px; height: 40px; border-radius: 10px; background: #fff7ed; color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                <i class="ri-chat-3-line"></i></div>
+                            <div style="font-size: 0.75rem; font-weight: 800; color: #f59e0b;"><i
+                                    class="ri-arrow-right-line"></i> 0%</div>
+                        </div>
+                        <div style="font-size: 1.8rem; font-weight: 850;" id="totalMessages">0</div>
+                        <div
+                            style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                            Berichten</div>
+                    </div>
+                    <div class="kpi-card glass-panel" style="padding: 25px; background: white;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                            <div
+                                style="width: 40px; height: 40px; border-radius: 10px; background: #fef2f2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                <i class="ri-flashlight-line"></i></div>
+                            <div style="font-size: 0.75rem; font-weight: 800; color: #ef4444;">Urgente Acties</div>
+                        </div>
+                        <div style="font-size: 1.8rem; font-weight: 850;" id="totalUrgent">0</div>
+                        <div
+                            style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                            Kritiek/Blockers</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Quick Actions Panel (Glassmorphism) -->
-            <div class="glass-panel"
-                style="margin-top: -60px; margin-bottom: 30px; position: relative; z-index: 10; padding: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button class="btn" onclick="window.location.href='advertentie-particulier.html'"
-                        style="background: var(--primary-particulier); color: white; display: flex; align-items: center; gap: 8px;">
-                        <i class="ri-image-add-line"></i> Foto's Toevoegen
-                    </button>
-                    <button class="btn btn-secondary" onclick="window.location.href='beschikbaarheid-particulier.html'"
-                        style="display: flex; align-items: center; gap: 8px;">
-                        <i class="ri-calendar-event-line"></i> Agenda Beheren
-                    </button>
-                    <button class="btn" onclick="openBoostModal()"
-                        style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; display: flex; align-items: center; gap: 8px;">
-                        <i class="ri-rocket-line"></i> Boost Advertentie
-                    </button>
+            <!-- Empty State / Adoption Hero -->
+            <div id="adoptionHero"
+                style="display: none; height: 600px; position: relative; border-radius: 30px; overflow: hidden; margin-bottom: 40px; background: #1e293b;">
+                <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&q=80"
+                    style="position: absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity: 0.4;">
+                <div
+                    style="position: absolute; inset:0; background: linear-gradient(0deg, rgba(30,41,59,1) 0%, rgba(30,41,59,0) 100%);">
                 </div>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="font-size: 0.85rem; color: var(--text-muted);">Pakket:</span>
+                <div
+                    style="position: absolute; inset:0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 60px; text-align: center; color: white;">
                     <span
-                        style="background: #10b981; color: white; padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 600;">
-                        <i class="ri-vip-crown-line"></i> 60 Dagen Actief
-                    </span>
-                </div>
-            </div>
-
-            <!-- Mijn Advertentie & Pakket -->
-            <div class="dashboard-grid-multi"
-                style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px;">
-                <div class="card glass-panel" id="advertentie" style="margin-bottom: 0;">
-                    <div class="card-header">
-                        <h2 class="card-title" style="color: var(--primary-particulier);">
-                            <i class="ri-home-4-line"></i> Mijn Advertentie
-                        </h2>
-                        <a href="advertentie-particulier.html"
-                            style="color: var(--primary-particulier); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 4px;">
-                            <i class="ri-edit-line"></i> Bewerken
-                        </a>
-                    </div>
-
-                    <div class="property-listing" style="display: flex; gap: 20px; align-items: flex-start;">
-                        <img id="currentPropImage"
-                            src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=300&q=80" alt="Woning"
-                            style="width: 140px; height: 100px; object-fit: cover; border-radius: 12px;">
-                        <div class="property-info" style="flex: 1;">
-                            <h3 id="currentPropName" style="font-size: 1.1rem; margin-bottom: 4px;">Duurzaam Wonen in 't
-                                Groen</h3>
-                            <div class="price" id="currentPropPrice"
-                                style="font-size: 1.3rem; font-weight: 700; color: var(--primary-particulier); margin-bottom: 8px;">
-                                € 550.000</div>
-                            <div class="details"
-                                style="display: flex; gap: 16px; font-size: 0.85rem; color: var(--text-muted);">
-                                <span id="currentPropAddress"><i class="ri-map-pin-line"></i> Leuven, Kessel-Lo</span>
-                                <span><i class="ri-hotel-bed-line"></i> 4 slaapkamers</span>
-                                <span><i class="ri-ruler-line"></i> 185 m²</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card glass-panel" id="pakket-beheer" style="margin-bottom: 0;">
-                    <div class="card-header">
-                        <h2 class="card-title" style="font-size: 1.1rem; color: var(--primary-particulier);">
-                            <i class="ri-box-3-line"></i> Pakket & Beheer
-                        </h2>
-                    </div>
-
-                    <div
-                        style="background: rgba(16, 185, 129, 0.05); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid rgba(16, 185, 129, 0.1);">
-                        <div
-                            style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px;">
-                            <span style="color: #64748b;">Actieve Panden</span>
-                            <span id="packageUsageCount" style="color: #10b981; font-weight: 700;">2 / 3</span>
-                        </div>
-                        <div
-                            style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; margin-bottom: 15px; overflow: hidden;">
-                            <div id="usageBar"
-                                style="width: 66%; height: 100%; background: linear-gradient(90deg, #10b981, #34d399); border-radius: 3px;">
-                            </div>
-                        </div>
-
-                        <div id="activeListingsList" style="display: flex; flex-direction: column; gap: 8px;">
-                            <!-- Dynamic content -->
-                        </div>
-                    </div>
-
-                    <button class="btn" onclick="window.location.href='pakket-beheer.html'"
-                        style="width: 100%; font-size: 0.8rem; padding: 10px; background: var(--primary-particulier); color: white;">
-                        <i class="ri-settings-3-line"></i> Pakket Beheren
+                        style="padding: 10px 20px; background: #10b981; border-radius: 100px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px;">Start
+                        je 24h Challenge</span>
+                    <h1 style="font-size: 3.5rem; font-weight: 900; margin-bottom: 16px; line-height: 1.1;">Verkoop je
+                        woning sneller met Vimmo</h1>
+                    <p
+                        style="font-size: 1.25rem; max-width: 600px; margin-bottom: 40px; opacity: 0.8; font-weight: 500;">
+                        Onze data laat zien dat kwalitatieve advertenties binnen 24 uur de eerste leads genereren. Start
+                        nu en haal de hoogste ranking.</p>
+                    <button onclick="startNewOnboarding()" class="btn"
+                        style="padding: 20px 40px; background: #10b981; color: white; border: none; border-radius: 16px; font-weight: 850; font-size: 1.2rem; display: flex; align-items: center; gap: 12px; transition: transform 0.2s ease, background 0.2s ease; cursor: pointer;">
+                        <i class="ri-add-circle-fill" style="font-size: 1.5rem;"></i> Maak je eerste advertentie
                     </button>
-                </div>
-            </div>
-
-            <!-- Bezichtigingsaanvragen -->
-            <div class="card" id="aanvragen">
-                <div class="card-header">
-                    <h2 class="card-title">Nieuwe Bezichtigingsaanvragen</h2>
-                    <a href="agenda.html"
-                        style="color: var(--primary-particulier); text-decoration: none; font-size: 0.9rem;">Agenda
-                        bekijken</a>
-                </div>
-
-                <div class="request-item">
-                    <div class="request-avatar">EP</div>
-                    <div class="request-info">
-                        <div class="request-name">
-                            Emma Peeters
-                            <span class="verified-tag"><i class="ri-shield-check-line"></i> Itsme</span>
+                    <div style="margin-top: 50px; display: flex; gap: 40px; opacity: 0.9;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="ri-shield-check-fill" style="color: #10b981; font-size: 1.5rem;"></i>
+                            <div style="text-align: left;">
+                                <div style="font-weight: 900;">AI Health Check</div>
+                                <div style="font-size: 0.75rem; opacity: 0.7;">Directe feedback</div>
+                            </div>
                         </div>
-                        <div style="font-weight: 600; color: var(--primary-particulier); margin: 4px 0;">📍 Moderne
-                            Woning in
-                            Antwerpen</div>
-                        <div class="request-time">Wil graag bezichtigen op: Woensdag 18 dec, 14:00</div>
-                        <div class="request-actions" style="margin-top: 16px;">
-                            <button class="btn-accept"
-                                style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;"
-                                onclick="acceptRequest('req-1', 'Emma Peeters', 'Woensdag 18 dec', '14:00')">
-                                <i class="ri-check-line"></i> Accepteren
-                            </button>
-                            <button class="btn-decline"
-                                style="background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;"
-                                onclick="declineRequest('req-1', 'Emma Peeters')">
-                                <i class="ri-close-line"></i> Afwijzen
-                            </button>
-                            <button class="btn-secondary"
-                                style="background: white; border: 1px solid rgba(0,0,0,0.1); padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;"
-                                onclick="window.location.href='chat-particulier.html?id=1'">
-                                <i class="ri-message-3-line"></i> Bericht
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="request-item">
-                    <div class="request-avatar">LV</div>
-                    <div class="request-info">
-                        <div class="request-name">
-                            Lucas Vermeulen
-                            <span class="verified-tag"><i class="ri-shield-check-line"></i> Itsme</span>
-                        </div>
-                        <div style="font-weight: 600; color: var(--primary-particulier); margin: 4px 0;">📍 Moderne
-                            Woning in
-                            Antwerpen</div>
-                        <div class="request-time">Wil graag bezichtigen op: Vrijdag 20 dec, 10:30</div>
-                        <div class="request-actions">
-                            <button class="btn-accept"
-                                onclick="acceptRequest('req-2', 'Lucas Vermeulen', 'Vrijdag 20 dec', '10:30')">Accepteren</button>
-                            <button class="btn-decline"
-                                onclick="declineRequest('req-2', 'Lucas Vermeulen')">Afwijzen</button>
-                            <button class="btn-decline" onclick="window.location.href='chat.html?id=2'"><i
-                                    class="ri-message-3-line"></i> Bericht</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="request-item">
-                    <div class="request-avatar">SD</div>
-                    <div class="request-info">
-                        <div class="request-name">Sophie Dubois</div>
-                        <div style="font-weight: 600; color: var(--primary-particulier); margin: 4px 0;">📍 Moderne
-                            Woning in
-                            Antwerpen</div>
-                        <div class="request-time">Wil graag bezichtigen op: Zaterdag 21 dec, 15:00</div>
-                        <div class="request-actions">
-                            <button class="btn-accept"
-                                onclick="acceptRequest('req-3', 'Sophie Dubois', 'Zaterdag 21 dec', '15:00')">Accepteren</button>
-                            <button class="btn-decline"
-                                onclick="declineRequest('req-3', 'Sophie Dubois')">Afwijzen</button>
-                            <button class="btn-decline" onclick="window.location.href='chat.html?id=3'"><i
-                                    class="ri-message-3-line"></i> Bericht</button>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="ri-flashlight-fill" style="color: #fbbf24; font-size: 1.5rem;"></i>
+                            <div style="text-align: left;">
+                                <div style="font-weight: 900;">Instant Ranking</div>
+                                <div style="font-size: 0.75rem; opacity: 0.7;">Bovenaan in de zoekresultaten</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Mijn Panden Section -->
-            <div style="margin-top: 40px;">
+            <!-- Actions Today Section - Two Column Layout -->
+            <div id="actionsTodaySection"
+                style="margin-top: 20px; position: relative; z-index: 100; margin-bottom: 40px;">
+                <div class="particulier-card" style="padding: 30px; border-top: 5px solid var(--primary-particulier);">
+                    <h3 style="margin-bottom: 25px; font-weight: 800; display: flex; align-items: center; gap: 10px;">
+                        <i class="ri-flashlight-line" style="color: var(--primary-particulier);"></i> Acties vandaag
+                    </h3>
+                    <div id="actionsList" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                        <!-- Left Column: Urgent -->
+                        <div id="actionsUrgent"
+                            style="background: var(--bg-urgent); padding: 25px; border-radius: 20px; border: 1px solid var(--border-particulier-card);">
+                            <div
+                                style="font-size: 0.75rem; font-weight: 800; color: #065f46; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                                <i class="ri-alarm-warning-fill" style="color: #ef4444;"></i> Focus & Urgentie
+                            </div>
+                            <div id="urgentItems" style="display: flex; flex-direction: column; gap: 15px;">
+                                <!-- Items will be injected here -->
+                            </div>
+                        </div>
+                        <!-- Right Column: Aanbevolen -->
+                        <div class="smart-box" id="actionsRecommended"
+                            style="background: var(--bg-recommended); padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0;">
+                            <div class="smart-title"
+                                style="font-size: 0.75rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                                <i class="ri-lightbulb-fill" style="color: #f59e0b;"></i> Slimme Verbeteringen
+                            </div>
+                            <div class="smart-list" id="smartList"
+                                style="display: flex; flex-direction: column; gap: 15px;">
+                                <!-- Items will be injected by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <style>
+                /* SLA Badge Styles */
+                .sla-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 4px 8px;
+                    margin-left: 6px;
+                    border-radius: 999px;
+                    font-size: 11px;
+                    font-weight: 800;
+                    border: 1px solid;
+                    white-space: nowrap;
+                }
+
+                .sla-badge.excellent {
+                    background: #e8fff0;
+                    border-color: #b7f0c6;
+                    color: #0f6b2f;
+                }
+
+                .sla-badge.good {
+                    background: #f2fff5;
+                    border-color: #d3f3dc;
+                    color: #1b6a34;
+                }
+
+                .sla-badge.ok {
+                    background: #fffaf0;
+                    border-color: #f1e0b8;
+                    color: #7a5a00;
+                }
+
+                .sla-badge.slow {
+                    background: #fff1f1;
+                    border-color: #f1b8b8;
+                    color: #8a1f1f;
+                }
+
+                .sla-badge.neutral {
+                    background: #f5f5f5;
+                    border-color: #e5e5e5;
+                    color: #333;
+                }
+
+                /* =========================================
+                   MODERNIZED PROPERTY CARD COMPONENT
+                   Clean, responsive, no inline styles
+                   ========================================= */
+                .property-card {
+                    position: relative;
+                    padding: 22px;
+                    background: #fff !important;
+                    border-radius: 20px;
+                    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+                    display: grid;
+                    grid-template-columns: 1fr auto auto;
+                    align-items: center;
+                    gap: 18px;
+                    margin-bottom: 20px;
+                    border: 1px solid var(--border-particulier-card);
+                }
+
+                .property-card.active {
+                    border-color: var(--primary-particulier);
+                    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+                }
+
+                .property-card:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.08);
+                }
+
+                .pc-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    min-width: 0;
+                }
+
+                .pc-emoji {
+                    font-size: 2.1rem;
+                    background: #f1f5f9;
+                    width: 66px;
+                    height: 66px;
+                    border-radius: 18px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex: 0 0 auto;
+                }
+
+                .pc-main {
+                    min-width: 0;
+                }
+
+                .pc-title {
+                    margin: 0 0 4px;
+                    font-size: 1.15rem;
+                    font-weight: 850;
+                    color: var(--text-main);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                .pc-chiprow {
+                    display: flex;
+                    gap: 8px;
+                    align-items: center;
+                    flex-wrap: wrap;
+                }
+
+                .pc-chiprow .status-chip {
+                    transform: scale(0.85);
+                    transform-origin: left center;
+                }
+
+                .pc-stats {
+                    display: flex;
+                    gap: 18px;
+                    background: #f8fafc;
+                    padding: 12px 16px;
+                    border-radius: 14px;
+                    border: 1px solid rgba(0, 0, 0, 0.06);
+                }
+
+                .pc-stat {
+                    text-align: center;
+                    min-width: 54px;
+                }
+
+                .pc-stat-val {
+                    font-weight: 900;
+                    font-size: 1rem;
+                }
+
+                .pc-stat-val.is-accent {
+                    color: var(--primary-particulier);
+                }
+
+                .pc-stat-lbl {
+                    font-size: 10px;
+                    letter-spacing: .12em;
+                    opacity: .65;
+                    text-transform: uppercase;
+                }
+
+                .pc-actions {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+                .pc-btn {
+                    padding: 10px 18px;
+                    border-radius: 12px;
+                    border: none;
+                    background: var(--primary-particulier);
+                    color: #fff;
+                    font-weight: 900;
+                    font-size: 0.8rem;
+                    cursor: pointer;
+                    transition: transform .12s ease, opacity .12s ease;
+                }
+
+                .pc-btn:hover {
+                    opacity: .92;
+                    transform: translateY(-1px);
+                }
+
+                .pc-btn:active {
+                    transform: translateY(0);
+                }
+
+                .pc-btn.secondary {
+                    background: #fff;
+                    color: var(--text-main);
+                    border: 1px solid #e2e8f0;
+                }
+
+                .pc-btn.secondary:hover {
+                    background: #f8fafc;
+                }
+
+                /* Responsive: stack on small screens */
+                @media (max-width: 900px) {
+                    .property-card {
+                        grid-template-columns: 1fr;
+                        gap: 14px;
+                    }
+
+                    .pc-actions {
+                        justify-content: stretch;
+                    }
+
+                    .pc-btn {
+                        width: 100%;
+                    }
+
+                    .pc-stats {
+                        justify-content: flex-start;
+                    }
+                }
+
+                @keyframes pulse {
+                    0% {
+                        opacity: 0.6;
+                    }
+
+                    50% {
+                        opacity: 1;
+                    }
+
+                    100% {
+                        opacity: 0.6;
+                    }
+                }
+
+                @keyframes shimmer {
+                    0% {
+                        background-position: 200% 0;
+                    }
+
+                    100% {
+                        background-position: -200% 0;
+                    }
+                }
+
+                @media (max-width: 900px) {
+                    #actionsList {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+            </style>
+
+
+
+
+            <!-- Woning Overzicht Section -->
+            <div id="woning-overzicht" style="margin-top: 40px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h2 class="section-title">Mijn Panden</h2>
-                    <button onclick="window.location.href='verkopen.html'" class="btn-edit"
-                        style="padding: 12px 24px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                        <i class="ri-add-line"></i> Nieuw Pand Toevoegen
-                    </button>
+                    <h2 class="section-title" style="font-size: 1.8rem; font-weight: 800; color: var(--text-main);">
+                        Woning Overzicht</h2>
                 </div>
 
-                <div id="propertyListGrid" style="display: grid; gap: 16px;">
+                <div id="propertyListGrid" style="display: grid; gap: 24px;">
                     <!-- Properties loaded by JavaScript -->
                 </div>
             </div>
         </main>
     </div>
 
+    <script src="dashboard-actions.js"></script>
     <script src="app.js"></script>
     <script src="propertyContext.js"></script>
     <script>
-        // Handle Accept/Decline for booking requests
-        function acceptRequest(requestId, name, date, time) {
-            if (confirm(`Bezichtiging accepteren voor ${name} op ${date} om ${time}?`)) {
-                // Update bookings in localStorage
-                const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-                const booking = bookings.find(b => b.id === requestId);
-                if (booking) {
-                    booking.status = 'confirmed';
-                    localStorage.setItem('bookings', JSON.stringify(bookings));
+        // ============================================
+        // CONSOLIDATED DASHBOARD LOGIC (V1.9)
+        // ============================================
+        // 1. Rendering Functions
+        function renderHeroMetrics() {
+            try {
+                const props = propertyContext.getAll ? propertyContext.getAll() : [propertyContext.getCurrent()];
+
+                // --- ONBOARDING LOGIC ---
+                const header = document.getElementById('controlRoomHeader');
+                const hero = document.getElementById('adoptionHero');
+                if (props.length === 0) {
+                    if (header) header.style.display = 'none';
+                    if (hero) hero.style.display = 'block';
+                    return;
+                } else {
+                    if (header) header.style.display = 'block';
+                    if (hero) hero.style.display = 'none';
                 }
+                // ------------------------
 
-                // Show success message
-                alert(`✅ Bezichtiging geaccepteerd! ${name} ontvangt een bevestiging.`);
+                let totalViews = 0, totalSaves = 0, totalRequests = 0, totalMessages = 0;
+                let totalUrgent = 0;
 
-                // Remove from UI
-                event.target.closest('.request-item').remove();
-            }
+                props.forEach(p => {
+                    const stats = propertyContext.getData('stats', p.id) || { views: 0, saves: 0, requests: 0 };
+                    const requests = propertyContext.getRequests(p.id) || [];
+                    const health = (window.ParticulierUtils && ParticulierUtils.computeListingHealth)
+                        ? ParticulierUtils.computeListingHealth(p)
+                        : { score: 0, blockers: [] };
+
+                    totalViews += (stats.views || 0);
+                    totalSaves += (stats.saves || 0);
+                    totalRequests += (requests.length || stats.requests || 0);
+                    totalUrgent += (health.blockers || []).length;
+
+                    // Aggregate messages
+                    requests.forEach(r => {
+                        const msgs = propertyContext.getMessages(r.id) || [];
+                        totalMessages += msgs.length;
+                    });
+                });
+
+                if (document.getElementById('totalViews')) document.getElementById('totalViews').textContent = totalViews.toLocaleString();
+                if (document.getElementById('totalSaves')) document.getElementById('totalSaves').textContent = totalSaves;
+                if (document.getElementById('totalMessages')) document.getElementById('totalMessages').textContent = totalMessages;
+                if (document.getElementById('totalUrgent')) document.getElementById('totalUrgent').textContent = totalUrgent;
+
+            } catch (e) { console.error('Hero Render Fail:', e); }
         }
 
-        function declineRequest(requestId, name) {
-            if (confirm(`Bezichtiging afwijzen voor ${name}?`)) {
-                // Update bookings in localStorage
-                const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-                const booking = bookings.find(b => b.id === requestId);
-                if (booking) {
-                    booking.status = 'declined';
-                    localStorage.setItem('bookings', JSON.stringify(bookings));
+        function renderActionsToday() {
+            try {
+                const urgentContainer = document.getElementById("urgentItems");
+                const recommendedContainer = document.getElementById("smartList");
+                if (!urgentContainer || !recommendedContainer) return;
+
+                const ctx = window.propertyContext;
+                if (!ctx || typeof ctx.getCurrent !== "function") return;
+
+                const prop = ctx.getCurrent() || {};
+                const propId = prop.id || ctx.getCurrentId?.();
+
+                const stats = (typeof ctx.getData === "function")
+                    ? (ctx.getData("stats", propId) || ctx.getData("stats") || { views: 0, saves: 0, requests: 0 })
+                    : { views: 0, saves: 0, requests: 0 };
+
+                const requests = (typeof ctx.getRequests === "function")
+                    ? (ctx.getRequests(propId) || ctx.getRequests() || [])
+                    : [];
+
+                const norm = (v) => (v === undefined || v === null) ? "" : String(v).trim();
+
+                const listingStatus = norm(prop.listingStatus || prop.status).toLowerCase();
+                const isConcept = listingStatus.includes("concept");
+
+                const name = norm(prop.name);
+                const transactionType = norm(prop.transactionType).toLowerCase();
+                const price = Number(prop.price);
+                const bedrooms = Number(prop.bedrooms);
+                const bathrooms = Number(prop.bathrooms);
+                const surface = Number(prop.surface);
+                const floors = Number(prop.floors);
+                const state = norm(prop.state);
+                const availability = norm(prop.availability);
+                const epcLabel = norm(prop.epcLabel).toUpperCase();
+                const location = norm(prop.location);
+                const address = norm(prop.address);
+                const postcode = norm(prop.postcode);
+
+                const mediaCount =
+                    Array.isArray(prop.photos) ? prop.photos.length :
+                        Array.isArray(prop.media) ? prop.media.length :
+                            Array.isArray(prop.images) ? prop.images.length :
+                                Number(prop.mediaCount || 0);
+
+                const newRequests = requests.filter(r => {
+                    const s = norm(r.status).toLowerCase();
+                    return s === "nieuw" || s === "wacht_op_antwoord" || s === "open";
+                });
+
+                // URGENT COLUMN (Left)
+                if (newRequests.length > 0) {
+                    urgentContainer.innerHTML = newRequests.slice(0, 3).map(req => `
+                        <div class="action-item urgent" data-testid="action-urgent"
+                            style="background: #fff1f2; padding: 18px; border-radius: 16px; display: flex; align-items: center; gap: 15px; border: 1px solid #fda4af;">
+                            <div style="width: 45px; height: 45px; background: #e11d48; color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                <i class="ri-notification-3-line"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 800; color: #9f1239; font-size: 0.9rem;">Nieuwe aanvraag</div>
+                                <div style="font-size: 0.75rem; color: #be123c; font-weight: 600;">${norm(req.name) || "Iemand"} wacht op antwoord</div>
+                            </div>
+                            <button class="vimmo-btn" data-action="open-aanvraag" data-request-id="${req.id}"
+                                style="background: #e11d48; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight: 700; font-size: 0.7rem; cursor: pointer;">
+                                Bekijk
+                            </button>
+                        </div>
+                    `).join("");
+                } else {
+                    urgentContainer.innerHTML = `
+                        <div class="action-item success" data-testid="action-success"
+                            style="background: #f0fdf4; padding: 20px; border-radius: 16px; border: 1px solid #86efac; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 10px;">✅</div>
+                            <div style="font-weight: 800; color: #059669; font-size: 1rem; margin-bottom: 5px;">Alles op schema!</div>
+                            <div style="font-size: 0.8rem; color: #10b981; font-weight: 600;">Geen urgente acties nodig</div>
+                        </div>
+                        <div class="action-item tip" data-action="go-beschikbaarheid"
+                            style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-top: 10px;">
+                            <i class="ri-calendar-check-line" style="font-size: 1.4rem; color: var(--primary-particulier);"></i>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 700; font-size: 0.85rem; color: var(--text-main);">Beschikbaarheid bijwerken</div>
+                                <div style="font-size: 0.7rem; color: var(--text-muted);">Houd je agenda actueel</div>
+                            </div>
+                            <i class="ri-arrow-right-s-line" style="color: #94a3b8;"></i>
+                        </div>
+                    `;
                 }
 
-                // Show message
-                alert(`Bezichtiging afgewezen. ${name} ontvangt een notificatie.`);
+                // SLIMME VERBETERINGEN: Cross-Portfolio priorities
+                const props = propertyContext.getAll ? propertyContext.getAll() : [propertyContext.getCurrent()];
+                let allTasks = [];
 
-                // Remove from UI
-                event.target.closest('.request-item').remove();
-            }
+                props.forEach(p => {
+                    const health = (window.ParticulierUtils && ParticulierUtils.computeListingHealth)
+                        ? ParticulierUtils.computeListingHealth(p)
+                        : { tips: [] };
+
+                    const listingTasks = [];
+                    if (p.listingStatus === 'Concept') {
+                        listingTasks.push({
+                            icon: "ri-draft-line",
+                            title: `Publiceer ${p.name}`,
+                            desc: "Je advertentie is nog een concept.",
+                            action: "go-mijn-aanbod",
+                            color: "#10b981",
+                            priority: 1
+                        });
+                    }
+
+                    (health.blockers || []).forEach(b => {
+                        listingTasks.push({
+                            icon: "ri-error-warning-line",
+                            title: `Blokker: ${p.name}`,
+                            desc: b.message || b,
+                            action: "go-mijn-aanbod",
+                            color: "#ef4444",
+                            priority: 0
+                        });
+                    });
+
+                    (health.penalties || []).slice(0, 1).forEach(pen => {
+                        listingTasks.push({
+                            icon: "ri-arrow-down-circle-line",
+                            title: `Ranking verlies: ${p.name}`,
+                            desc: pen.message || pen,
+                            action: "go-mijn-aanbod",
+                            color: "#f59e0b",
+                            priority: 2
+                        });
+                    });
+
+                    allTasks = allTasks.concat(listingTasks);
+                });
+
+                // Sort by priority (0 is highest)
+                allTasks.sort((a, b) => a.priority - b.priority);
+                const finalTasks = allTasks.slice(0, 3);
+
+                if (finalTasks.length === 0) {
+                    recommendedContainer.innerHTML = `
+                        <div class="smart-task">
+                            <div class="meta">
+                                <div class="title">Alles ziet er goed uit</div>
+                                <div class="desc">Geen verbeteringen nodig op dit moment.</div>
+                            </div>
+                            <button class="go" type="button" data-action="go-mijn-aanbod">Bekijk advertentie</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                recommendedContainer.innerHTML = finalTasks.map(t => `
+                    <div class="action-item recommended" data-action="${t.action}" data-testid="action-recommended"
+                        style="background: white; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s;">
+                        <div style="width: 40px; height: 40px; background: ${t.color}15; color: ${t.color}; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                            <i class="${t.icon}"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; font-size: 0.85rem; color: var(--text-main);">${t.title}</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">${t.desc}</div>
+                        </div>
+                        <i class="ri-arrow-right-s-line" style="color: #94a3b8;"></i>
+                    </div>
+                `).join("");
+
+            } catch (e) { console.error("Actions Render Fail:", e); }
         }
 
-        // Render property list from PropertyContext
         function renderPropertyList() {
-            const grid = document.getElementById('propertyListGrid');
-            if (!grid) return;
+            try {
+                const grid = document.getElementById('propertyListGrid');
+                if (!grid) return;
 
-            const properties = propertyContext.getActive();
-            const currentId = propertyContext.getCurrentId();
+                const ctx = window.propertyContext;
+                if (!ctx) throw new Error('PropertyContext missing');
 
-            if (properties.length === 0) {
-                grid.innerHTML = `
-                    <div style="padding: 60px; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-lg);">
-                        <i class="ri-home-4-line" style="font-size: 3rem; opacity: 0.3; color: var(--primary-particulier);"></i>
-                        <p style="margin-top: 16px;">Nog geen panden toegevoegd</p>
-                        <button onclick="window.location.href='verkopen.html'" class="btn-edit" style="margin-top: 16px;">
-                            <i class="ri-add-line"></i> Eerste pand toevoegen
-                        </button>
-                    </div>
-                `;
-                return;
-            }
+                const properties = ctx.getActive();
+                const currentId = ctx.getCurrentId();
 
-            grid.innerHTML = properties.map(prop => {
-                const stats = propertyContext.getData('stats', prop.id) || { views: 0, saves: 0, requests: 0 };
-                const advData = propertyContext.getData('advertentie', prop.id) || {};
-                const isActive = prop.id === currentId;
-                const isBoosted = advData.isBoosted || false;
-                const transactionType = advData.transactionType || 'koop';
+                if (properties.length === 0) {
+                    grid.innerHTML = '<div style="grid-column: 1/-1; padding: 40px; text-align: center; background: #fff; border-radius: 20px; border: 1px dashed #cbd5e1; color: #64748b;">Geen actieve panden gevonden.</div>';
+                    return;
+                }
 
-                return `
-                    <div class="property-card ${isActive ? 'active' : ''}" onclick="switchProperty('${prop.id}')" style="position: relative;">
-                        ${isBoosted ? '<div style="position: absolute; top: -10px; right: 20px;"><span class="badge-boost"><i class="ri-flashlight-line"></i> Geboost</span></div>' : ''}
-                        <div class="property-card-info">
-                            <div class="property-card-emoji">${prop.emoji}</div>
-                            <div class="property-card-details">
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <h4 style="margin: 0;">${prop.name}</h4>
-                                    <span class="type-tag ${transactionType}" style="font-size: 0.65rem; padding: 2px 8px;">${transactionType === 'huur' ? 'Te Huur' : 'Te Koop'}</span>
-                                    ${isActive ? '<span style="font-size: 0.65rem; background: var(--primary-particulier); color: white; padding: 2px 8px; border-radius: 12px;">Actief</span>' : ''}
+                let html = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px; margin-bottom: 30px;">
+                        <div style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; padding: 25px; border-radius: 20px;">
+                            <h5 style="font-size: 1rem; margin-bottom: 10px; font-weight: 800;">Markt Inzicht</h5>
+                            <p style="font-size: 0.8rem; opacity: 0.8;">Woningen in uw regio worden momenteel binnen 18 dagen verkocht.</p>
+                        </div>
+                        <div style="background: #f0fdf9; border: 1px dashed #34d399; padding: 25px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                            <h5 style="margin-bottom: 10px; font-weight: 800; color: #0f172a;">Nog een pand?</h5>
+                            <button class="vimmo-btn" id="btnNieuwPand" data-action="nieuw-pand"
+                                style="background: #059669; color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 800; cursor: pointer;">
+                                + Nieuw pand
+                            </button>
+                        </div>
+                    </div>`;
+
+                html += properties.map(prop => {
+                    const isActive = prop.id === currentId;
+                    const stats = ctx.getData('stats', prop.id) || { views: 0, saves: 0, requests: 0 };
+                    const scoreObj = (typeof computeVimmoScore === "function") ? computeVimmoScore(prop, ctx) : { score: 0, tips: [] };
+
+                    const sla = (typeof computeSlaScore === "function")
+                        ? computeSlaScore(prop, ctx)
+                        : null;
+
+                    const slaTone = sla?.avgMinutes == null
+                        ? "neutral"
+                        : sla.avgMinutes <= 60
+                            ? "excellent"
+                            : sla.avgMinutes <= 120
+                                ? "good"
+                                : sla.avgMinutes <= 360
+                                    ? "ok"
+                                    : "slow";
+
+                    return `
+                        <div class="particulier-card property-card ${isActive ? 'active' : ''}">
+                            <div class="pc-left">
+                                <div class="pc-emoji">${prop.emoji || '🏠'}</div>
+                                <div class="pc-main">
+                                    <h4 class="pc-title">${prop.name}</h4>
+                                    <div class="pc-chiprow">
+                                        <span class="status-chip ${(prop.listingStatus || 'Actief').toLowerCase().replace(' ', '-')}">${prop.listingStatus || 'Actief'}</span>
+                                        <span class="dash-score" title="${(scoreObj.tips || []).slice(0, 2).join(' ')}">⭐ ${scoreObj.score}/10</span>
+                                        ${sla?.badge ? `<span class="sla-badge ${slaTone}" title="${sla.label || ''}">${sla.badge}</span>` : ''}
+                                    </div>
+                                    ${(() => {
+                            const docs = prop.docs || {};
+                            const hasEpc = !!(docs.doc_epc && docs.doc_epc.ok);
+                            const hasAsbest = !!(docs.doc_asbest && docs.doc_asbest.ok);
+                            const hasBodem = !!(docs.doc_bodem && docs.doc_bodem.ok);
+                            const ownerOk = !!prop.ownerVerified;
+                            const b = (label, ok) => `<span class="dash-badge ${ok ? 'ok' : 'warn'}"><span class="dot"></span>${label}</span>`;
+                            return `<div class="dash-badges">${b("EPC", hasEpc)}${b("Asbest", hasAsbest)}${b("Bodem", hasBodem)}${b("Owner", ownerOk)}</div>`;
+                        })()}
                                 </div>
-                                <p><i class="ri-map-pin-line"></i> ${prop.address}</p>
                             </div>
-                        </div>
-                        <div class="property-card-stats">
-                            <div class="property-card-stat">
-                                <div class="property-card-stat-value">${stats.views}</div>
-                                <div class="property-card-stat-label">Views</div>
-                            </div>
-                            <div class="property-card-stat">
-                                <div class="property-card-stat-value">${stats.requests}</div>
-                                <div class="property-card-stat-label">Aanvragen</div>
-                            </div>
-                            <div class="property-card-stat">
-                                <div class="property-card-stat-value">${stats.saves}</div>
-                                <div class="property-card-stat-label">Opgeslagen</div>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="btn-edit" title="Bewerken" onclick="event.stopPropagation(); window.location.href='advertentie-particulier.html?prop=${prop.id}'">
-                                <i class="ri-edit-line"></i>
-                            </button>
-                            <button class="btn-secondary" title="Statistieken" onclick="event.stopPropagation(); viewPropertyStats('${prop.id}')">
-                                <i class="ri-bar-chart-line"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
 
-        function switchProperty(propertyId) {
-            propertyContext.switch(propertyId);
-            renderPropertyList();
-            updateStatsDisplay();
-            refreshPackageUsageUI();
-            updateCurrentPropDisplay();
-        }
+                            <div class="pc-stats">
+                                <div class="pc-stat">
+                                    <div class="pc-stat-val">${stats.views}</div>
+                                    <div class="pc-stat-lbl">Views</div>
+                                </div>
+                                <div class="pc-stat">
+                                    <div class="pc-stat-val is-accent">${stats.requests}</div>
+                                    <div class="pc-stat-lbl">Apps</div>
+                                </div>
+                            </div>
 
-        function viewPropertyStats(propertyId) {
-            const stats = propertyContext.getData('stats', propertyId) || { views: 0, saves: 0, requests: 0, messages: 0 };
-            const prop = propertyContext.getAll()[propertyId];
-            alert(`📊 Statistieken - ${prop.name}\n\n👁️ ${stats.views} Weergaven\n❤️ ${stats.saves} Opgeslagen\n📅 ${stats.requests} Bezichtigingsaanvragen\n💬 ${stats.messages || 0} Berichten`);
-        }
+                            <div class="pc-actions">
+                                ${isActive
+                            ? `<button class="pc-btn" data-action="go-mijn-aanbod">BEHEER</button>`
+                            : `<button class="pc-btn secondary" onclick="switchProperty('${prop.id}')">WISSEL</button>`
+                        }
+                            </div>
+                        </div>`;
+                }).join('');
 
-        function updateStatsDisplay() {
-            const stats = propertyContext.getStats();
-            // Update hero stats
-            const heroStats = document.querySelectorAll('#propertyHero [style*="font-weight: 700"]');
-            if (heroStats.length >= 3) {
-                heroStats[0].textContent = (stats.views || 0).toLocaleString();
-                heroStats[1].textContent = stats.requests || 0;
-                heroStats[2].textContent = stats.saves || 0;
+                grid.innerHTML = html;
+            } catch (e) {
+                console.error('PropertyList Render Fail:', e);
+                const grid = document.getElementById('propertyListGrid');
+                if (grid) grid.innerHTML = `<div style="color:red; padding:20px;">Error rendering properties: ${e.message}</div>`;
             }
         }
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function () {
+        // 2. Global Helpers
+        window.switchProperty = function (id) {
+            propertyContext.switch(id);
+            if (window.VIMMO) VIMMO.toast(`Wisselen naar ${id}...`);
+            setTimeout(() => location.reload(), 600);
+        };
+
+        window.startNewListing = async function () {
+            const name = prompt("Pand naam:");
+            if (name) {
+                const nid = propertyContext.createProperty(name);
+                if (window.VIMMO) VIMMO.toast('Advertentie aangemaakt!');
+                setTimeout(() => window.location.href = `advertentie-particulier.html?prop=${nid}&new=true`, 800);
+            }
+        };
+
+        window.openBoostModal = () => document.getElementById('boostModal').style.display = 'flex';
+        window.closeBoostModal = () => document.getElementById('boostModal').style.display = 'none';
+        window.selectBoost = (type, price) => {
+            alert(`🚀 ${type} geactiveerd (€${price})!`);
+            window.closeBoostModal();
+        };
+
+        // 3. Init
+        window.initDashboard = function () {
+            console.log('%c VIMMO: Starting Robust Init ', 'background: #059669; color: white; font-weight: bold;');
+            try {
+                const ctx = window.propertyContext;
+                if (!ctx) {
+                    console.error('VIMMO: PropertyContext missing on init');
+                    return;
+                }
+
+                renderHeroMetrics();
+                renderActionsToday();
+                renderPropertyList();
+
+                // Update telemetry with real counts
+                const marker = document.getElementById('vimmo-telemetry');
+                if (marker) {
+                    const props = ctx.getActive().length;
+                    const reqs = ctx.getRequests().length;
+                    marker.innerHTML = `VIMMO (FINAL) • P:${props} R:${reqs} • <span style="text-decoration: underline" onclick="initDashboard()">RE-RENDER</span>`;
+                    marker.style.background = props > 0 ? '#059669' : '#ef4444';
+                    marker.title = `Data Status: ${props} Properties found. Click to force re-render.`;
+                }
+            } catch (e) {
+                console.error('VIMMO: Dashboard Init Fatal:', e);
+            }
+        };
+
+        // Execution: Immediate if ready, else wait
+        if (document.readyState === 'interactive' || document.readyState === 'complete') {
+            window.initDashboard();
+        } else {
+            document.addEventListener('DOMContentLoaded', window.initDashboard);
+        }
+
+        window.addEventListener('propertyChanged', () => {
+            renderHeroMetrics();
+            renderActionsToday();
             renderPropertyList();
-            updateStatsDisplay();
-            refreshPackageUsageUI();
-            updateHeroDisplay();
         });
 
-        function updateHeroDisplay() {
-            const prop = propertyContext.getCurrent();
-            if (!prop) return;
+        window.startNewOnboarding = function () {
+            const newId = propertyContext.createProperty({ name: "", listingStatus: "Concept", source: "Empty State" });
+            if (newId) {
+                window.location.href = `advertentie-particulier.html?prop=${newId}&new=true`;
+            }
+        };
 
-            if (document.getElementById('heroTitle')) document.getElementById('heroTitle').textContent = prop.name;
-            if (document.getElementById('heroAddress')) document.getElementById('heroAddress').innerHTML = `<i class="ri-map-pin-line"></i> ${prop.address}`;
-            if (document.getElementById('heroImage') && prop.image) document.getElementById('heroImage').src = prop.image;
-        }
-
-        function updateCurrentPropDisplay() {
-            const prop = propertyContext.getCurrent();
-            if (!prop) return;
-
-            if (document.getElementById('currentPropName')) document.getElementById('currentPropName').textContent = prop.name;
-            if (document.getElementById('currentPropPrice')) document.getElementById('currentPropPrice').textContent = prop.price ? `€ ${prop.price.toLocaleString()}` : 'Prijs op aanvraag';
-            if (document.getElementById('currentPropAddress')) document.getElementById('currentPropAddress').innerHTML = `<i class="ri-map-pin-line"></i> ${prop.address}`;
-            if (document.getElementById('currentPropImage') && prop.image) document.getElementById('currentPropImage').src = prop.image;
-            updateHeroDisplay();
-        }
-
-        function refreshPackageUsageUI() {
-            const container = document.getElementById('activeListingsList');
-            const countLabel = document.getElementById('packageUsageCount');
-            const usageBar = document.getElementById('usageBar');
-            if (!container || !countLabel) return;
-
-            const allProps = propertyContext.getAll();
-            const activeProps = Object.values(allProps).filter(p => p.status === 'active');
-            const limit = 3;
-
-            countLabel.textContent = `${activeProps.length} / ${limit}`;
-            if (usageBar) usageBar.style.width = `${(activeProps.length / limit) * 100}%`;
-
-            container.innerHTML = activeProps.map(p => `
-                <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px; border-radius: 8px; border: 1px solid #f1f5f9;">
-                    <span style="font-size: 0.8rem; font-weight: 600; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;">${p.name}</span>
-                    <button onclick="switchProperty('${p.id}')" style="background: ${p.id === propertyContext.getCurrentId() ? '#f0fdf4' : 'transparent'}; border: 1px solid ${p.id === propertyContext.getCurrentId() ? '#10b981' : '#e2e8f0'}; color: ${p.id === propertyContext.getCurrentId() ? '#10b981' : '#64748b'}; font-size: 0.65rem; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-weight: 700;">
-                        ${p.id === propertyContext.getCurrentId() ? 'HUIDIG' : 'KIES'}
-                    </button>
-                </div>
-            `).join('');
-
-            // Update sidebar too
-            const sidebarUsage = document.getElementById('sidebar-package-usage');
-            if (sidebarUsage) sidebarUsage.textContent = `${activeProps.length}/${limit}`;
-        }
-
-        // Boost Modal Functions
-        function openBoostModal() {
-            document.getElementById('boostModal').style.display = 'flex';
-        }
-
-        function closeBoostModal() {
-            document.getElementById('boostModal').style.display = 'none';
-        }
-
-        function selectBoost(boostType, price) {
-            const prop = propertyContext.getCurrent();
-            alert(`🚀 ${boostType} geactiveerd voor ${prop.name}!\n\nKosten: €${price}\nDit is een demo - geen echte betaling.`);
-            closeBoostModal();
-        }
+        // Initial setup
+        renderHeroMetrics();
+        renderActionsToday();
+        renderPropertyList();
     </script>
 
     <!-- Boost Modal -->
@@ -575,6 +1116,272 @@
     </div>
 
     <script src="dashboard-nav.js"></script>
+
+    <!-- JS Core: Sidebar active state + breadcrumb sync -->
+    <script>
+        (function () {
+            const navItems = document.querySelectorAll(".nav-item[data-route]");
+            const titleEl = document.querySelector("[data-page-title]");
+            const crumbEl = document.querySelector("[data-breadcrumb]");
+
+            function setFromActiveLink() {
+                const path = (location.pathname || "").toLowerCase();
+                let matched = null;
+
+                navItems.forEach(a => {
+                    const href = (a.getAttribute("href") || "").toLowerCase();
+                    const isActive = href && path.endsWith(href);
+                    a.classList.toggle("is-active", isActive);
+                    a.classList.toggle("active", isActive); // fallback for old styling
+                    if (isActive) matched = a;
+                });
+
+                if (matched) {
+                    const t = matched.getAttribute("data-title") || matched.textContent.trim();
+                    if (titleEl) titleEl.textContent = t;
+                    if (crumbEl) crumbEl.textContent = t;
+                }
+            }
+
+            setFromActiveLink();
+            window.addEventListener("popstate", setFromActiveLink);
+        })();
+    </script>
+
+    <!-- 4.2 KPI cards klikbaar met logische routes -->
+    <script>
+        (function () {
+            const map = {
+                views: "statistieken-particulier.html?tab=views",
+                aanvragen: "aanvragen-particulier.html?filter=open",
+                opgeslagen: "statistieken-particulier.html?tab=saves"
+            };
+
+            document.addEventListener("click", (e) => {
+                const card = e.target.closest("[data-kpi]");
+                if (!card) return;
+                e.preventDefault();
+                const key = card.getAttribute("data-kpi");
+                const href = map[key];
+                if (href) window.location.href = href;
+            });
+        })();
+    </script>
+
+    <!-- Overzicht Core - Unified dashboard controller -->
+    <script>
+        (function () {
+            const routes = {
+                views: "statistieken-particulier.html?tab=views",
+                aanvragen: "aanvragen-particulier.html?filter=open",
+                opgeslagen: "statistieken-particulier.html?tab=saves",
+                berichten: "berichten-particulier.html",
+                beschikbaarheid: "beschikbaarheid-particulier.html",
+                mijnAanbod: "advertentie-particulier.html"
+            };
+
+            function setSidebarActiveAndCrumb() {
+                const navItems = document.querySelectorAll(".nav-item[data-route]");
+                const titleEl = document.querySelector("[data-page-title]");
+                const crumbEl = document.querySelector("[data-breadcrumb]");
+
+                const path = (location.pathname || "").toLowerCase();
+                let matched = null;
+
+                navItems.forEach(a => {
+                    const href = (a.getAttribute("href") || "").toLowerCase();
+                    const isActive = href && path.endsWith(href);
+                    a.classList.toggle("is-active", isActive);
+                    a.classList.toggle("active", isActive);
+                    if (isActive) matched = a;
+                });
+
+                if (matched) {
+                    const t = matched.getAttribute("data-title") || matched.textContent.trim();
+                    if (titleEl) titleEl.textContent = t;
+                    if (crumbEl) crumbEl.textContent = t;
+                }
+            }
+
+            function hideDebugBadgeOutsideDev() {
+                const badge = document.getElementById("vimmo-telemetry");
+                if (!badge) return;
+
+                const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+                const isDevParam = new URLSearchParams(location.search).get("dev") === "1";
+
+                if (!(isLocal || isDevParam)) {
+                    badge.style.display = "none";
+                } else {
+                    badge.style.cursor = "pointer";
+                    badge.title = "Dev badge. Click to re-render.";
+                }
+            }
+
+            // Note: buildSmartTasksFromContext and renderSmartTasks removed.
+            // All smart tasks are now handled by renderActionsToday() above.
+
+            function bindClicksOnce() {
+                if (window.__vimmoDashboardBound) return;
+                window.__vimmoDashboardBound = true;
+
+                document.addEventListener("click", (e) => {
+                    const kpi = e.target.closest("[data-kpi]");
+                    if (kpi) {
+                        const key = kpi.getAttribute("data-kpi");
+                        const href = routes[key];
+                        if (href) window.location.href = href;
+                        return;
+                    }
+
+                    const goBtn = e.target.closest("[data-go]");
+                    if (goBtn) {
+                        const href = goBtn.getAttribute("data-go");
+                        if (!href) return;
+
+                        if (href === "#boost") {
+                            const modal = document.getElementById("boostModal");
+                            if (modal) modal.style.display = "flex";
+                            return;
+                        }
+
+                        window.location.href = href;
+                        return;
+                    }
+
+                    const viewReq = e.target.closest("[data-action='open-aanvraag']");
+                    if (viewReq) {
+                        const id = viewReq.getAttribute("data-request-id");
+                        if (!id) return;
+                        window.location.href = "aanvragen-particulier.html?id=" + encodeURIComponent(id);
+                        return;
+                    }
+
+                    const quick = e.target.closest(".quick-action-btn[data-action]");
+                    if (quick) {
+                        const act = quick.getAttribute("data-action");
+                        if (act === "go-berichten") window.location.href = routes.berichten;
+                        if (act === "go-beschikbaarheid") window.location.href = routes.beschikbaarheid;
+                        if (act === "fix-description") window.location.href = routes.mijnAanbod + "#beschrijving";
+                        return;
+                    }
+
+                    const beheer = e.target.closest("[data-action='go-mijn-aanbod']");
+                    if (beheer) {
+                        window.location.href = routes.mijnAanbod;
+                        return;
+                    }
+                    // Note: nieuw-pand is handled by dedicated delegation script at end of file
+                });
+            }
+
+            function boot() {
+                setSidebarActiveAndCrumb();
+                hideDebugBadgeOutsideDev();
+                bindClicksOnce();
+                // Note: smart tasks now rendered by renderActionsToday() called from initDashboard()
+            }
+
+            if (document.readyState === "complete" || document.readyState === "interactive") {
+                boot();
+            } else {
+                document.addEventListener("DOMContentLoaded", boot);
+            }
+
+            window.addEventListener("propertyChanged", () => {
+                setSidebarActiveAndCrumb();
+            });
+        })();
+    </script>
+
+    <!-- Click Router for Smart Action Tasks -->
+    <script>
+        (function () {
+            if (window.__vimmoDashboardActionRouter) return;
+            window.__vimmoDashboardActionRouter = true;
+
+            const goEditor = (hash) => window.location.href = "advertentie-particulier.html" + (hash || "");
+            const openBoost = () => {
+                const modal = document.getElementById("boostModal");
+                if (modal) modal.style.display = "flex";
+            };
+
+            document.addEventListener("click", (e) => {
+                const el = e.target.closest("[data-action]");
+                if (!el) return;
+
+                const act = el.getAttribute("data-action");
+
+                if (act === "fix-title") goEditor("#titel");
+                if (act === "fix-transaction") goEditor("#transaction");
+                if (act === "fix-price") goEditor("#prijs");
+                if (act === "fix-address") goEditor("#adres");
+                if (act === "fix-surface") goEditor("#oppervlakte");
+                if (act === "fix-bedrooms") goEditor("#slaapkamers");
+                if (act === "fix-epc") goEditor("#epc");
+                if (act === "fix-photos") goEditor("#media");
+
+                if (act === "go-mijn-aanbod") goEditor("");
+                if (act === "go-beschikbaarheid") window.location.href = "beschikbaarheid-particulier.html";
+                if (act === "open-boost") openBoost();
+            });
+        })();
+    </script>
+
+    <!-- Delegated nieuw-pand handler -->
+    <script>
+        (function () {
+            if (window.__vimmoNieuwPandDelegated) return;
+            window.__vimmoNieuwPandDelegated = true;
+
+            function safeToast(msg) {
+                try { if (window.VIMMO && typeof VIMMO.toast === "function") VIMMO.toast(msg); } catch { }
+            }
+
+            document.addEventListener("click", (e) => {
+                const btn = e.target.closest("[data-action='nieuw-pand'], #btnNieuwPand");
+                if (!btn) return;
+
+                e.preventDefault();
+
+                const ctx = window.propertyContext;
+                if (!ctx || typeof ctx.createProperty !== "function") {
+                    console.error("VIMMO: createProperty ontbreekt");
+                    return;
+                }
+
+                const id = ctx.createProperty("Nieuwe woning");
+
+                if (typeof ctx.updateProperty === "function") {
+                    ctx.updateProperty(id, { listingStatus: "Concept", name: "Nieuwe woning" });
+                }
+
+                if (typeof ctx.switch === "function") ctx.switch(id);
+
+                safeToast("Nieuw pand aangemaakt (Concept)");
+
+                setTimeout(() => {
+                    window.location.href = `advertentie-particulier.html?prop=${encodeURIComponent(id)}&new=true`;
+                }, 200);
+            });
+        })();
+    </script>
+
+    <!-- Boost Modal Premium UX: overlay click + Escape to close -->
+    <script>
+        (function () {
+            const modal = document.getElementById("boostModal");
+            if (!modal) return;
+
+            modal.addEventListener("click", (e) => {
+                if (e.target === modal) modal.style.display = "none";
+            });
+
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape" && modal.style.display === "flex") modal.style.display = "none";
+            });
+        })();
+    </script>
 </body>
 
 </html>

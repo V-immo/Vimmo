@@ -11,209 +11,552 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.0">
     <style>
+        /* Page-specific styles only - layout handled by global style.css */
+
         .package-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 25px;
             margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f1f5f9;
+            border-top: 4px solid var(--primary-particulier);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
         }
 
         .usage-progress {
             width: 100%;
             height: 12px;
-            background: #e2e8f0;
-            border-radius: 6px;
+            background: #f1f5f9;
+            border-radius: 100px;
             overflow: hidden;
             margin: 20px 0;
+            border: 1px solid #e2e8f0;
         }
 
         .usage-bar {
             height: 100%;
-            background: linear-gradient(to right, #10b981, #34d399);
-            border-radius: 6px;
-            transition: width 0.5s ease;
+            background: linear-gradient(90deg, #10b981, #059669);
+            border-radius: 100px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .pakket-card {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+            border-radius: 24px;
+            padding: 35px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.03);
         }
 
         .active-property-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
+            padding: 20px;
             background: #f8fafc;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border: 1px solid transparent;
-            transition: all 0.2s;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s;
         }
 
         .active-property-row:hover {
-            border-color: #10b981;
+            border-color: var(--primary-particulier);
             background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
         }
 
         .status-pill {
-            padding: 4px 12px;
+            padding: 6px 14px;
             border-radius: 100px;
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .status-pill.online {
-            background: #dcfce7;
-            color: #166534;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
         }
 
-        .status-pill.concept {
-            background: #fef9c3;
-            color: #854d0e;
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 25px;
+            }
+
+            .package-stats {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
-<body>
+<body class="role-particulier">
     <div class="dashboard-particulier">
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
+                <!-- User Profile at TOP -->
+                <div class="sidebar-user" style="border-top: none; margin-bottom: 20px; padding-top: 5px;">
+                    <div class="user-avatar"
+                        style="background: rgba(16, 185, 129, 0.1); color: var(--primary-particulier);">
+                        TV</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Tomas Verbeeck</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Particulier</div>
+                    </div>
+                </div>
+
+                <div style="margin: 10px 0 20px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
                 <a href="dashboard-particulier.html" class="nav-item">
                     <i class="ri-dashboard-line"></i> Overzicht
                 </a>
                 <a href="advertentie-particulier.html" class="nav-item">
-                    <i class="ri-home-4-line"></i> Mijn Advertentie
+                    <i class="ri-home-4-line"></i> Mijn Aanbod
                 </a>
                 <a href="beschikbaarheid-particulier.html" class="nav-item">
                     <i class="ri-calendar-line"></i> Beschikbaarheid
                 </a>
-                <a href="agenda-particulier.html" class="nav-item">
-                    <i class="ri-calendar-check-line"></i> Aanvragen
+                <a href="aanvragen-particulier.html" class="nav-item">
+                    <i class="ri-mail-line"></i> Aanvragen
+                    <span
+                        style="margin-left: auto; background: #ef4444; color: white; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">3</span>
                 </a>
                 <a href="berichten-particulier.html" class="nav-item">
                     <i class="ri-message-3-line"></i> Berichten
+                    <span
+                        style="margin-left: auto; background: var(--primary-particulier); color: white; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">2</span>
                 </a>
                 <a href="pakket-beheer.html" class="nav-item active">
                     <i class="ri-box-3-line"></i> Pakket Beheer
                     <span id="sidebar-package-usage"
-                        style="margin-left: auto; color: #10b981; font-weight: 700;">-/-</span>
+                        style="margin-left: auto; color: var(--primary-particulier); font-weight: 800; font-size: 0.8rem;">2/3</span>
                 </a>
 
-                <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.06);"></div>
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
-                <a href="instellingen-particulier.html" class="nav-item">
+                <a href="instellingen-particulier.html" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-                <a href="index.html" class="nav-item">
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
                     <i class="ri-logout-box-line"></i> Uitloggen
                 </a>
             </nav>
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content">
-            <header style="margin-bottom: 40px;">
-                <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Pakket & Beheer</h1>
-                <p style="color: var(--text-muted);">Beheer je advertentieslots en pakketinstellingen.</p>
-            </header>
+        <main class="main-content" style="padding: 40px 60px;">
+            <!-- Breadcrumbs -->
+            <div class="particulier-breadcrumb"
+                style="margin-bottom: 25px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 700;">
+                <a href="dashboard-particulier.html" style="color: var(--text-muted); text-decoration: none;"><i
+                        class="ri-dashboard-line"></i> Dashboard</a>
+                <span style="color: #cbd5e1;">/</span>
+                <span class="current" style="color: var(--primary-particulier);">Pakket Beheer</span>
+            </div>
 
-            <div class="package-stats">
-                <div class="stat-card" style="border-left-color: #10b981;">
-                    <div class="stat-label">Huidig Pakket</div>
-                    <div class="stat-value" style="font-size: 1.5rem;">Optimaal (60 Dagen)</div>
-                    <div style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">Geldig t/m 30 jan 2024</div>
-                </div>
-                <div class="stat-card" style="border-left-color: #3b82f6;">
-                    <div class="stat-label">Advertentie Slots</div>
-                    <div class="stat-value" id="slot-count">2 / 3</div>
-                    <div style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">1 slot beschikbaar</div>
-                </div>
-                <div class="stat-card" style="border-left-color: #f59e0b;">
-                    <div class="stat-label">Volgende Factuur</div>
-                    <div class="stat-value">€ 149</div>
-                    <div style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">Handmatige verlenging</div>
+            <div class="particulier-page-header" style="margin-bottom: 40px;">
+                <div class="page-header-info">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <a href="dashboard-particulier.html" class="back-btn glass-panel"
+                            style="width: 45px; height: 45px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); background: white; display: flex; align-items: center; justify-content: center; color: var(--text-main); text-decoration: none;">
+                            <i class="ri-arrow-left-line"></i>
+                        </a>
+                        <div>
+                            <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-main);">Pakket & Beheer
+                            </h1>
+                            <p class="page-subtitle"
+                                style="color: var(--text-muted); font-weight: 600; margin-top: 5px;">Beheer je
+                                advertentieslots en pakketinstellingen</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="pakket-card">
-                <h3 style="margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
-                    <i class="ri-home-gear-line" style="color: #10b981;"></i>
+            <div class="package-stats"
+                style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 40px;">
+                <div class="stat-card glass-panel"
+                    style="background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); padding: 30px; border-radius: 24px; border-top: 5px solid var(--primary-particulier);">
+                    <div class="stat-label"
+                        style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
+                        Huidig Pakket</div>
+                    <div class="stat-value" id="package-name"
+                        style="font-size: 1.4rem; font-weight: 800; color: var(--text-main);">
+                        Laden...</div>
+                    <div id="package-expiry"
+                        style="font-size: 0.85rem; color: var(--primary-particulier); margin-top: 10px; font-weight: 700;">
+                        ...</div>
+                </div>
+                <div class="stat-card glass-panel"
+                    style="background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); padding: 30px; border-radius: 24px; border-top: 5px solid #3b82f6;">
+                    <div class="stat-label"
+                        style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
+                        Advertentie Slots</div>
+                    <div class="stat-value" id="slot-count"
+                        style="font-size: 1.4rem; font-weight: 800; color: var(--text-main);">...</div>
+                    <div id="slot-availability"
+                        style="font-size: 0.85rem; color: #3b82f6; margin-top: 10px; font-weight: 700;">...</div>
+                </div>
+                <div class="stat-card glass-panel"
+                    style="background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); padding: 30px; border-radius: 24px; border-top: 5px solid #f59e0b;">
+                    <div class="stat-label"
+                        style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
+                        Volgende Factuur</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div>
+                            <div class="stat-value" id="next-bill-amount"
+                                style="font-size: 2rem; font-weight: 800; color: var(--text-main);">
+                                € 0</div>
+                            <div style="font-size: 0.85rem; color: #f59e0b; margin-top: 5px; font-weight: 700;">
+                                Verlenging vereist</div>
+                        </div>
+                        <button onclick="renewPackage()"
+                            style="background: #f59e0b; color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 15px rgba(245, 158, 11, 0.2);">
+                            Verlengen
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pakket-card glass-panel"
+                style="padding: 40px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.4);">
+                <h3
+                    style="margin-bottom: 30px; display: flex; align-items: center; gap: 12px; font-size: 1.3rem; font-weight: 800; color: var(--text-main);">
+                    <i class="ri-home-gear-line" style="color: var(--primary-particulier); font-size: 1.6rem;"></i>
                     Actieve Woningadvertenties
                 </h3>
 
-                <div class="usage-progress">
-                    <div id="usage-progress-bar" class="usage-bar" style="width: 66%;"></div>
+                <div class="usage-progress"
+                    style="height: 16px; background: rgba(0,0,0,0.05); border-radius: 100px; margin-bottom: 35px; border: 1px solid rgba(0,0,0,0.05);">
+                    <div id="usage-progress-bar" class="usage-bar"
+                        style="width: 0%; background: var(--primary-particulier); box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);">
+                    </div>
                 </div>
 
-                <div id="active-properties-list">
+                <div id="active-properties-list" style="display: flex; flex-direction: column; gap: 15px;">
                     <!-- Loaded via JS -->
                 </div>
 
                 <div
-                    style="margin-top: 30px; padding-top: 25px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
-                    <p style="font-size: 0.9rem; color: #64748b;">Je hebt nog ruimte voor 1 extra advertentie.</p>
-                    <button onclick="window.location.href='advertentie-particulier.html?new=true'" class="btn-primary"
-                        style="background: #10b981; padding: 10px 20px; border-radius: 8px;">
-                        <i class="ri-add-line"></i> Nieuwe Advertentie
+                    style="margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;">
+                    <p style="font-size: 1rem; color: var(--text-muted); font-weight: 600;" id="remaining-slots-text">
+                        Laden...
+                    </p>
+                    <button onclick="startNewListing()" class="btn"
+                        style="background: var(--primary-particulier); color: white; padding: 14px 28px; border-radius: 14px; font-weight: 800; border: none; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);">
+                        <i class="ri-add-line" style="font-size: 1.2rem;"></i> Nieuwe Advertentie
                     </button>
+                </div>
+            </div>
+
+            <!-- Upgrade Section -->
+            <div style="margin-top: 60px;">
+                <h2 style="font-size: 1.8rem; font-weight: 850; margin-bottom: 30px; text-align: center;">Kies het
+                    passende pakket</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+                    <!-- Basis -->
+                    <div class="glass-panel"
+                        style="padding: 35px; border-radius: 24px; background: white; text-align: center; border: 1px solid rgba(0,0,0,0.05); transition: transform 0.3s ease;">
+                        <div
+                            style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; color: #64748b; letter-spacing: 1px; margin-bottom: 20px;">
+                            Basis</div>
+                        <div style="font-size: 2.5rem; font-weight: 900; margin-bottom: 5px;">€ 49<span
+                                style="font-size: 1rem; color: #94a3b8;">/mnd</span></div>
+                        <div style="margin-bottom: 20px; font-size: 0.9rem; color: #64748b;">Voor de incidentele
+                            verkoper.</div>
+                        <div
+                            style="background: #f8fafc; border: 1px solid rgba(0,0,0,0.05); border-radius: 12px; padding: 12px; margin-bottom: 25px;">
+                            <div
+                                style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px;">
+                                Ranking Kracht</div>
+                            <div style="font-size: 1.1rem; font-weight: 900; color: var(--text-main);">Standaard (1.0x)
+                            </div>
+                        </div>
+                        <ul
+                            style="list-style: none; padding: 0; margin: 0 0 35px; text-align: left; display: flex; flex-direction: column; gap: 12px;">
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i
+                                    class="ri-check-line" style="color: #10b981;"></i> 1 Advertentie Slot</li>
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i
+                                    class="ri-check-line" style="color: #10b981;"></i> Standaard Ranking</li>
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem; opacity: 0.5;">
+                                <i class="ri-close-line" style="color: #94a3b8;"></i> Geen Trust Reveal
+                            </li>
+                        </ul>
+                        <button onclick="upgradeTo('Basis')"
+                            style="width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: white; font-weight: 800; cursor: pointer;">Selecteer</button>
+                    </div>
+
+                    <!-- Optimaal -->
+                    <div class="glass-panel"
+                        style="padding: 35px; border-radius: 24px; background: white; text-align: center; border: 2px solid #10b981; position: relative; transform: scale(1.05); box-shadow: 0 20px 40px rgba(16, 185, 129, 0.1);">
+                        <div
+                            style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 4px 12px; border-radius: 100px; font-size: 0.7rem; font-weight: 900; letter-spacing: 1px;">
+                            POPULAIR</div>
+                        <div
+                            style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; color: #10b981; letter-spacing: 1px; margin-bottom: 20px;">
+                            Optimaal</div>
+                        <div style="font-size: 2.5rem; font-weight: 900; margin-bottom: 5px;">€ 149<span
+                                style="font-size: 1rem; color: #94a3b8;">/mnd</span></div>
+                        <div style="margin-bottom: 20px; font-size: 0.9rem; color: #64748b;">De conversie-machine.</div>
+                        <div
+                            style="background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 12px; padding: 12px; margin-bottom: 25px;">
+                            <div
+                                style="font-size: 0.65rem; font-weight: 800; color: #10b981; text-transform: uppercase; margin-bottom: 4px;">
+                                Ranking Kracht</div>
+                            <div style="font-size: 1.1rem; font-weight: 900; color: #10b981;">+15% Zichtbaarheid</div>
+                            <div style="font-size: 0.75rem; color: #15803d; margin-top: 2px;">Bij health score 85+</div>
+                        </div>
+                        <ul
+                            style="list-style: none; padding: 0; margin: 0 0 35px; text-align: left; display: flex; flex-direction: column; gap: 12px;">
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i
+                                    class="ri-check-line" style="color: #10b981;"></i> 3 Advertentie Slots</li>
+                            <li
+                                style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 700;">
+                                <i class="ri-flashlight-line" style="color: #fbbf24;"></i> +15% Ranking Boost
+                            </li>
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i
+                                    class="ri-shield-user-line" style="color: #10b981;"></i> Trust Reveal Enabled</li>
+                        </ul>
+                        <button onclick="upgradeTo('Optimaal')"
+                            style="width: 100%; padding: 14px; border-radius: 12px; border: none; background: #10b981; color: white; font-weight: 800; cursor: pointer;">Huidig
+                            Pakket</button>
+                    </div>
+
+                    <!-- Premium -->
+                    <div class="glass-panel"
+                        style="padding: 35px; border-radius: 24px; background: #1e293b; text-align: center; border: 1px solid rgba(255,255,255,0.1); color: white;">
+                        <div
+                            style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-bottom: 20px;">
+                            Premium</div>
+                        <div style="font-size: 2.5rem; font-weight: 900; margin-bottom: 5px;">€ 299<span
+                                style="font-size: 1rem; color: #94a3b8;">/mnd</span></div>
+                        <div style="margin-bottom: 20px; font-size: 0.9rem; color: #94a3b8;">Voor de
+                            groot-vastgoedbezitter.</div>
+                        <div
+                            style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; margin-bottom: 25px;">
+                            <div
+                                style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px;">
+                                Ranking Kracht</div>
+                            <div style="font-size: 1.1rem; font-weight: 900; color: #fff;">+25% Zichtbaarheid</div>
+                            <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 2px;">Bij health score 85+</div>
+                        </div>
+                        <ul
+                            style="list-style: none; padding: 0; margin: 0 0 35px; text-align: left; display: flex; flex-direction: column; gap: 12px;">
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i
+                                    class="ri-check-line" style="color: #10b981;"></i> 10 Advertentie Slots</li>
+                            <li
+                                style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 700;">
+                                <i class="ri-flashlight-line" style="color: #fbbf24;"></i> +25% Ranking Boost
+                            </li>
+                            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i
+                                    class="ri-customer-service-2-line" style="color: #10b981;"></i> Priority Support
+                            </li>
+                        </ul>
+                        <button onclick="upgradeTo('Premium')"
+                            style="width: 100%; padding: 14px; border-radius: 12px; border: none; background: rgba(255,255,255,0.1); color: white; font-weight: 800; cursor: pointer;">Kies
+                            Premium</button>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
     <script src="propertyContext.js"></script>
+    <script src="particulier-utils.js"></script>
+    <script src="dashboard-nav.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        // Initialize - robust initialization
+        function initPage() {
+            if (!window.propertyContext) {
+                setTimeout(initPage, 50);
+                return;
+            }
+
             refreshUI();
-        });
+
+            if (window.ParticulierUtils && ParticulierUtils.initTooltips) {
+                ParticulierUtils.initTooltips();
+            }
+        }
+
+        // Start as soon as possible
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPage);
+        } else {
+            initPage();
+        }
+
+        async function startNewListing() {
+            const acc = propertyContext.getAccount();
+            const activeProps = propertyContext.getActive();
+
+            if (activeProps.length >= acc.slots) {
+                const ok = await ParticulierUtils.confirm(
+                    'Slot limiet bereikt',
+                    `Je huidige pakket (${acc.tier}) staat maximaal ${acc.slots} actieve advertenties toe. Wil je upgraden voor meer slots?`,
+                    'Upgrade Nu'
+                );
+                if (ok) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    ParticulierUtils.toast('Kies een groter pakket om meer woningen te plaatsen.', 'info');
+                }
+                return;
+            }
+
+            const name = await ParticulierUtils.prompt('Nieuwe Woning', 'Voer de naam of het adres in voor de nieuwe advertentie:', 'Bv. Penthouse Schelde');
+            if (name && name.trim()) {
+                const newId = propertyContext.createProperty({ name: name.trim(), listingStatus: 'Concept', source: 'Pakket Beheer' });
+                ParticulierUtils.toast('Woning aangemaakt!', 'success');
+                setTimeout(() => {
+                    window.location.href = `advertentie-particulier.html?prop=${newId}&new=true`;
+                }, 1000);
+            }
+        }
 
         function refreshUI() {
             const list = document.getElementById('active-properties-list');
             const slotCount = document.getElementById('slot-count');
+            const slotAvail = document.getElementById('slot-availability');
             const progressBar = document.getElementById('usage-progress-bar');
             const sidebarUsage = document.getElementById('sidebar-package-usage');
+            const pkgName = document.getElementById('package-name');
+            const pkgExpiry = document.getElementById('package-expiry');
 
             if (!list) return;
 
+            const acc = propertyContext.getAccount();
             const allProps = propertyContext.getAll();
-            const activeProps = Object.values(allProps).filter(p => p.status === 'active');
-            const limit = 3;
+            const activeProps = propertyContext.getActive();
+            const limit = acc.slots;
 
-            slotCount.textContent = `${activeProps.length} / ${limit}`;
-            progressBar.style.width = `${(activeProps.length / limit) * 100}%`;
+            // Set Package Info
+            if (pkgName) pkgName.textContent = `${acc.tier} (${acc.slots} Slots)`;
+            if (pkgExpiry) pkgExpiry.textContent = `Geldig t/m ${new Date(acc.expiresAt).toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+
+            if (slotCount) slotCount.textContent = `${activeProps.length} / ${limit}`;
+            if (slotAvail) slotAvail.textContent = `${Math.max(0, limit - activeProps.length)} slot${limit - activeProps.length === 1 ? '' : 's'} beschikbaar`;
+            if (progressBar) progressBar.style.width = `${Math.min(100, (activeProps.length / limit) * 100)}%`;
             if (sidebarUsage) sidebarUsage.textContent = `${activeProps.length}/${limit}`;
 
+            const nextBill = document.getElementById('next-bill-amount');
+            if (nextBill) nextBill.textContent = `€ ${acc.nextBillAmount}`;
+
+            const remainingText = document.getElementById('remaining-slots-text');
+            if (remainingText) {
+                const avail = limit - activeProps.length;
+                if (avail > 0) {
+                    remainingText.innerHTML = `Je hebt nog ruimte voor <span style="color: var(--primary-particulier); font-weight: 800;">${avail} extra</span> advertentie${avail === 1 ? '' : 's'}.`;
+                } else {
+                    remainingText.innerHTML = `<span style="color: #ef4444; font-weight: 800;">Je hebt geen vrije slots meer.</span> Upgrade voor meer capaciteit.`;
+                }
+            }
+
             list.innerHTML = activeProps.map(p => `
-                <div class="active-property-row">
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <div style="font-size: 1.5rem;">${p.emoji}</div>
+                <div class="active-property-row glass-panel" style="padding: 24px; background: rgba(255,255,255,0.6); border: 1px solid rgba(0,0,0,0.05); border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0;">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div style="font-size: 2rem; width: 60px; height: 60px; background: white; border-radius: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 15px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);">${p.emoji || '🏠'}</div>
                         <div>
-                            <div style="font-weight: 700; color: #1e293b;">${p.name}</div>
-                            <div style="font-size: 0.8rem; color: #64748b;">${p.address}</div>
+                            <div style="font-weight: 800; color: var(--text-main); font-size: 1.1rem; margin-bottom: 4px;">${p.name}</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;"><i class="ri-map-pin-line" style="color: var(--primary-particulier);"></i> ${p.address || 'Adres onbekend'}</div>
                         </div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <span class="status-pill online">Online</span>
-                        <button onclick="window.location.href='advertentie-particulier.html?prop=${p.id}'" 
-                                style="background: white; border: 1px solid #e2e8f0; padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                            Beheren
-                        </button>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <span class="status-pill online" style="background: #f0fdf4; color: #10b981; border: 1px solid rgba(16, 185, 129, 0.1); padding: 8px 16px; font-size: 0.75rem; font-weight: 800; border-radius: 100px;">Online</span>
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="renewListing('${p.id}', '${p.name}')" 
+                                    style="background: white; border: 1px solid #fde68a; color: #b45309; padding: 10px 20px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;">
+                                <i class="ri-refresh-line"></i> Verlengen
+                            </button>
+                            <button onclick="window.location.href='advertentie-particulier.html?prop=${p.id}'" 
+                                    style="background: white; border: 1px solid #e2e8f0; color: var(--text-main); padding: 10px 20px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;">
+                                <i class="ri-settings-3-line"></i> Beheren
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
+        }
+        async function renewPackage() {
+            const acc = propertyContext.getAccount();
+            const confirmed = await ParticulierUtils.confirm(
+                'Pakket Verlengen',
+                `Wilt u uw "${acc.tier}" pakket verlengen voor €${acc.nextBillAmount} per maand?`,
+                'Ja, Verlengen'
+            );
+
+            if (confirmed) {
+                propertyContext.updatePackage(acc.tier);
+                ParticulierUtils.toast('Pakket succesvol verlengd', 'success');
+            }
+        }
+
+        async function upgradeTo(tier) {
+            const current = propertyContext.getAccount().tier;
+            if (current === tier) {
+                ParticulierUtils.toast(`Je hebt al het ${tier} pakket.`, 'info');
+                return;
+            }
+
+            const ok = await ParticulierUtils.confirm(
+                `Upgrade naar ${tier}`,
+                `Wil je overstappen naar het ${tier} pakket? Dit geeft je direct meer mogelijkheden.`,
+                'Ja, Upgrade'
+            );
+
+            if (ok) {
+                propertyContext.updatePackage(tier);
+                ParticulierUtils.toast(`Welkom bij ${tier}! 🎉`, 'success');
+            }
+        }
+
+        window.addEventListener('accountChanged', refreshUI);
+        window.addEventListener('propertyChanged', refreshUI);
+
+        async function renewListing(id, name) {
+            const confirmed = await ParticulierUtils.confirm(
+                'Advertentie Verlengen',
+                `Wilt u de advertentie-duur voor "${name}" verlengen met 30 dagen?`,
+                'Ja, Verlengen'
+            );
+
+            if (confirmed) {
+                ParticulierUtils.toast(`Listing "${name}" verlengd`, 'success');
+            }
         }
     </script>
     <script src="dashboard-nav.js"></script>

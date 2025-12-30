@@ -53,19 +53,6 @@
       "created_at": "2025-12-19T17:03:00.000Z"
     },
     {
-      "id": 5,
-      "email": "jan.modaal@example.be",
-      "password_hash": "$2a$12$k85p3sBqaY46MdqhSeqa7uwSMq97qYtKnH3mxrZKvQwufzyDa.sba",
-      "first_name": "Jan",
-      "last_name": "Modaal",
-      "role": "makelaar",
-      "verification_token": null,
-      "verified": 1,
-      "reset_token": null,
-      "reset_token_expires": null,
-      "created_at": "2025-12-19T18:54:52.771Z"
-    },
-    {
       "id": 6,
       "email": "test@vimmo.nl",
       "password_hash": "$2a$12$bFb92ctdbc3.0IOBtLCSIOWUC8gb10sD4t.I4s60K.4vnczUYe6cW",
