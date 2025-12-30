@@ -1486,12 +1486,13 @@ h4,
     gap: 20px;
 }
 
+/* .brand in navbar (PATCH: do not override brand color) */
 .brand {
     font-size: 1.8rem;
     letter-spacing: -0.5px;
-    color: var(--text-main);
     white-space: nowrap;
     flex-shrink: 0;
+    color: inherit;
 }
 
 .nav-links {
@@ -1584,8 +1585,11 @@ h4,
     color: var(--text-main);
 }
 
+
+
+/* PATCH: brand accent must not depend on theme primary */
 .text-gold {
-    color: var(--primary);
+    color: var(--accent-red);
 }
 
 .hero-subtitle {
@@ -4073,4 +4077,458 @@ main,
 /* Status bar panel with green accent */
 .luxury-panel[style*="border-left"] {
     background: linear-gradient(180deg, rgba(245, 247, 244, .95), rgba(237, 242, 238, .90)) !important;
+}
+
+/* ==========================================================
+   HARD PROOF + HARD LOCK (must override any fancy text effect)
+   ========================================================== */
+#heroTitle {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    text-fill-color: #fff !important;
+
+    background: rgba(0, 0, 0, .35) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+
+    isolation: isolate;
+    mix-blend-mode: normal !important;
+    filter: none !important;
+    opacity: 1 !important;
+
+    padding: 0.35em 0.55em;
+    border-radius: 14px;
+    display: inline-block;
+    max-width: 800px;
+}
+
+/* Responsive safety for small screens */
+@media (max-width: 600px) {
+    #heroTitle {
+        padding: 0.3em 0.5em;
+        border-radius: 12px;
+        max-width: 92vw;
+    }
+}
+
+/* ============================================
+   PREMIUM PORTFOLIO LISTING CARD SYSTEM
+   "Above premium" asset overview styling
+   Uses --theme as single canonical green accent
+   ============================================ */
+
+:root {
+    --theme: #0e8f61;
+}
+
+/* Particulier pages get green theme */
+body.my-aanbod,
+body.particulier,
+.sidebar-particulier~main {
+    --theme: #0e8f61;
+}
+
+.listing-card {
+    border-radius: 22px;
+    background: var(--bg-card);
+    border: 1px solid rgba(0, 0, 0, .06);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.listing-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, .08);
+}
+
+.listing-card.is-selected {
+    border-color: var(--theme);
+    box-shadow: 0 0 0 3px rgba(14, 143, 97, .15), 0 16px 40px rgba(0, 0, 0, .08);
+}
+
+.listing-card.critical {
+    border-color: rgba(180, 83, 9, .25);
+}
+
+.lc-urgent {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(254, 243, 199, .85);
+    color: #92400e;
+    font-size: .78rem;
+    font-weight: 600;
+}
+
+.listing-card[data-status="expired"] .lc-urgent {
+    background: rgba(254, 226, 226, .85);
+    color: #b91c1c;
+}
+
+.lc-urgent i {
+    font-size: 1rem;
+}
+
+.lc-urgent-more {
+    margin-left: auto;
+    font-size: .7rem;
+    opacity: .75;
+}
+
+.lc-hero {
+    height: 124px;
+    background: rgba(0, 0, 0, .03);
+}
+
+.lc-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.lc-hero-fallback {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #cbd5e1;
+}
+
+.lc-body {
+    padding: 16px 16px 14px;
+}
+
+.lc-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.lc-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.lc-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lc-meta {
+    margin-top: 6px;
+    color: var(--text-muted);
+    font-size: .85rem;
+}
+
+.lc-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.lc-side {
+    text-align: right;
+    min-width: 100px;
+    flex-shrink: 0;
+}
+
+.lc-statusline {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    font-size: .72rem;
+    color: var(--text-muted);
+}
+
+.lc-statusdot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--theme);
+    box-shadow: 0 0 0 4px rgba(14, 143, 97, .12);
+}
+
+/* Status dot colors based on status class */
+.lc-status.is-live~.lc-statusdot,
+.lc-statusdot:has(+ .lc-status.is-live) {
+    background: #10b981;
+}
+
+.lc-statusline:has(.is-concept) .lc-statusdot {
+    background: #f59e0b;
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, .12);
+}
+
+.lc-statusline:has(.is-expired) .lc-statusdot {
+    background: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, .12);
+}
+
+.lc-statusline:has(.is-review) .lc-statusdot {
+    background: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, .12);
+}
+
+.lc-statusline:has(.is-paused) .lc-statusdot {
+    background: #64748b;
+    box-shadow: 0 0 0 4px rgba(100, 116, 139, .12);
+}
+
+.lc-status {
+    background: transparent;
+    padding: 0;
+    border: 0;
+    backdrop-filter: none;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.lc-price {
+    margin-top: 6px;
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--text-main);
+    white-space: nowrap;
+}
+
+.lc-healthbar {
+    margin-top: 12px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, .06);
+    overflow: hidden;
+}
+
+.lc-healthbar>span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: rgba(14, 143, 97, .85);
+    transition: width 0.3s ease;
+}
+
+.listing-card.critical .lc-healthbar>span {
+    background: rgba(180, 83, 9, .85);
+}
+
+.lc-footer {
+    padding: 12px 16px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+}
+
+.lc-primary-btn {
+    background: rgba(255, 255, 255, .7);
+    color: var(--text-main);
+    border: 1px solid rgba(0, 0, 0, .08);
+    font-weight: 600;
+    border-radius: 16px;
+    padding: 8px 12px;
+    font-size: .85rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lc-primary-btn:hover {
+    border-color: rgba(14, 143, 97, .35);
+    color: var(--theme);
+    background: rgba(255, 255, 255, .95);
+}
+
+.lc-kebab {
+    margin-left: auto;
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.lc-kebab:hover {
+    background: rgba(0, 0, 0, .05);
+}
+
+.lc-kebab>i {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+.lc-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 6px;
+    min-width: 180px;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, .08);
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .10);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.15s ease;
+    z-index: 100;
+}
+
+.lc-kebab.is-open .lc-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.lc-menu-item {
+    padding: 10px 14px;
+    font-size: .86rem;
+    font-weight: 500;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.1s ease;
+}
+
+.lc-menu-item:hover {
+    background: rgba(0, 0, 0, .04);
+}
+
+.lc-menu-item i {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.lc-menu-sep {
+    height: 1px;
+    background: rgba(0, 0, 0, .06);
+    margin: 4px 0;
+}
+
+.lc-menu-item.lc-boost {
+    color: #b45309;
+    font-weight: 600;
+}
+
+.lc-menu-item.lc-boost i {
+    color: #b45309;
+}
+
+.lc-menu-item.is-danger {
+    color: #dc2626;
+}
+
+.lc-menu-item.is-danger i {
+    color: #dc2626;
+}
+
+/* List view adjustments */
+.listing-card.is-list {
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    align-items: center;
+}
+
+.listing-card.is-list .lc-hero {
+    height: 100%;
+    min-height: 100px;
+}
+
+.listing-card.is-list .lc-body {
+    padding: 16px;
+}
+
+.listing-card.is-list .lc-footer {
+    flex-direction: column;
+    padding: 16px;
+    gap: 8px;
+}
+
+/* ============================================
+   LAYOUT HARD LOCK: Sidebar + Content Shell
+   Prevents overlap bugs between sidebar and content
+   ============================================ */
+
+:root {
+    --sidebar-w: 260px;
+}
+
+/* Sidebar stays fixed, never overlapped */
+.sidebar,
+.sidebar-particulier {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: var(--sidebar-w) !important;
+    z-index: 200 !important;
+    background: var(--bg-card, #fff) !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.08) !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Main content respects sidebar width */
+.ma-main,
+.dashboard-main,
+.main-content {
+    margin-left: var(--sidebar-w) !important;
+    width: calc(100% - var(--sidebar-w)) !important;
+}
+
+/* Page headers stay in flow, never negative shift */
+.ma-topbar,
+.ma-title,
+.page-header,
+.content-header {
+    position: relative;
+    z-index: 10;
+    margin-left: 0 !important;
+}
+
+/* Sidebar brand stays crisp */
+.sidebar .sidebar-brand,
+.sidebar-particulier .sidebar-brand {
+    opacity: 1 !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
+}
+
+/* Responsive: collapse sidebar on mobile */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-w: 0px;
+    }
+
+    .sidebar,
+    .sidebar-particulier {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.is-open,
+    .sidebar-particulier.is-open {
+        transform: translateX(0);
+    }
 }

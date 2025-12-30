@@ -1012,8 +1012,7 @@
 
 <body class="my-aanbod">
     <!-- Sidebar (reuse from dashboard) -->
-    <aside class="sidebar sidebar-particulier"
-        style="width: 260px; background: #fff; border-right: 1px solid rgba(0,0,0,0.08); display: flex; flex-direction: column;">
+    <aside class="sidebar sidebar-particulier">
         <a href="index.html" class="sidebar-brand">
             <span class="brand-v">V</span><span class="brand-i">I</span><span class="brand-mmo">MMO</span>
         </a>
@@ -1293,48 +1292,55 @@
                 return `
                     <article class="listing-card ${isSelected ? 'is-selected' : ''} ${isListView ? 'is-list' : ''} ${isCritical ? 'critical' : ''}"
                         data-listing-id="${p.id}" data-status="${p.status}">
-                        
+
                         ${showUrgentStrip ? `
-                            <div class="lc-urgent" style="background: ${isExpired ? '#fee2e2' : '#fef3c7'}; color: ${isExpired ? '#b91c1c' : '#92400e'};">
+                            <div class="lc-urgent">
                                 <i class="${isExpired ? 'ri-timer-line' : 'ri-error-warning-line'}"></i>
                                 <span class="lc-urgent-text">${isExpired ? 'Publicatie verlopen' : health.blockers[0].label}</span>
                                 ${health.blockers.length > 1 ? `<span class="lc-urgent-more">+${health.blockers.length - 1} meer</span>` : ""}
                             </div>
                         ` : ""}
-                        
+
                         <div class="lc-hero">
-                            ${coverUrl ? `<img src="${coverUrl}" alt="">` : `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:2rem;color:#cbd5e1;">🏠</div>`}
-                            <div class="lc-hero-overlay"></div>
-                            <div class="lc-hero-badges">
-                                <span class="lc-status ${status.class}" style="backdrop-filter: blur(10px); padding: 4px 12px; font-size: 9px;">${status.label}</span>
-                            </div>
+                            ${coverUrl
+                        ? `<img src="${coverUrl}" alt="">`
+                        : `<div class="lc-hero-fallback">🏠</div>`
+                    }
                         </div>
-                        
-                        <div class="lc-body" style="padding: 16px;">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 4px;">
-                                <h3 class="lc-title" style="margin: 0; font-size: 14px; font-weight: 800;">${p.name || "Geen titel"}</h3>
-                                <div class="lc-price" style="font-size: 14px; white-space: nowrap;">${price}</div>
-                            </div>
-                            
-                            <div class="lc-meta" style="opacity: 0.6; margin-bottom: 12px;">
-                                <span class="lc-meta-item"><i class="ri-map-pin-line"></i> ${p.location || p.address || "—"}</span>
+
+                        <div class="lc-body">
+                            <div class="lc-top">
+                                <div class="lc-main">
+                                    <h3 class="lc-title">${p.name || "Geen titel"}</h3>
+                                    <div class="lc-meta">
+                                        <span class="lc-meta-item"><i class="ri-map-pin-line"></i> ${p.location || p.address || "—"}</span>
+                                    </div>
+                                </div>
+
+                                <div class="lc-side">
+                                    <div class="lc-statusline">
+                                        <span class="lc-statusdot" aria-hidden="true"></span>
+                                        <span class="lc-status ${status.class}">${status.label}</span>
+                                    </div>
+                                    <div class="lc-price">${price}</div>
+                                </div>
                             </div>
 
-                            <!-- STAP 5.2 HTML: Health = bar, geen badge -->
-                            <div class="lc-healthbar">
+                            <div class="lc-healthbar" title="Listing health">
                                 <span style="width:${health.score}%"></span>
                             </div>
                         </div>
 
-                        <div class="lc-footer" style="padding: 12px 16px; border-top: none; background: transparent;">
-                            <button class="lc-primary-btn" data-action="primary" style="background: #f8fafc; color: var(--text-main); border: 1px solid rgba(0,0,0,0.05); font-weight: 800;">
+                        <div class="lc-footer">
+                            <button class="lc-primary-btn" data-action="primary">
                                 <i class="ri-eye-line"></i> Details
                             </button>
+
                             <div class="lc-kebab" data-action="kebab">
                                 <i class="ri-more-2-fill"></i>
                                 <div class="lc-menu">
-                                    <div class="lc-menu-item" data-action="boost" style="color: #b45309; font-weight: 800;"><i class="ri-flashlight-line"></i> Boost Woning</div>
-                                    <div style="height: 1px; background: rgba(0,0,0,0.05); margin: 4px 0;"></div>
+                                    <div class="lc-menu-item lc-boost" data-action="boost"><i class="ri-flashlight-line"></i> Boost Woning</div>
+                                    <div class="lc-menu-sep"></div>
                                     <div class="lc-menu-item" data-action="edit"><i class="ri-edit-line"></i> Bewerken</div>
                                     <div class="lc-menu-item" data-action="duplicate"><i class="ri-file-copy-line"></i> Dupliceren</div>
                                     <div class="lc-menu-item" data-action="pause"><i class="ri-pause-circle-line"></i> Pauzeren</div>
@@ -1342,6 +1348,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </article>
                 `;
             }
