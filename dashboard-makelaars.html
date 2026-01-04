@@ -59,6 +59,12 @@
 
 <body class="role-makelaar">
     <div class="dashboard-makelaars">
+        <!-- Mobile Toggle -->
+        <button class="makelaar-mobile-toggle"
+            style="display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--primary-makelaars); color: white; border: none; border-radius: 12px; width: 45px; height: 45px; cursor: pointer; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <i class="ri-menu-line"></i>
+        </button>
+
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
@@ -109,6 +115,15 @@
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Breadcrumb -->
+            <div class="makelaar-breadcrumb"
+                style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 700;">
+                <a href="dashboard-makelaars.html" style="color: var(--primary-makelaars); text-decoration: none;">
+                    <i class="ri-dashboard-line"></i> Dashboard
+                </a>
+                <span style="color: #cbd5e1;">/</span>
+                <span class="current" style="color: var(--text-main);">Overzicht</span>
+            </div>
             <div
                 style="margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; padding: 20px 0;">
                 <div>

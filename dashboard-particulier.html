@@ -15,7 +15,7 @@
     <style>
         /* Ultra-Robust Inline Fallback */
         body.role-particulier {
-            background: linear-gradient(180deg, #ecfdf5 0%, #059669 100%) !important;
+            background: linear-gradient(180deg, #f0f9f6 0%, #e0f2eb 40%, #3d8b6e 100%) !important;
             background-attachment: fixed !important;
         }
 
@@ -222,12 +222,12 @@
                 <h1 data-page-title style="display:none;">Overzicht</h1>
             </div>
 
-            <!-- Control Room Header -->
-            <div id="controlRoomHeader" style="display: none;">
-                <div class="control-room-header"
+            <!-- Overzicht Header -->
+            <div id="overzichtHeader" style="display: none;">
+                <div class="overzicht-header"
                     style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
                     <div>
-                        <h1 style="font-size: 2.8rem; font-weight: 850; margin-bottom: 5px;">Control Room</h1>
+                        <h1 style="font-size: 2.8rem; font-weight: 850; margin-bottom: 5px;">Overzicht</h1>
                         <p style="color: var(--text-muted); font-weight: 600; font-size: 1.1rem;">Welkom terug, Tomas.
                             Hier is je portfolio status van vandaag.</p>
                     </div>
@@ -253,7 +253,8 @@
                             style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
                             <div
                                 style="width: 40px; height: 40px; border-radius: 10px; background: #ecfdf5; color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                                <i class="ri-eye-line"></i></div>
+                                <i class="ri-eye-line"></i>
+                            </div>
                             <div style="font-size: 0.75rem; font-weight: 800; color: #10b981;"><i
                                     class="ri-arrow-up-line"></i> 12%</div>
                         </div>
@@ -267,7 +268,8 @@
                             style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
                             <div
                                 style="width: 40px; height: 40px; border-radius: 10px; background: #eff6ff; color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                                <i class="ri-heart-line"></i></div>
+                                <i class="ri-heart-line"></i>
+                            </div>
                             <div style="font-size: 0.75rem; font-weight: 800; color: #3b82f6;"><i
                                     class="ri-arrow-up-line"></i> 8%</div>
                         </div>
@@ -281,7 +283,8 @@
                             style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
                             <div
                                 style="width: 40px; height: 40px; border-radius: 10px; background: #fff7ed; color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                                <i class="ri-chat-3-line"></i></div>
+                                <i class="ri-chat-3-line"></i>
+                            </div>
                             <div style="font-size: 0.75rem; font-weight: 800; color: #f59e0b;"><i
                                     class="ri-arrow-right-line"></i> 0%</div>
                         </div>
@@ -295,7 +298,8 @@
                             style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
                             <div
                                 style="width: 40px; height: 40px; border-radius: 10px; background: #fef2f2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                                <i class="ri-flashlight-line"></i></div>
+                                <i class="ri-flashlight-line"></i>
+                            </div>
                             <div style="font-size: 0.75rem; font-weight: 800; color: #ef4444;">Urgente Acties</div>
                         </div>
                         <div style="font-size: 1.8rem; font-weight: 850;" id="totalUrgent">0</div>
@@ -646,7 +650,7 @@
                 const props = propertyContext.getAll ? propertyContext.getAll() : [propertyContext.getCurrent()];
 
                 // --- ONBOARDING LOGIC ---
-                const header = document.getElementById('controlRoomHeader');
+                const header = document.getElementById('overzichtHeader');
                 const hero = document.getElementById('adoptionHero');
                 if (props.length === 0) {
                     if (header) header.style.display = 'none';

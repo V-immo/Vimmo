@@ -215,6 +215,12 @@
 
 <body class="role-zoeker">
     <div class="dashboard-zoeker">
+        <!-- Mobile Toggle -->
+        <button class="zoeker-mobile-toggle"
+            style="display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--primary-zoeker); color: white; border: none; border-radius: 12px; width: 45px; height: 45px; cursor: pointer; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <i class="ri-menu-line"></i>
+        </button>
+
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
@@ -262,6 +268,15 @@
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Breadcrumb -->
+            <div class="zoeker-breadcrumb"
+                style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 700;">
+                <a href="dashboard-zoeker.html" style="color: var(--primary-zoeker); text-decoration: none;">
+                    <i class="ri-dashboard-line"></i> Dashboard
+                </a>
+                <span style="color: #cbd5e1;">/</span>
+                <span class="current" style="color: var(--text-main);">Favorieten</span>
+            </div>
             <div style="margin-bottom: 40px; padding: 20px 0;">
                 <h1 style="font-size: 2.8rem; font-weight: 800; color: var(--text-main);">Opgeslagen Woningen</h1>
                 <p style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">Al uw favoriete woningen op

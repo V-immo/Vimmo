@@ -215,6 +215,12 @@
 
 <body class="role-particulier">
     <div class="dashboard-particulier">
+        <!-- Mobile Toggle -->
+        <button class="particulier-mobile-toggle"
+            style="display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--primary-particulier); color: white; border: none; border-radius: 12px; width: 45px; height: 45px; cursor: pointer; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <i class="ri-menu-line"></i>
+        </button>
+
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
@@ -244,7 +250,7 @@
                 <a href="beschikbaarheid-particulier.html" class="nav-item">
                     <i class="ri-calendar-line"></i> Beschikbaarheid
                 </a>
-                <a href="aanvragen-particulier.html" class="nav-item">
+                <a href="aanvragen-particulier.html" class="nav-item active">
                     <i class="ri-mail-line"></i> Aanvragen
                     <span
                         style="margin-left: auto; background: #ef4444; color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
@@ -273,6 +279,16 @@
 
         <!-- Main Content -->
         <main class="main-content" style="padding: 40px 60px;">
+            <!-- Breadcrumb -->
+            <div class="particulier-breadcrumb"
+                style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 700;">
+                <a href="dashboard-particulier.html" style="color: var(--primary-particulier); text-decoration: none;">
+                    <i class="ri-dashboard-line"></i> Dashboard
+                </a>
+                <span style="color: #cbd5e1;">/</span>
+                <span class="current" style="color: var(--text-main);">Aanvragen</span>
+            </div>
+
             <div class="funnel-tabs">
                 <div class="funnel-tab active" data-filter="all">Alles <span class="count">3</span></div>
                 <div class="funnel-tab" data-filter="nieuw">Nieuw <span class="count">1</span></div>

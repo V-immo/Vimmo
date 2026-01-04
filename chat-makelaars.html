@@ -118,37 +118,110 @@
     </style>
 </head>
 
-<body>
-    <div class="chat-layout">
-        <aside class="chat-sidebar">
-            <div class="chat-header">
-                <a href="berichten-makelaars.html" style="color: var(--text-main); font-size: 1.5rem;"><i
-                        class="ri-arrow-left-line"></i></a>
-                <h2 style="font-weight: 800;">Emma Peeters</h2>
-            </div>
-            <div style="padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.05);">
-                <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-makelaars); margin-bottom: 5px;">
-                    BETREFT</div>
-                <div style="font-weight: 700; font-size: 0.9rem;">Penthouse aan de Schelde</div>
-            </div>
+<body class="role-makelaar">
+    <div class="dashboard-makelaars">
+        <!-- Mobile Toggle -->
+        <button class="makelaar-mobile-toggle"
+            style="display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--primary-makelaars); color: white; border: none; border-radius: 12px; width: 45px; height: 45px; cursor: pointer; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <i class="ri-menu-line"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-brand">
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+            </a>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard-makelaars.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="advertentie-makelaars.html" class="nav-item">
+                    <i class="ri-home-4-line"></i> Mijn Panden
+                </a>
+                <a href="agenda-makelaars.html" class="nav-item">
+                    <i class="ri-calendar-event-line"></i> Aanvragen
+                    <span
+                        style="margin-left: auto; background: var(--primary-makelaars); color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">3</span>
+                </a>
+                <a href="berichten-makelaars.html" class="nav-item active">
+                    <i class="ri-message-3-line"></i> Berichten
+                    <span
+                        style="margin-left: auto; background: #2d3436; color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">2</span>
+                </a>
+
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
+                <a href="instellingen-makelaars.html" class="nav-item" style="opacity: 0.7;">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+
+                <div class="sidebar-user">
+                    <div class="user-avatar"
+                        style="background: rgba(214, 48, 49, 0.1); color: var(--primary-makelaars);">
+                        JD</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Jan de Vries</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Vimmo Partner</div>
+                    </div>
+                </div>
+            </nav>
         </aside>
 
-        <main class="chat-main">
-            <div class="chat-messages">
-                <div class="message received">
-                    Beste Jan, ik heb de extra foto's gezien van het terras. Hartelijk dank!
-                </div>
-                <div class="message sent">
-                    Graag gedaan Emma. Zijn er nog andere ruimtes waar u detailfoto's van zou willen ontvangen?
-                </div>
-                <div class="message received">
-                    Nee, dit was voldoende voor nu. Tot morgen bij de bezichtiging!
+        <!-- Main Content -->
+        <main class="main-content" style="padding: 0; display: flex; flex-direction: column; height: 100vh;">
+            <div style="padding: 20px 40px 0;">
+                <!-- Breadcrumb -->
+                <div class="makelaar-breadcrumb"
+                    style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 700;">
+                    <a href="dashboard-makelaars.html" style="color: var(--primary-makelaars); text-decoration: none;">
+                        <i class="ri-dashboard-line"></i> Dashboard
+                    </a>
+                    <span style="color: #cbd5e1;">/</span>
+                    <a href="berichten-makelaars.html" style="color: var(--primary-makelaars); text-decoration: none;">
+                        Berichten
+                    </a>
+                    <span style="color: #cbd5e1;">/</span>
+                    <span class="current" style="color: var(--text-main);">Chat</span>
                 </div>
             </div>
 
-            <div class="chat-input-area">
-                <input type="text" class="chat-input" placeholder="Typ uw bericht...">
-                <button class="btn-send"><i class="ri-send-plane-2-line"></i></button>
+            <div class="chat-layout" style="flex: 1; height: auto;">
+                <aside class="chat-sidebar">
+                    <div class="chat-header">
+                        <a href="berichten-makelaars.html" style="color: var(--text-main); font-size: 1.5rem;"><i
+                                class="ri-arrow-left-line"></i></a>
+                        <h2 style="font-weight: 800;">Emma Peeters</h2>
+                    </div>
+                    <div style="padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div
+                            style="font-size: 0.8rem; font-weight: 700; color: var(--primary-makelaars); margin-bottom: 5px;">
+                            BETREFT</div>
+                        <div style="font-weight: 700; font-size: 0.9rem;">Penthouse aan de Schelde</div>
+                    </div>
+                </aside>
+
+                <main class="chat-main">
+                    <div class="chat-messages">
+                        <div class="message received">
+                            Beste Jan, ik heb de extra foto's gezien van het terras. Hartelijk dank!
+                        </div>
+                        <div class="message sent">
+                            Graag gedaan Emma. Zijn er nog andere ruimtes waar u detailfoto's van zou willen ontvangen?
+                        </div>
+                        <div class="message received">
+                            Nee, dit was voldoende voor nu. Tot morgen bij de bezichtiging!
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <input type="text" class="chat-input" placeholder="Typ uw bericht...">
+                        <button class="btn-send"><i class="ri-send-plane-2-line"></i></button>
+                    </div>
+                </main>
             </div>
         </main>
     </div>

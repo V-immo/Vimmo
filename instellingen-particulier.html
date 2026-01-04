@@ -16,7 +16,7 @@
     <style>
         /* Groene achtergrond voor particulier pagina's */
         body.role-particulier {
-            background: linear-gradient(180deg, #ecfdf5 0%, #059669 100%) !important;
+            background: linear-gradient(180deg, #f0f9f6 0%, #e0f2eb 40%, #3d8b6e 100%) !important;
             background-attachment: fixed !important;
         }
 
@@ -111,7 +111,13 @@
 </head>
 
 <body class="role-particulier">
-    <div class="settings-page" style="background: #f8fafc; display: flex; min-height: 100vh;">
+    <div class="dashboard-particulier">
+        <!-- Mobile Toggle -->
+        <button class="particulier-mobile-toggle"
+            style="display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--primary-particulier); color: white; border: none; border-radius: 12px; width: 45px; height: 45px; cursor: pointer; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <i class="ri-menu-line"></i>
+        </button>
+
         <!-- Sidebar -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">

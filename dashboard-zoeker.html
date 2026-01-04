@@ -60,7 +60,8 @@
 <body class="role-zoeker">
     <div class="dashboard-zoeker">
         <!-- Mobile Toggle -->
-        <button class="zoeker-mobile-toggle" style="display: none;">
+        <button class="zoeker-mobile-toggle"
+            style="display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--primary-zoeker); color: white; border: none; border-radius: 12px; width: 45px; height: 45px; cursor: pointer; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
             <i class="ri-menu-line"></i>
         </button>
 
@@ -113,6 +114,15 @@
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Breadcrumb -->
+            <div class="zoeker-breadcrumb"
+                style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 700;">
+                <a href="dashboard-zoeker.html" style="color: var(--primary-zoeker); text-decoration: none;">
+                    <i class="ri-dashboard-line"></i> Dashboard
+                </a>
+                <span style="color: #cbd5e1;">/</span>
+                <span class="current" style="color: var(--text-main);">Overzicht</span>
+            </div>
             <!-- Luxury Hero Section -->
             <div class="luxury-hero">
                 <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80" alt="Luxury Home">

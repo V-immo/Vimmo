@@ -40,15 +40,40 @@
     --primary-zoeker: #8b5cf6;
     --primary-dark-zoeker: #7c3aed;
 
-    /* Layer 1: Vertical green gradient background - refined for extra depth */
-    --bg-particulier-gradient-start: #ecfdf5;
-    --bg-particulier-gradient-end: #059669;
-    --bg-particulier-gradient: linear-gradient(180deg, var(--bg-particulier-gradient-start) 0%, var(--bg-particulier-gradient-end) 100%);
-    /* Layer 2: Card surface - warm-white, not pure white */
-    --bg-particulier-card: #fafdf9;
-    /* Layer 3: Card border and shadow */
-    --border-particulier-card: #d1fae5;
-    --shadow-particulier-card: 0 4px 20px rgba(16, 185, 129, 0.08);
+    /* Layer 1: Vertical green gradient - softer 3-point for warmth & harmony */
+    --bg-particulier-gradient-start: #f0f9f6;
+    --bg-particulier-gradient-mid: #e0f2eb;
+    --bg-particulier-gradient-end: #3d8b6e;
+    --bg-particulier-gradient: linear-gradient(180deg, var(--bg-particulier-gradient-start) 0%, var(--bg-particulier-gradient-mid) 40%, var(--bg-particulier-gradient-end) 100%);
+    /* Layer 2: Card surface - warm off-white for premium feel */
+    --bg-particulier-card: #fdfcfa;
+    /* Layer 3: Card border and shadow - refined for depth */
+    --border-particulier-card: rgba(5, 150, 105, 0.15);
+    --shadow-particulier-card: 0 8px 32px rgba(3, 84, 63, 0.08);
+
+    /* --- MAKELAAR HARMONY SCHEME --- */
+    /* Deep Burgundy/Warm Red Gradient */
+    --bg-makelaar-gradient-start: #fff5f5;
+    --bg-makelaar-gradient-mid: #ffe3e3;
+    --bg-makelaar-gradient-end: #9b2c2c;
+    --bg-makelaar-gradient: linear-gradient(180deg, var(--bg-makelaar-gradient-start) 0%, var(--bg-makelaar-gradient-mid) 40%, var(--bg-makelaar-gradient-end) 100%);
+
+    /* Makelaar Cards */
+    --bg-makelaar-card: #fffafa;
+    --border-makelaar-card: rgba(214, 48, 49, 0.1);
+    --shadow-makelaar-card: 0 8px 32px rgba(153, 27, 27, 0.08);
+
+    /* --- ZOEKER HARMONY SCHEME --- */
+    /* Deep Royal Purple/Lavender Gradient */
+    --bg-zoeker-gradient-start: #f5f3ff;
+    --bg-zoeker-gradient-mid: #ede9fe;
+    --bg-zoeker-gradient-end: #6d28d9;
+    --bg-zoeker-gradient: linear-gradient(180deg, var(--bg-zoeker-gradient-start) 0%, var(--bg-zoeker-gradient-mid) 40%, var(--bg-zoeker-gradient-end) 100%);
+
+    /* Zoeker Cards */
+    --bg-zoeker-card: #fcfbfe;
+    --border-zoeker-card: rgba(139, 92, 246, 0.12);
+    --shadow-zoeker-card: 0 8px 32px rgba(109, 40, 217, 0.08);
 
     /* Category Backgrounds */
     --bg-urgent: #f0fdf4;
@@ -1177,16 +1202,94 @@ body.role-particulier .main-content-particulier {
     background: transparent !important;
 }
 
+/* Makelaar Dashboard - Gradient Background */
+body.role-makelaar,
+body.role-makelaar .dashboard-makelaars,
+body.role-makelaar .main-content {
+    background: var(--bg-makelaar-gradient) !important;
+    background-attachment: fixed !important;
+}
+
+body.role-makelaar .main-content {
+    background: transparent !important;
+}
+
+/* Zoeker Dashboard - Gradient Background */
+body.role-zoeker,
+body.role-zoeker .dashboard-zoeker,
+body.role-zoeker .main-content {
+    background: var(--bg-zoeker-gradient) !important;
+    background-attachment: fixed !important;
+}
+
+body.role-zoeker .main-content {
+    background: transparent !important;
+}
+
 /* ============================================
    PARTICULIER VISUAL LAYER SYSTEM
    ============================================ */
 
-/* Layer 2: Card Styling - Warm White (not pure #fff) */
+/* Sidebar - Glassmorphism for premium feel */
+body.role-particulier .sidebar {
+    background: rgba(253, 252, 250, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(5, 150, 105, 0.1);
+}
+
+/* Makelaar Sidebar - Warm Glass */
+body.role-makelaar .sidebar {
+    background: rgba(255, 250, 250, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(214, 48, 49, 0.1);
+}
+
+/* Makelaar Glass Panels */
+body.role-makelaar .glass-panel {
+    background: rgba(255, 252, 252, 0.85);
+    /* Slightly pinkish white */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(214, 48, 49, 0.12);
+    box-shadow: 0 8px 32px rgba(153, 27, 27, 0.05);
+    /* Soft red shadow */
+}
+
+/* Zoeker Sidebar - Lavender Glass */
+body.role-zoeker .sidebar {
+    background: rgba(253, 252, 255, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+/* Zoeker Glass Panels */
+body.role-zoeker .glass-panel {
+    background: rgba(253, 252, 255, 0.85);
+    /* Slightly lavender white */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(139, 92, 246, 0.12);
+    box-shadow: 0 8px 32px rgba(109, 40, 217, 0.05);
+    /* Soft purple shadow */
+}
+
+/* Layer 2: Card Styling - Warm off-white with enhanced shadows */
 .particulier-card {
     background: var(--bg-particulier-card);
     border: 1px solid var(--border-particulier-card);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-particulier-card);
+}
+
+/* Glass panels in particulier context - warmer feel */
+body.role-particulier .glass-panel {
+    background: rgba(253, 252, 250, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(5, 150, 105, 0.12);
 }
 
 /* Status Chips */
@@ -4516,7 +4619,7 @@ body.particulier,
 }
 
 /* Responsive: collapse sidebar on mobile */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     :root {
         --sidebar-w: 0px;
     }
@@ -4525,10 +4628,36 @@ body.particulier,
     .sidebar-particulier {
         transform: translateX(-100%);
         transition: transform 0.3s ease;
+        z-index: 10000;
     }
 
+    .sidebar.active,
+    .sidebar-particulier.active,
     .sidebar.is-open,
     .sidebar-particulier.is-open {
         transform: translateX(0);
+    }
+
+    /* Show mobile toggle button */
+    .particulier-mobile-toggle,
+    .zoeker-mobile-toggle,
+    .makelaar-mobile-toggle {
+        display: flex !important;
+    }
+
+    /* Main content uses full width on mobile */
+    .main-content {
+        margin-left: 0 !important;
+        padding: 20px !important;
+        padding-top: 70px !important;
+    }
+
+    /* Overlay when sidebar is open */
+    .sidebar.active::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: -1;
     }
 }

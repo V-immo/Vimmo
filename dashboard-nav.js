@@ -279,7 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Initialize mobile toggle if present
-        const mobileToggle = document.querySelector('.particulier-mobile-toggle') || document.querySelector('.zoeker-mobile-toggle');
+        const mobileToggle = document.querySelector('.particulier-mobile-toggle') || 
+                             document.querySelector('.zoeker-mobile-toggle') ||
+                             document.querySelector('.makelaar-mobile-toggle');
         if (mobileToggle) {
             mobileToggle.addEventListener('click', toggleSidebar);
         }
@@ -294,8 +296,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (sidebar) {
             sidebar.classList.toggle('active');
 
-            // Toggle orientation of icon if it's the hamburger
-            const icon = document.querySelector('.particulier-mobile-toggle i');
+            // Toggle orientation of icon
+            const icon = document.querySelector('.particulier-mobile-toggle i, .zoeker-mobile-toggle i, .makelaar-mobile-toggle i');
             if (icon) {
                 if (sidebar.classList.contains('active')) {
                     icon.classList.remove('ri-menu-line');

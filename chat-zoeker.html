@@ -265,72 +265,146 @@
     </style>
 </head>
 
-<body>
-    <div class="chat-page">
-        <div class="chat-container">
-            <!-- Chat Header -->
-            <div class="chat-header">
-                <button class="back-btn" onclick="history.back()">
-                    <i class="ri-arrow-left-line"></i>
-                </button>
-                <div class="header-avatar">MV</div>
-                <div class="header-info">
-                    <div class="name">Makelaar Vastgoed</div>
-                    <div class="property"><i class="ri-home-4-line"></i> Penthouse aan de Schelde</div>
+<body class="role-zoeker">
+    <div class="dashboard-zoeker">
+        <!-- Mobile Toggle -->
+        <button class="zoeker-mobile-toggle"
+            style="display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--primary-zoeker); color: white; border: none; border-radius: 12px; width: 45px; height: 45px; cursor: pointer; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <i class="ri-menu-line"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-brand">
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+            </a>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard-zoeker.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i> Overzicht
+                </a>
+                <a href="opgeslagen-zoeker.html" class="nav-item">
+                    <i class="ri-heart-line"></i> Opgeslagen
+                </a>
+                <a href="agenda-zoeker.html" class="nav-item">
+                    <i class="ri-calendar-check-line"></i> Bezichtigingen
+                </a>
+                <a href="berichten-zoeker.html" class="nav-item active">
+                    <i class="ri-message-3-line"></i> Berichten
+                    <span
+                        style="margin-left: auto; background: var(--primary-zoeker); color: white; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;">2</span>
+                </a>
+                <a href="zoekopdrachten-zoeker.html" class="nav-item">
+                    <i class="ri-search-line"></i> Zoekopdrachten
+                </a>
+
+                <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
+                <a href="instellingen-zoeker.html" class="nav-item" style="opacity: 0.7;">
+                    <i class="ri-settings-3-line"></i> Instellingen
+                </a>
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
+
+                <div class="sidebar-user">
+                    <div class="user-avatar" style="background: rgba(108, 92, 231, 0.1); color: var(--primary-zoeker);">
+                        AK</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Anouk Kerstens</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Woningzoeker</div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" style="padding: 0; display: flex; flex-direction: column; height: 100vh;">
+            <div style="padding: 20px 40px 0;">
+                <!-- Breadcrumb -->
+                <div class="zoeker-breadcrumb"
+                    style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 700;">
+                    <a href="dashboard-zoeker.html" style="color: var(--primary-zoeker); text-decoration: none;">
+                        <i class="ri-dashboard-line"></i> Dashboard
+                    </a>
+                    <span style="color: #cbd5e1;">/</span>
+                    <a href="berichten-zoeker.html" style="color: var(--primary-zoeker); text-decoration: none;">
+                        Berichten
+                    </a>
+                    <span style="color: #cbd5e1;">/</span>
+                    <span class="current" style="color: var(--text-main);">Chat</span>
                 </div>
             </div>
-
-            <!-- Chat Messages -->
-            <div class="chat-messages" id="chatMessages">
-                <!-- Received -->
-                <div class="message">
-                    <div class="msg-avatar">MV</div>
-                    <div class="msg-bubble">
-                        <div class="msg-text">Goedemiddag! De documenten voor de penthouse zijn zojuist naar uw e-mail
-                            verzonden.</div>
-                        <span class="msg-time">10:45</span>
+            <div class="chat-page" style="flex: 1; height: auto;">
+                <div class="chat-container">
+                    <!-- Chat Header -->
+                    <div class="chat-header">
+                        <button class="back-btn" onclick="history.back()">
+                            <i class="ri-arrow-left-line"></i>
+                        </button>
+                        <div class="header-avatar">MV</div>
+                        <div class="header-info">
+                            <div class="name">Makelaar Vastgoed</div>
+                            <div class="property"><i class="ri-home-4-line"></i> Penthouse aan de Schelde</div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Sent -->
-                <div class="message sent">
-                    <div class="msg-avatar">EP</div>
-                    <div class="msg-bubble">
-                        <div class="msg-text">Bedankt voor het snelle bericht! Ik heb ze ontvangen en ga ze direct
-                            bekijken.</div>
-                        <span class="msg-time">11:02</span>
-                    </div>
-                </div>
-
-                <!-- Received with card -->
-                <div class="message">
-                    <div class="msg-avatar">MV</div>
-                    <div class="msg-bubble">
-                        <div class="msg-text">U vindt hieronder ook nog even de directe link naar de advertentie voor de
-                            details.</div>
-                        <a href="property.html" class="property-card-inline">
-                            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=200&q=80"
-                                alt="Property">
-                            <div class="p-info">
-                                <div class="p-price">€ 1.250.000</div>
-                                <div class="p-title">Penthouse aan de Schelde</div>
+                    <!-- Chat Messages -->
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Received -->
+                        <div class="message">
+                            <div class="msg-avatar">MV</div>
+                            <div class="msg-bubble">
+                                <div class="msg-text">Goedemiddag! De documenten voor de penthouse zijn zojuist naar uw
+                                    e-mail
+                                    verzonden.</div>
+                                <span class="msg-time">10:45</span>
                             </div>
-                        </a>
-                        <span class="msg-time">11:05</span>
+                        </div>
+
+                        <!-- Sent -->
+                        <div class="message sent">
+                            <div class="msg-avatar">EP</div>
+                            <div class="msg-bubble">
+                                <div class="msg-text">Bedankt voor het snelle bericht! Ik heb ze ontvangen en ga ze
+                                    direct
+                                    bekijken.</div>
+                                <span class="msg-time">11:02</span>
+                            </div>
+                        </div>
+
+                        <!-- Received with card -->
+                        <div class="message">
+                            <div class="msg-avatar">MV</div>
+                            <div class="msg-bubble">
+                                <div class="msg-text">U vindt hieronder ook nog even de directe link naar de advertentie
+                                    voor de
+                                    details.</div>
+                                <a href="property.html" class="property-card-inline">
+                                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=200&q=80"
+                                        alt="Property">
+                                    <div class="p-info">
+                                        <div class="p-price">€ 1.250.000</div>
+                                        <div class="p-title">Penthouse aan de Schelde</div>
+                                    </div>
+                                </a>
+                                <span class="msg-time">11:05</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="chat-input-area">
+                        <div class="input-wrapper">
+                            <input type="text" class="chat-input" placeholder="Typ uw bericht..." id="chatInput">
+                            <button class="send-button" onclick="sendMessage()">
+                                <i class="ri-send-plane-fill"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Chat Input -->
-            <div class="chat-input-area">
-                <div class="input-wrapper">
-                    <input type="text" class="chat-input" placeholder="Typ uw bericht..." id="chatInput">
-                    <button class="send-button" onclick="sendMessage()">
-                        <i class="ri-send-plane-fill"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
     <script>

@@ -268,45 +268,67 @@
     </style>
 </head>
 
-<body>
+<body class="role-particulier">
     <div class="chat-page dashboard-particulier">
         <!-- Mobile Toggle -->
-        <button class="particulier-mobile-toggle">
+        <button class="particulier-mobile-toggle"
+            style="display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--primary-particulier); color: white; border: none; border-radius: 12px; width: 45px; height: 45px; cursor: pointer; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
             <i class="ri-menu-line"></i>
         </button>
 
-        <!-- Sidebar (Mini Version for Chat) -->
-        <aside class="sidebar sidebar-mini">
+        <!-- Sidebar -->
+        <aside class="sidebar">
             <a href="index.html" class="sidebar-brand">
-                <span class="logo-v">V</span> <span class="logo-i">I</span><span class="logo-mmo">MMO</span>
+                <span class="logo-v">V</span><span class="logo-i">I</span><span class="logo-mmo">MMO</span>
             </a>
 
             <nav class="sidebar-nav">
-                <a href="dashboard-particulier.html" class="nav-item" title="Dashboard">
-                    <i class="ri-dashboard-line"></i>
+                <!-- User Profile at TOP -->
+                <div class="sidebar-user" style="border-top: none; margin-bottom: 20px; padding-top: 5px;">
+                    <div class="user-avatar"
+                        style="background: rgba(16, 185, 129, 0.1); color: var(--primary-particulier);">
+                        TV</div>
+                    <div class="user-info">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">Tomas Verbeeck</div>
+                        <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Particulier</div>
+                    </div>
+                </div>
+
+                <div style="margin: 10px 0 20px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
+
+                <a href="dashboard-particulier.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i> Overzicht
                 </a>
-                <a href="advertentie-particulier.html" class="nav-item" title="Mijn Aanbod">
-                    <i class="ri-home-4-line"></i>
+                <a href="advertentie-particulier.html" class="nav-item">
+                    <i class="ri-home-4-line"></i> Mijn Aanbod
                 </a>
-                <a href="beschikbaarheid-particulier.html" class="nav-item" title="Beschikbaarheid">
-                    <i class="ri-calendar-line"></i>
+                <a href="beschikbaarheid-particulier.html" class="nav-item">
+                    <i class="ri-calendar-line"></i> Beschikbaarheid
                 </a>
-                <a href="agenda-particulier.html" class="nav-item" title="Aanvragen">
-                    <i class="ri-calendar-check-line"></i>
+                <a href="aanvragen-particulier.html" class="nav-item">
+                    <i class="ri-mail-line"></i> Aanvragen
+                    <span
+                        style="margin-left: auto; background: #ef4444; color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
                 </a>
-                <a href="berichten-particulier.html" class="nav-item active" title="Berichten">
-                    <i class="ri-message-3-line"></i>
+                <a href="berichten-particulier.html" class="nav-item active">
+                    <i class="ri-message-3-line"></i> Berichten
+                    <span
+                        style="margin-left: auto; background: var(--primary-particulier); color: white; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 800;"></span>
+                </a>
+                <a href="pakket-beheer.html" class="nav-item">
+                    <i class="ri-box-3-line"></i> Pakket Beheer
+                    <span id="sidebar-package-usage"
+                        style="margin-left: auto; color: var(--primary-particulier); font-weight: 800; font-size: 0.8rem;"></span>
                 </a>
 
                 <div style="margin: 25px 0 15px; border-top: 1px solid rgba(0,0,0,0.05);"></div>
 
-                <a href="instellingen-particulier.html" class="nav-item" title="Instellingen">
-                    <i class="ri-settings-3-line"></i>
+                <a href="instellingen-particulier.html" class="nav-item" style="opacity: 0.7;">
+                    <i class="ri-settings-3-line"></i> Instellingen
                 </a>
-
-                <div class="sidebar-user">
-                    <div class="user-avatar">TV</div>
-                </div>
+                <a href="javascript:logout()" class="nav-item" style="opacity: 0.7;">
+                    <i class="ri-logout-box-line"></i> Uitloggen
+                </a>
             </nav>
         </aside>
 
